@@ -742,6 +742,8 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     <div class="sub" style="margin-bottom:10px">Достижения</div>
     <div class="ach" id="ach"></div>
   </div>
+
+  <p class="note" style="text-align:center;margin:6px 0 18px"><a id="privLink" href="privacy.html" target="_blank" rel="noopener" style="color:var(--hint)">Политика конфиденциальности</a> · Рекомендации FitHub не заменяют консультацию врача</p>
 </section>
 
 <nav>
@@ -919,7 +921,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   // а миниатюры фото еды в облако не кладём (они остаются только на устройстве).
   var CLOUD_KEYS = ["fithub_user", "fithub_user_goal", "fithub_goal", "fithub_weights", "fithub_workouts", "fithub_food",
     "fithub_kcal_goal", "fithub_macro_goal", "fithub_daytasks", "fithub_done", "fithub_routine", "fithub_visits",
-    "fithub_visit_best", "fithub_my_plan", "fithub_plan_custom", "fithub_plan_sel", "fithub_train_log", "fithub_voice"];
+    "fithub_visit_best", "fithub_my_plan", "fithub_plan_custom", "fithub_plan_sel", "fithub_train_log", "fithub_voice", "fithub_first_seen", "fithub_ret"];
   var CHUNK = 4000, cloudDirty = {}, cloudTimer = null, cloudBusy = false;
   var cs = null;
   try { if (tg && tg.CloudStorage && tg.isVersionAtLeast && tg.isVersionAtLeast("6.9")) cs = tg.CloudStorage; } catch(e){}
@@ -3197,6 +3199,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     if (!w || w < 30 || w > 300) { notify("error"); alert("Укажите вес от 30 до 300 кг"); return; }
     userData = { sex: sex, age: Math.round(age), h: Math.round(h), lvl: $("udLvl").value, eq: $("udEq").value, days: udDraft.days, lim: udDraft.lim.slice() };
     save("fithub_user", userData);
+    track("profile_save", { eq: userData.eq, days: userData.days, lvl: userData.lvl });
     udDirty = false;
     rebuildPlans(); renderPlan();
     w = +w.toFixed(1);
@@ -3680,6 +3683,21 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   }
   ensureToday();
 
+  // --- удержание для Метрики: вернулся ли человек через 1, 7 и 30 дней после первого запуска ---
+  (function(){
+    var today = localDay(new Date());
+    var first = load("fithub_first_seen", null) || visits[0] || today;
+    if (!load("fithub_first_seen", null)) save("fithub_first_seen", first);
+    var days = dayNum(today) - dayNum(first);
+    if (days === 0 && visits.length <= 1) track("first_open");
+    var sent = load("fithub_ret", {}), changed = false;
+    [[1, "ret_d1"], [7, "ret_d7"], [30, "ret_d30"]].forEach(function(m){
+      if (days >= m[0] && !sent[m[1]]) { sent[m[1]] = today; changed = true; track(m[1], { days: days, active_days: visits.length }); }
+    });
+    if (changed) save("fithub_ret", sent);
+    try { if (METRIKA_ID && window.ym) window.ym(METRIKA_ID, "params", { days_since_first: days, active_days: visits.length }); } catch(e){}
+  })();
+
   var LEVEL_GLOW = { 1: "rgba(255,180,70,.45)", 2: "rgba(255,120,40,.5)", 3: "rgba(240,50,40,.55)", 4: "rgba(120,110,255,.6)" };
   var LEVEL_SCALE = { 1: 0.82, 2: 0.92, 3: 1.04, 4: 1.12 };
   var LEVEL_NEXT = [3, 7, 30, 100];
@@ -4094,6 +4112,10 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   renderWeights();   // внутри вызывает renderProfile
   renderCal();
   track("app_open");
+  $("privLink").onclick = function(e){
+    var url = new URL("privacy.html", location.href).href;
+    try { if (tg && tg.openLink) { e.preventDefault(); tg.openLink(url); } } catch(err){}
+  };
   cloudPull();
   document.addEventListener("visibilitychange", function(){ if (document.hidden) { clearTimeout(cloudTimer); cloudPush(); } });
 })();
