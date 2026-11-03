@@ -143,6 +143,11 @@ nav button.on{color:var(--accent);font-weight:700}
 .taskrow{display:grid;grid-template-columns:116px 1fr;gap:10px}
 .chk{display:flex;align-items:center;gap:10px;color:var(--text);font-size:14px;margin:12px 0 0}
 .chk input{width:20px;height:20px;accent-color:var(--accent);padding:0}
+.remsec{border-top:1px solid var(--line);margin-top:12px;padding-top:2px}
+.remsec .chk{font-weight:700}
+.remsec .body{display:none}.remsec.on .body{display:block}
+.remdays{display:flex;gap:4px;margin-top:10px}.remdays .chip{flex:1;padding:7px 0;text-align:center}
+.rem3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.rem3>div{min-width:0}.rem3 input{min-width:0;padding:12px 6px;font-size:15px}
 
 /* главная */
 .stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
@@ -743,6 +748,43 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     <div class="ach" id="ach"></div>
   </div>
 
+  <div class="card" id="remCard">
+    <div class="sub">🔔 Напоминания от бота</div>
+    <div class="note" style="margin-top:4px">Бот пришлёт сообщение в Telegram — с кнопкой, которая сразу откроет FitHub.</div>
+    <div class="remsec" id="remW">
+      <label class="chk"><input type="checkbox" id="remWOn"> О тренировках</label>
+      <div class="body">
+        <div class="remdays" id="remDays"></div>
+        <div class="row">
+          <div><label>Время тренировки</label><input id="remWTime" type="time" value="18:00"></div>
+          <div><label>Напомнить</label><select id="remWBefore"><option value="0">в это время</option><option value="15">за 15 мин</option><option value="30">за 30 мин</option><option value="60">за час</option><option value="120">за 2 часа</option></select></div>
+        </div>
+      </div>
+    </div>
+    <div class="remsec" id="remF">
+      <label class="chk"><input type="checkbox" id="remFOn"> Записать еду</label>
+      <div class="body">
+        <div class="rem3">
+          <div><label>Завтрак</label><input id="remF1" type="time" value="09:00"></div>
+          <div><label>Обед</label><input id="remF2" type="time" value="13:30"></div>
+          <div><label>Ужин</label><input id="remF3" type="time" value="19:30"></div>
+        </div>
+        <div class="note" style="margin-top:6px">Очистите время, чтобы не напоминать об этом приёме пищи.</div>
+      </div>
+    </div>
+    <div class="remsec" id="remG">
+      <label class="chk"><input type="checkbox" id="remGOn"> Взвешивание раз в неделю</label>
+      <div class="body">
+        <div class="row">
+          <div><label>День</label><select id="remGDay"><option value="1">Понедельник</option><option value="2">Вторник</option><option value="3">Среда</option><option value="4">Четверг</option><option value="5">Пятница</option><option value="6">Суббота</option><option value="0">Воскресенье</option></select></div>
+          <div><label>Время</label><input id="remGTime" type="time" value="08:30"></div>
+        </div>
+      </div>
+    </div>
+    <button class="btn" id="remSave" type="button">Сохранить напоминания</button>
+    <div class="note" id="remNote" style="text-align:center"></div>
+  </div>
+
   <p class="note" style="text-align:center;margin:6px 0 18px"><a id="privLink" href="privacy.html" target="_blank" rel="noopener" style="color:var(--hint)">Политика конфиденциальности</a> · Рекомендации FitHub не заменяют консультацию врача</p>
 </section>
 
@@ -921,7 +963,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   // а миниатюры фото еды в облако не кладём (они остаются только на устройстве).
   var CLOUD_KEYS = ["fithub_user", "fithub_user_goal", "fithub_goal", "fithub_weights", "fithub_workouts", "fithub_food",
     "fithub_kcal_goal", "fithub_macro_goal", "fithub_daytasks", "fithub_done", "fithub_routine", "fithub_visits",
-    "fithub_visit_best", "fithub_my_plan", "fithub_plan_custom", "fithub_plan_sel", "fithub_train_log", "fithub_voice", "fithub_first_seen", "fithub_ret"];
+    "fithub_visit_best", "fithub_my_plan", "fithub_plan_custom", "fithub_plan_sel", "fithub_train_log", "fithub_voice", "fithub_first_seen", "fithub_ret", "fithub_rem"];
   var CHUNK = 4000, cloudDirty = {}, cloudTimer = null, cloudBusy = false;
   var cs = null;
   try { if (tg && tg.CloudStorage && tg.isVersionAtLeast && tg.isVersionAtLeast("6.9")) cs = tg.CloudStorage; } catch(e){}
@@ -4107,6 +4149,95 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   clampT();
   requestAnimationFrame(tick);
   setTimeout(function(){ if (!chatOpen && !docked) say("Двойной тап — чат. Смахни вниз — спрячусь в меню", 5000); }, 1200);
+
+  // === НАПОМИНАНИЯ ОТ БОТА ===
+  // настройки хранятся у пользователя (fithub_rem) и на сервере (функция fithub-ai → Object Storage),
+  // рассылку делает таймер в облаке, поэтому приложение может быть закрыто
+  var REM_DEF = { workout: { on: false, days: [], time: "18:00", before: 30 }, food: { on: false, times: ["09:00", "13:30", "19:30"] }, weight: { on: false, day: 1, time: "08:30" } };
+  var rem = load("fithub_rem", null);
+  var remDays = [];
+  function planWeekdays(){
+    var d = myPlan && myPlan.split ? myPlan.split.map(function(x){ return x.wd; }).filter(function(x){ return x != null; }) : [];
+    return d.length ? d : [1, 3, 5];
+  }
+  function remPost(payload){
+    var initData = "";
+    try { initData = (tg && tg.initData) || ""; } catch(e){}
+    payload.initData = initData;
+    payload.tz = -new Date().getTimezoneOffset();
+    return fetch(AI_ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(payload) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok, status: r.status, j: j }; }); });
+  }
+  function renderRem(){
+    var r = rem || REM_DEF;
+    remDays = (rem && r.workout.days.length ? r.workout.days : planWeekdays()).slice();
+    $("remWOn").checked = !!(rem && r.workout.on);
+    $("remWTime").value = r.workout.time; $("remWBefore").value = String(r.workout.before);
+    $("remFOn").checked = !!(rem && r.food.on);
+    ["remF1", "remF2", "remF3"].forEach(function(id, i){ $(id).value = r.food.times[i] || ""; });
+    $("remGOn").checked = !!(rem && r.weight.on);
+    $("remGDay").value = String(r.weight.day); $("remGTime").value = r.weight.time;
+    var order = [1, 2, 3, 4, 5, 6, 0];
+    $("remDays").innerHTML = order.map(function(d){
+      return '<button type="button" class="chip' + (remDays.indexOf(d) >= 0 ? ' on' : '') + '" data-d="' + d + '">' + WD_SHORT[d] + '</button>';
+    }).join("");
+    remSections();
+    $("remNote").textContent = rem && (r.workout.on || r.food.on || r.weight.on) ? "Напоминания включены ✓" : "";
+  }
+  function remSections(){
+    [["remW", "remWOn"], ["remF", "remFOn"], ["remG", "remGOn"]].forEach(function(x){ $(x[0]).classList.toggle("on", $(x[1]).checked); });
+  }
+  ["remWOn", "remFOn", "remGOn"].forEach(function(id){ $(id).onchange = remSections; });
+  $("remDays").onclick = function(e){
+    var b = e.target.closest("[data-d]"); if (!b) return;
+    var d = +b.getAttribute("data-d"), i = remDays.indexOf(d);
+    if (i >= 0) remDays.splice(i, 1); else remDays.push(d);
+    b.classList.toggle("on", i < 0);
+  };
+  function remCollect(){
+    return {
+      workout: { on: $("remWOn").checked, days: remDays.slice().sort(), time: $("remWTime").value || "18:00", before: +$("remWBefore").value },
+      food: { on: $("remFOn").checked, times: ["remF1", "remF2", "remF3"].map(function(id){ return $(id).value; }).filter(Boolean) },
+      weight: { on: $("remGOn").checked, day: +$("remGDay").value, time: $("remGTime").value || "08:30" }
+    };
+  }
+  $("remSave").onclick = function(){
+    var next = remCollect(), btn = $("remSave"), note = $("remNote");
+    var any = next.workout.on && next.workout.days.length || next.food.on && next.food.times.length || next.weight.on;
+    if (next.workout.on && !next.workout.days.length) { note.textContent = "Выберите хотя бы один день тренировок"; return; }
+    var wasOn = rem && (rem.workout.on || rem.food.on || rem.weight.on);
+    function send(){
+      btn.disabled = true; note.textContent = "Сохраняю…";
+      remPost({ action: "reminders", rem: next, test: any && !wasOn }).then(function(x){
+        btn.disabled = false;
+        if (x.ok && x.j && x.j.ok) {
+          rem = next; save("fithub_rem", rem);
+          note.textContent = any ? (wasOn ? "Сохранено ✓" : "Готово ✓ Бот прислал пробное сообщение") : "Напоминания выключены";
+          track(any ? "reminders_on" : "reminders_off", { w: next.workout.on ? next.workout.days.length : 0, f: next.food.on ? next.food.times.length : 0, g: next.weight.on ? 1 : 0 });
+        } else if (x.j && x.j.error === "bot_blocked") {
+          note.textContent = "Бот не может вам написать: откройте чат с ботом и нажмите «Старт», затем сохраните ещё раз.";
+        } else if (x.status === 401) {
+          note.textContent = "Откройте приложение через бота в Telegram, чтобы включить напоминания.";
+        } else {
+          note.textContent = "Не получилось сохранить (" + (x.status || "нет сети") + "). Попробуйте позже.";
+          track("reminders_error", { code: x.status + (x.j && x.j.error ? " " + x.j.error : "") });
+        }
+      }).catch(function(){ btn.disabled = false; note.textContent = "Нет связи с сервером. Попробуйте позже."; });
+    }
+    // разрешение боту писать первым (если человек запускал бота — уже есть, окно не покажется)
+    if (any && tg && tg.requestWriteAccess) {
+      try { tg.requestWriteAccess(function(granted){ if (granted) send(); else note.textContent = "Без разрешения бот не сможет присылать напоминания."; }); }
+      catch(e){ send(); }
+    } else send();
+  };
+  renderRem();
+  // отмечаем вход раз в день — чтобы бот не писал «давно не виделись» тем, кто заходит
+  (function(){
+    if (!rem || !(rem.workout.on || rem.food.on || rem.weight.on)) return;
+    var today = localDay(new Date());
+    if (load("fithub_rem_seen", "") === today) return;
+    remPost({ action: "seen" }).then(function(x){ if (x.ok) save("fithub_rem_seen", today); }).catch(function(){});
+  })();
 
   // === СТАРТ ===
   renderWeights();   // внутри вызывает renderProfile
