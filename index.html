@@ -144,6 +144,29 @@ nav button.on{color:var(--accent);font-weight:700}
 .chk{display:flex;align-items:center;gap:10px;color:var(--text);font-size:14px;margin:12px 0 0}
 .chk input{width:20px;height:20px;accent-color:var(--accent);padding:0}
 .remsec{border-top:1px solid var(--line);margin-top:12px;padding-top:2px}
+.onb{position:fixed;inset:0;z-index:80;background:var(--bg);display:none;flex-direction:column;padding:calc(14px + env(safe-area-inset-top)) 16px calc(14px + env(safe-area-inset-bottom));overflow-y:auto}
+.onb.open{display:flex}
+.onb-top{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.onb-bar{flex:1;display:flex;gap:6px}.onb-bar i{flex:1;height:4px;border-radius:4px;background:var(--line)}.onb-bar i.on{background:var(--grad)}
+.onb-skip{background:none;border:0;color:var(--hint);font:inherit;font-size:14px;cursor:pointer;padding:4px}
+.onb h2{font-size:24px;line-height:1.25;margin:4px 0 6px}
+.onb .lead{color:var(--hint);font-size:14.5px;line-height:1.5;margin-bottom:16px}
+.onb-step{display:none;flex:1;flex-direction:column}.onb-step.on{display:flex}
+.onb-opts{display:grid;gap:10px}
+.onb-opt{display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;color:var(--text);font:inherit;font-size:16px;font-weight:600;cursor:pointer}
+.onb-opt i{font-style:normal;font-size:26px;width:32px;text-align:center}
+.onb-opt small{display:block;font-weight:400;color:var(--hint);font-size:13px;margin-top:2px}
+.onb-opt.on{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.onb-seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.onb-seg.three{grid-template-columns:1fr 1fr 1fr}
+.onb-seg button{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 6px;color:var(--text);font:inherit;font-size:14.5px;font-weight:600;cursor:pointer}
+.onb-seg button.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--card))}
+.onb-row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.onb-row3>div{min-width:0}.onb-row3 input{min-width:0}
+.onb-foot{margin-top:auto;padding-top:18px}
+.onb-err{color:#ff6b6b;font-size:13.5px;min-height:18px;margin-top:10px}
+.onb-sum{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.onb-sum b{display:block;font-size:15px;margin-bottom:4px}
+.onb-sum div{color:var(--hint);font-size:14px;line-height:1.5}
 .remsec .chk{font-weight:700}
 .remsec .body{display:none}.remsec.on .body{display:block}
 .remdays{display:flex;gap:4px;margin-top:10px}.remdays .chip{flex:1;padding:7px 0;text-align:center}
@@ -841,6 +864,64 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   </div>
 </div>
 
+<!-- ОНБОРДИНГ: 3 шага для нового пользователя -->
+<div class="onb" id="onb" role="dialog" aria-modal="true" aria-label="Настройка FitHub">
+  <div class="onb-top">
+    <div class="onb-bar" id="onbBar"><i></i><i></i><i></i></div>
+    <button class="onb-skip" id="onbSkip" type="button">Пропустить</button>
+  </div>
+
+  <div class="onb-step" data-s="1">
+    <h2>Привет! Я Арни 💪</h2>
+    <div class="lead">Отвечу на 3 вопроса — и соберу план тренировок и питания под вас. Займёт минуту.<br><b style="color:var(--text)">Какая у вас цель?</b></div>
+    <div class="onb-opts" id="onbGoal">
+      <button type="button" class="onb-opt" data-g="Похудеть на 5 кг"><i>🔥</i><span>Похудеть<small>Сжечь жир и сохранить мышцы</small></span></button>
+      <button type="button" class="onb-opt" data-g="Набрать мышечную массу"><i>💪</i><span>Набрать массу<small>Больше мышц, рельеф</small></span></button>
+      <button type="button" class="onb-opt" data-g="Стать сильнее"><i>🏋️</i><span>Стать сильнее<small>Рост рабочих весов</small></span></button>
+      <button type="button" class="onb-opt" data-g="Улучшить выносливость"><i>🫀</i><span>Выносливость<small>Дыхание, сердце, энергия</small></span></button>
+      <button type="button" class="onb-opt" data-g="Быть в форме"><i>✨</i><span>Быть в форме<small>Тонус и здоровье</small></span></button>
+    </div>
+    <div class="onb-foot"><button class="btn" id="onbN1" type="button">Дальше</button></div>
+  </div>
+
+  <div class="onb-step" data-s="2">
+    <h2>Немного о вас</h2>
+    <div class="lead">Нужно, чтобы посчитать калории и подобрать нагрузку. Данные хранятся только у вас в Telegram.</div>
+    <div class="onb-seg" id="onbSex"><button type="button" data-v="m">👨 Мужской</button><button type="button" data-v="f">👩 Женский</button></div>
+    <div class="onb-row3" style="margin-top:4px">
+      <div><label>Возраст</label><input id="onbAge" type="number" inputmode="numeric" placeholder="25"></div>
+      <div><label>Рост, см</label><input id="onbH" type="number" inputmode="numeric" placeholder="175"></div>
+      <div><label>Вес, кг</label><input id="onbW" type="number" inputmode="decimal" placeholder="75"></div>
+    </div>
+    <div class="onb-err" id="onbErr2"></div>
+    <div class="onb-foot"><button class="btn" id="onbN2" type="button">Дальше</button></div>
+  </div>
+
+  <div class="onb-step" data-s="3">
+    <h2>Как будете тренироваться?</h2>
+    <label style="margin-top:0">Опыт</label>
+    <div class="onb-seg three" id="onbLvl"><button type="button" data-v="beg">Новичок</button><button type="button" data-v="mid">Иногда</button><button type="button" data-v="adv">Регулярно</button></div>
+    <label>Где</label>
+    <div class="onb-seg three" id="onbEq"><button type="button" data-v="home">Дома</button><button type="button" data-v="db">Дома с гантелями</button><button type="button" data-v="gym">В зале</button></div>
+    <label>Сколько раз в неделю</label>
+    <div class="chips" id="onbDays"></div>
+    <label>Есть ограничения?</label>
+    <div class="chips" id="onbLim"></div>
+    <label>Удобное время тренировки</label>
+    <input id="onbTime" type="time" value="18:00">
+    <div class="onb-err" id="onbErr3"></div>
+    <div class="onb-foot"><button class="btn" id="onbN3" type="button">🤖 Составить мой план</button></div>
+  </div>
+
+  <div class="onb-step" data-s="4">
+    <h2>План готов ✅</h2>
+    <div class="lead" id="onbLead"></div>
+    <div id="onbSum"></div>
+    <label class="chk"><input type="checkbox" id="onbRem" checked> Бот напомнит о тренировке за 30 минут</label>
+    <div class="onb-foot"><button class="btn" id="onbGo" type="button">Начать</button></div>
+  </div>
+</div>
+
 <!-- КАРТОЧКА УПРАЖНЕНИЯ -->
 <div class="sheet-bg" id="exBg"></div>
 <div class="sheet" id="exSheet" role="dialog" aria-modal="true" aria-labelledby="exTitle">
@@ -963,7 +1044,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   // а миниатюры фото еды в облако не кладём (они остаются только на устройстве).
   var CLOUD_KEYS = ["fithub_user", "fithub_user_goal", "fithub_goal", "fithub_weights", "fithub_workouts", "fithub_food",
     "fithub_kcal_goal", "fithub_macro_goal", "fithub_daytasks", "fithub_done", "fithub_routine", "fithub_visits",
-    "fithub_visit_best", "fithub_my_plan", "fithub_plan_custom", "fithub_plan_sel", "fithub_train_log", "fithub_voice", "fithub_first_seen", "fithub_ret", "fithub_rem"];
+    "fithub_visit_best", "fithub_my_plan", "fithub_plan_custom", "fithub_plan_sel", "fithub_train_log", "fithub_voice", "fithub_first_seen", "fithub_ret", "fithub_rem", "fithub_onb"];
   var CHUNK = 4000, cloudDirty = {}, cloudTimer = null, cloudBusy = false;
   var cs = null;
   try { if (tg && tg.CloudStorage && tg.isVersionAtLeast && tg.isVersionAtLeast("6.9")) cs = tg.CloudStorage; } catch(e){}
@@ -1022,7 +1103,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   function cloudPull(){
     if (!cs) return;
     var times = syncTimes();
-    csCall("getItem", ["fithub_meta"]).then(function(m){
+    return csCall("getItem", ["fithub_meta"]).then(function(m){
       var meta = {}; try { meta = JSON.parse(m || "{}") || {}; } catch(e){}
       var newer = CLOUD_KEYS.filter(function(k){ return meta[k] && meta[k].t > (times[k] || 0); });
       CLOUD_KEYS.forEach(function(k){   // здесь новее — отправим в облако
@@ -4239,6 +4320,123 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     remPost({ action: "seen" }).then(function(x){ if (x.ok) save("fithub_rem_seen", today); }).catch(function(){});
   })();
 
+  // === ОНБОРДИНГ: цель → данные → тренировки → готовый план ===
+  var onb = { step: 1, goal: "", sex: "", lvl: "beg", eq: "home", days: 3, lim: [] };
+  function onbStep(n){
+    onb.step = n;
+    [].forEach.call(document.querySelectorAll(".onb-step"), function(el){ el.classList.toggle("on", +el.dataset.s === n); });
+    [].forEach.call($("onbBar").children, function(el, i){ el.classList.toggle("on", i < n); });
+    $("onbSkip").style.visibility = n >= 4 ? "hidden" : "visible";
+    $("onb").scrollTop = 0;
+    track("onb_step", { step: n });
+  }
+  function onbSeg(id, key){
+    var box = $(id);
+    [].forEach.call(box.children, function(b){ b.classList.toggle("on", b.dataset.v === onb[key]); });
+    box.onclick = function(e){
+      var b = e.target.closest ? e.target.closest("[data-v]") : null; if (!b) return;
+      haptic(); onb[key] = b.dataset.v; onbSeg(id, key);
+    };
+  }
+  function onbChips(){
+    $("onbDays").innerHTML = [2, 3, 4, 5, 6].map(function(d){
+      return '<button type="button" class="chip' + (onb.days === d ? " on" : "") + '" data-d="' + d + '">' + d + '</button>';
+    }).join("");
+    $("onbLim").innerHTML = '<button type="button" class="chip' + (!onb.lim.length ? " on" : "") + '" data-l="">Нет</button>' +
+      LIMITS.map(function(l){ return '<button type="button" class="chip' + (onb.lim.indexOf(l[0]) >= 0 ? " on" : "") + '" data-l="' + l[0] + '">' + l[1] + '</button>'; }).join("");
+  }
+  $("onbDays").onclick = function(e){
+    var b = e.target.closest ? e.target.closest("[data-d]") : null; if (!b) return;
+    haptic(); onb.days = +b.dataset.d; onbChips();
+  };
+  $("onbLim").onclick = function(e){
+    var b = e.target.closest ? e.target.closest("[data-l]") : null; if (!b) return;
+    haptic();
+    var l = b.dataset.l;
+    if (!l) onb.lim = [];
+    else { var i = onb.lim.indexOf(l); if (i >= 0) onb.lim.splice(i, 1); else onb.lim.push(l); }
+    onbChips();
+  };
+  $("onbGoal").onclick = function(e){
+    var b = e.target.closest ? e.target.closest("[data-g]") : null; if (!b) return;
+    haptic(); onb.goal = b.dataset.g;
+    [].forEach.call($("onbGoal").children, function(x){ x.classList.toggle("on", x === b); });
+    setTimeout(function(){ onbStep(2); }, 180);   // выбрали — сразу дальше
+  };
+  $("onbN1").onclick = function(){
+    if (!onb.goal) { notify("error"); $("onbGoal").children[4].click(); return; }   // без выбора — «Быть в форме»
+    onbStep(2);
+  };
+  $("onbN2").onclick = function(){
+    var age = num($("onbAge").value), h = num($("onbH").value), w = num(String($("onbW").value).replace(",", "."));
+    var err = !onb.sex ? "Выберите пол" : (!age || age < 10 || age > 100) ? "Укажите возраст от 10 до 100 лет" :
+      (!h || h < 120 || h > 230) ? "Укажите рост от 120 до 230 см" : (!w || w < 30 || w > 300) ? "Укажите вес от 30 до 300 кг" : "";
+    $("onbErr2").textContent = err;
+    if (err) { notify("error"); return; }
+    onb.age = Math.round(age); onb.h = Math.round(h); onb.w = +w.toFixed(1);
+    haptic(); onbStep(3);
+  };
+  $("onbN3").onclick = function(){
+    haptic("medium");
+    userData = { sex: onb.sex, age: onb.age, h: onb.h, lvl: onb.lvl, eq: onb.eq, days: onb.days, lim: onb.lim.slice() };
+    save("fithub_user", userData);
+    track("profile_save", { eq: userData.eq, days: userData.days, lvl: userData.lvl, onb: 1 });
+    var today = localDay(new Date());
+    entries = entries.filter(function(x){ return x.d !== today; });
+    entries.push({ d: today, w: onb.w });
+    save("fithub_weights", entries);
+    udDirty = false; renderUserData();
+    var time = $("onbTime").value || "18:00", plan;
+    try { plan = buildPlan(onb.goal, time); applyPlan(plan); } catch(e){ plan = null; }
+    track("goal_plan", { onb: 1 }); track("goal_apply", { onb: 1 });
+    renderWeights();
+    if (plan) {
+      var days = (plan.split || []).filter(function(d){ return d.wd != null; }).map(function(d){ return WD_SHORT[d.wd]; });
+      $("onbLead").textContent = "Цель: " + plan.goal.label.toLowerCase() + ". Всё уже в приложении — план на сегодня на главной.";
+      $("onbSum").innerHTML =
+        '<div class="onb-sum"><b>🏋️ Тренировки</b><div>' + esc(days.join(", ").replace(/^./, function(c){ return c.toUpperCase(); })) + ' в ' + esc(time) + '. ' + esc(plan.splitTxt || "") + '</div></div>' +
+        '<div class="onb-sum"><b>🍽 Питание</b><div>' + plan.kcal + ' ккал в день: белки ' + plan.p + ' г, жиры ' + plan.f + ' г, углеводы ' + plan.c + ' г</div></div>' +
+        (plan.warns && plan.warns.length ? '<div class="onb-sum"><b>⚠️ Важно</b><div>' + esc(plan.warns[0]) + '</div></div>' : '');
+    } else {
+      $("onbLead").textContent = "Данные сохранены. План можно подобрать на главной в разделе «Моя цель».";
+      $("onbSum").innerHTML = "";
+    }
+    onbStep(4);
+  };
+  function onbClose(done){
+    $("onb").classList.remove("open");
+    document.body.style.overflow = "";
+    save("fithub_onb", done ? "done" : "skip");
+    try { tg.BackButton.offClick(onbBack); tg.BackButton.hide(); } catch(e){}
+  }
+  function onbBack(){ if (onb.step > 1 && onb.step < 4) onbStep(onb.step - 1); }
+  $("onbSkip").onclick = function(){ haptic(); track("onb_skip", { step: onb.step }); onbClose(false); };
+  $("onbGo").onclick = function(){
+    haptic("medium");
+    var wantRem = $("onbRem").checked;
+    track("onb_done", { rem: wantRem ? 1 : 0 });
+    onbClose(true);
+    showTab("home");
+    if (wantRem) {   // включаем напоминания о тренировках по дням плана (с тем же сохранением, что и в профиле)
+      rem = rem || null; renderRem();
+      remDays = planWeekdays();
+      $("remWOn").checked = true; $("remWTime").value = $("onbTime").value || "18:00"; $("remWBefore").value = "30";
+      remSections();
+      $("remSave").click();
+    }
+  };
+  function openOnb(){
+    onbSeg("onbSex", "sex"); onbSeg("onbLvl", "lvl"); onbSeg("onbEq", "eq"); onbChips();
+    onbStep(1);
+    $("onb").classList.add("open");
+    document.body.style.overflow = "hidden";
+    try { tg.BackButton.onClick(onbBack); tg.BackButton.show(); } catch(e){}
+  }
+  function maybeOnboard(){
+    if (load("fithub_onb", "") || profileReady()) return;
+    openOnb();
+  }
+
   // === СТАРТ ===
   renderWeights();   // внутри вызывает renderProfile
   renderCal();
@@ -4247,7 +4445,8 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     var url = new URL("privacy.html", location.href).href;
     try { if (tg && tg.openLink) { e.preventDefault(); tg.openLink(url); } } catch(err){}
   };
-  cloudPull();
+  // онбординг — после проверки облака, чтобы не показывать его тому, чьи данные сейчас восстановятся
+  Promise.race([Promise.resolve(cloudPull()), new Promise(function(r){ setTimeout(r, 3000); })]).catch(function(){}).then(function(){ setTimeout(maybeOnboard, 300); });
   document.addEventListener("visibilitychange", function(){ if (document.hidden) { clearTimeout(cloudTimer); cloudPush(); } });
 })();
 </script>
