@@ -144,6 +144,7 @@ nav button.on{color:var(--accent);font-weight:700}
 .chk{display:flex;align-items:center;gap:10px;color:var(--text);font-size:14px;margin:12px 0 0}
 .chk input{width:20px;height:20px;accent-color:var(--accent);padding:0}
 .remsec{border-top:1px solid var(--line);margin-top:12px;padding-top:2px}
+.fbcard{display:flex;align-items:center;gap:12px}.fbcard>div{flex:1}.fbcard .btn{width:auto;margin:0;padding:11px 16px;font-size:15px}
 .onb{position:fixed;inset:0;z-index:80;background:var(--bg);display:none;flex-direction:column;padding:calc(14px + env(safe-area-inset-top)) 16px calc(14px + env(safe-area-inset-bottom));overflow-y:auto}
 .onb.open{display:flex}
 .onb-top{display:flex;align-items:center;gap:10px;margin-bottom:18px}
@@ -771,6 +772,11 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     <div class="ach" id="ach"></div>
   </div>
 
+  <div class="card fbcard">
+    <div><b>💬 Есть идея или нашли ошибку?</b><div class="note" style="margin-top:2px">Напишите — я читаю каждое сообщение</div></div>
+    <button class="btn" id="fbOpen" type="button">Написать</button>
+  </div>
+
   <div class="card" id="remCard">
     <div class="sub">🔔 Напоминания от бота</div>
     <div class="note" style="margin-top:4px">Бот пришлёт сообщение в Telegram — с кнопкой, которая сразу откроет FitHub.</div>
@@ -919,6 +925,22 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     <div id="onbSum"></div>
     <label class="chk"><input type="checkbox" id="onbRem" checked> Бот напомнит о тренировке за 30 минут</label>
     <div class="onb-foot"><button class="btn" id="onbGo" type="button">Начать</button></div>
+  </div>
+</div>
+
+<!-- ОТЗЫВ -->
+<div class="sheet-bg" id="fbBg"></div>
+<div class="sheet" id="fbSheet" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
+  <div class="sheet-top">
+    <div class="sheet-grip"></div>
+    <div class="sheet-head"><span style="font-size:22px">💬</span><b id="fbTitle">Отзыв о FitHub</b><button id="fbClose" type="button" aria-label="Закрыть">✕</button></div>
+  </div>
+  <div class="sheet-body">
+    <div class="chips" id="fbKinds"><button type="button" class="chip on" data-k="💡 Идея">💡 Идея</button><button type="button" class="chip" data-k="🐞 Ошибка">🐞 Ошибка</button><button type="button" class="chip" data-k="❤️ Нравится">❤️ Нравится</button><button type="button" class="chip" data-k="😕 Неудобно">😕 Неудобно</button></div>
+    <textarea id="fbText" rows="5" maxlength="2000" style="margin-top:12px" placeholder="Что понравилось, что мешает, чего не хватает? Если ошибка — опишите, что нажимали."></textarea>
+    <div class="note">Сообщение придёт автору в Telegram вместе с вашим именем, чтобы он мог ответить.</div>
+    <button class="btn" id="fbSend" type="button">Отправить</button>
+    <div class="note" id="fbNote" style="text-align:center"></div>
   </div>
 </div>
 
@@ -1189,7 +1211,9 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   // === НАВИГАЦИЯ ===
   var tabs = document.querySelectorAll(".tab");
   var navBtns = document.querySelectorAll("nav button");
+  var curTab = "home";
   function showTab(name){
+    curTab = name;
     navBtns.forEach(function(x){ x.classList.toggle("on", x.dataset.tab === name); });
     tabs.forEach(function(x){ x.classList.remove("on"); });
     $("tab-" + name).classList.add("on");
@@ -4319,6 +4343,54 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     if (load("fithub_rem_seen", "") === today) return;
     remPost({ action: "seen" }).then(function(x){ if (x.ok) save("fithub_rem_seen", today); }).catch(function(){});
   })();
+
+  // === ОТЗЫВ: сообщение приходит автору в Telegram через функцию ===
+  var fbKind = "💡 Идея", fbOpenNow = false;
+  function openFb(){
+    if (fbOpenNow) return; fbOpenNow = true;
+    $("fbNote").textContent = ""; $("fbSend").disabled = false; $("fbSend").textContent = "Отправить";
+    $("fbSheet").classList.add("open"); $("fbBg").classList.add("open");
+    document.body.style.overflow = "hidden";
+    try { tg.BackButton.onClick(closeFb); tg.BackButton.show(); } catch(e){}
+    track("feedback_open", { tab: curTab });
+  }
+  function closeFb(){
+    if (!fbOpenNow) return; fbOpenNow = false;
+    $("fbSheet").classList.remove("open"); $("fbBg").classList.remove("open");
+    document.body.style.overflow = "";
+    try { tg.BackButton.offClick(closeFb); tg.BackButton.hide(); } catch(e){}
+  }
+  $("fbOpen").onclick = function(){ haptic(); openFb(); };
+  $("fbText").addEventListener("input", function(){ if ($("fbNote").textContent && !$("fbSend").disabled) $("fbNote").textContent = ""; });
+  $("fbClose").onclick = function(){ haptic(); closeFb(); };
+  $("fbBg").onclick = closeFb;
+  $("fbKinds").onclick = function(e){
+    var b = e.target.closest ? e.target.closest("[data-k]") : null; if (!b) return;
+    haptic(); fbKind = b.dataset.k;
+    [].forEach.call($("fbKinds").children, function(x){ x.classList.toggle("on", x === b); });
+  };
+  $("fbSend").onclick = function(){
+    var text = $("fbText").value.trim(), note = $("fbNote"), btn = $("fbSend");
+    if (text.length < 2) { notify("error"); note.textContent = "Напишите хотя бы пару слов"; $("fbText").focus(); return; }
+    var initData = "", first = load("fithub_first_seen", null);
+    try { initData = (tg && tg.initData) || ""; } catch(e){}
+    var meta = { tab: curTab, platform: (tg && tg.platform) || "", ver: (tg && tg.version) || "", days: first ? dayNum(localDay(new Date())) - dayNum(first) : null };
+    btn.disabled = true; btn.textContent = "Отправляю…"; note.textContent = "";
+    fetch(AI_ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify({ action: "feedback", text: fbKind + "\n" + text, meta: meta, initData: initData }) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok, status: r.status, j: j }; }); })
+      .then(function(x){
+        if (x.ok && x.j.ok) {
+          notify("success"); track("feedback_sent", { kind: fbKind, tab: meta.tab });
+          $("fbText").value = ""; btn.textContent = "Отправлено ✓"; note.textContent = "Спасибо! Автор прочитает и, если нужно, ответит вам в Telegram.";
+          setTimeout(closeFb, 1800);
+        } else {
+          btn.disabled = false; btn.textContent = "Отправить";
+          note.textContent = x.status === 401 ? "Откройте приложение через бота в Telegram, чтобы отправить отзыв." :
+            x.status === 429 ? "Слишком много сообщений за сегодня — попробуйте завтра." : "Не получилось отправить (" + (x.status || "нет сети") + "). Попробуйте позже.";
+          notify("error");
+        }
+      }).catch(function(){ btn.disabled = false; btn.textContent = "Отправить"; note.textContent = "Нет связи с сервером. Попробуйте позже."; });
+  };
 
   // === ОНБОРДИНГ: цель → данные → тренировки → готовый план ===
   var onb = { step: 1, goal: "", sex: "", lvl: "beg", eq: "home", days: 3, lim: [] };
