@@ -1173,7 +1173,27 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   // Номер счётчика в metrika.yandex.ru («FitHub мини-приложение»). 0 — отключить аналитику.
   var METRIKA_ID = 113832857;
   var ymQueue = [];
+  // счётчики для недельной сводки от бота: копятся и раз в несколько секунд уходят в функцию
+  var STAT_MAP = { app_open: "open", first_open: "first_open", onb_done: "onb_done", onb_skip: "onb_skip", ret_d1: "ret_d1", ret_d7: "ret_d7",
+    ret_d30: "ret_d30", photo: "photo", ai_ok: "ai_ok", ai_error: "ai_error", food_add: "food_add", workout_start: "workout_start",
+    workout_done: "workout_done", goal_apply: "goal_apply", reminders_on: "reminders_on", feedback_sent: "feedback_sent", exercise_info: "exercise_info" };
+  var statQ = {}, statTimer = null;
+  function statFlush(){
+    clearTimeout(statTimer); statTimer = null;
+    if (!Object.keys(statQ).length) return;
+    var initData = ""; try { initData = (tg && tg.initData) || ""; } catch(e){}
+    var ev = statQ; statQ = {};
+    if (!initData) return;
+    try { fetch(AI_ENDPOINT, { method: "POST", keepalive: true, headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify({ action: "stat", ev: ev, initData: initData }) }).catch(function(){}); } catch(e){}
+  }
+  function statAdd(goal){
+    var k = STAT_MAP[goal]; if (!k) return;
+    statQ[k] = (statQ[k] || 0) + 1;
+    if (!statTimer) statTimer = setTimeout(statFlush, 4000);
+  }
+  document.addEventListener("visibilitychange", function(){ if (document.hidden) statFlush(); });
   function track(goal, params){
+    statAdd(goal);
     if (!METRIKA_ID) return;
     try {
       if (window.ym) window.ym(METRIKA_ID, "reachGoal", goal, params || {});
