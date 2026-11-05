@@ -772,6 +772,11 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     <div class="ach" id="ach"></div>
   </div>
 
+  <div class="card fbcard" id="ownerCard" style="display:none">
+    <div><b>📊 Сводка для автора</b><div class="note" style="margin-top:2px" id="ownerNote">Статистика за последние 7 дней придёт от бота</div></div>
+    <button class="btn" id="ownerDigest" type="button">Прислать</button>
+  </div>
+
   <div class="card fbcard">
     <div><b>💬 Есть идея или нашли ошибку?</b><div class="note" style="margin-top:2px">Напишите — я читаю каждое сообщение</div></div>
     <button class="btn" id="fbOpen" type="button">Написать</button>
@@ -4411,6 +4416,26 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
         }
       }).catch(function(){ btn.disabled = false; btn.textContent = "Отправить"; note.textContent = "Нет связи с сервером. Попробуйте позже."; });
   };
+
+  // === СВОДКА ПО ЗАПРОСУ (видна только автору; проверка — на сервере) ===
+  (function(){
+    var OWNER_ID = 5517755450, me = 0;
+    try { me = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 0; } catch(e){}
+    if (me !== OWNER_ID) return;
+    $("ownerCard").style.display = "";
+    $("ownerDigest").onclick = function(){
+      var btn = $("ownerDigest"), note = $("ownerNote"), initData = "";
+      try { initData = tg.initData || ""; } catch(e){}
+      haptic(); btn.disabled = true; btn.textContent = "…"; note.textContent = "Собираю статистику…";
+      fetch(AI_ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify({ action: "digest_now", initData: initData }) })
+        .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok, status: r.status, j: j }; }); })
+        .then(function(x){
+          btn.disabled = false; btn.textContent = "Прислать";
+          if (x.ok && x.j.ok) { notify("success"); note.textContent = "Готово — сводка в чате с ботом ✓"; }
+          else { notify("error"); note.textContent = "Не получилось (" + (x.status || "нет сети") + "). Попробуйте ещё раз."; }
+        }).catch(function(){ btn.disabled = false; btn.textContent = "Прислать"; note.textContent = "Нет связи с сервером."; });
+    };
+  })();
 
   // === ОНБОРДИНГ: цель → данные → тренировки → готовый план ===
   var onb = { step: 1, goal: "", sex: "", lvl: "beg", eq: "home", days: 3, lim: [] };
