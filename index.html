@@ -447,6 +447,13 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 .cform{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--line)}
 .cform input{flex:1;min-width:0}
 .cform button{width:46px;border:0;border-radius:12px;background:var(--grad);color:#fff;font-size:18px;cursor:pointer;flex:none}
+.premcard{border:1px solid rgba(255,196,0,.35);background:linear-gradient(135deg,rgba(255,196,0,.10),rgba(255,140,0,.05)),var(--card)}
+.premcard .btn,#premBuy{background:linear-gradient(135deg,#ffd54a,#ff9f1c);color:#1a1200}
+.premcard .btn{white-space:nowrap}
+.premlist{list-style:none;margin:4px 0 0;padding:0}
+.premlist li{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.45}
+.premlist li:last-child{border-bottom:0}
+.premlist i{font-style:normal;flex:none;width:22px;text-align:center}
 </style>
 </head>
 <body>
@@ -777,6 +784,11 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     <button class="btn" id="ownerDigest" type="button">Прислать</button>
   </div>
 
+  <div class="card fbcard premcard" id="premCard">
+    <div><b>⭐ FitHub Premium</b><div class="note" style="margin-top:2px" id="premNote">Больше распознаваний еды по фото</div></div>
+    <button class="btn" id="premBtn" type="button">Подробнее</button>
+  </div>
+
   <div class="card fbcard">
     <div><b>💬 Есть идея или нашли ошибку?</b><div class="note" style="margin-top:2px">Напишите — я читаю каждое сообщение</div></div>
     <button class="btn" id="fbOpen" type="button">Написать</button>
@@ -932,6 +944,26 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     <div class="onb-foot"><button class="btn" id="onbGo" type="button">Начать</button></div>
   </div>
 </div>
+
+<!-- PREMIUM -->
+<div class="sheet-bg" id="premBg"></div>
+<div class="sheet" id="premSheet" role="dialog" aria-modal="true" aria-labelledby="premTitle">
+  <div class="sheet-top">
+    <div class="sheet-grip"></div>
+    <div class="sheet-head"><span style="font-size:22px">⭐</span><b id="premTitle">FitHub Premium</b><button id="premClose" type="button" aria-label="Закрыть">✕</button></div>
+  </div>
+  <div class="sheet-body">
+    <div class="note" id="premReason" style="margin-top:0"></div>
+    <ul class="premlist">
+      <li><i>📸</i><span>До <b id="premDaily">30</b> распознаваний еды по фото в день вместо <b id="premFree">3</b></span></li>
+      <li><i>💪</i><span>Поддержка FitHub: новые функции выходят быстрее</span></li>
+      <li><i>🔁</i><span>Подписка на 30 дней с автопродлением. Отменить можно в любой момент: Telegram → Настройки → Мои звёзды → Подписки</span></li>
+    </ul>
+    <button class="btn" id="premBuy" type="button">Подключить за <span id="premPrice">150</span> ⭐ в месяц</button>
+    <div class="note" id="premSheetNote" style="text-align:center"></div>
+  </div>
+</div>
+
 
 <!-- ОТЗЫВ -->
 <div class="sheet-bg" id="fbBg"></div>
@@ -2106,6 +2138,11 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
         if (!x.ok) {
           track("ai_error", { code: x.status + (x.j && x.j.error ? " " + x.j.error : "") });
           notify("error");
+          if (x.status === 402) {
+            fstatus("Бесплатные распознавания по фото на сегодня закончились (" + ((x.j && x.j.free) || 3) + " в день). С Premium — до " + ((x.j && x.j.daily) || 30) + " в день, а пока можно добавить продукты через поиск ниже.");
+            try { if (window.FitHubPremium) window.FitHubPremium.open("Бесплатные распознавания на сегодня закончились."); } catch(e){}
+            return;
+          }
           fstatus((x.status === 429 ? "Лимит распознаваний по фото на сегодня исчерпан. Завтра снова можно, а пока добавьте продукты через поиск ниже."
             : x.status === 401 ? "Распознавание по фото работает только внутри Telegram. Откройте приложение через бота."
             : "ИИ сейчас недоступен. Попробуйте ещё раз чуть позже или найдите продукты в поиске ниже.")
@@ -4565,6 +4602,90 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   // онбординг — после проверки облака, чтобы не показывать его тому, чьи данные сейчас восстановятся
   Promise.race([Promise.resolve(cloudPull()), new Promise(function(r){ setTimeout(r, 3000); })]).catch(function(){}).then(function(){ setTimeout(maybeOnboard, 300); });
   document.addEventListener("visibilitychange", function(){ if (document.hidden) { clearTimeout(cloudTimer); cloudPush(); } });
+})();
+</script>
+<script>
+// FitHub Premium: подписка за Telegram Stars (сервер — та же функция, что и распознавание фото)
+(function(){
+  var API = "https://functions.yandexcloud.net/d4est35jduoqlr0e3jh3";
+  var tg = window.Telegram && window.Telegram.WebApp;
+  var st = null, busy = false, isOpen = false;
+  function $(id){ return document.getElementById(id); }
+  function notify(kind){ try { tg.HapticFeedback.notificationOccurred(kind); } catch(e){} }
+  function call(action){
+    var initData = ""; try { initData = (tg && tg.initData) || ""; } catch(e){}
+    return fetch(API, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify({ action: action, initData: initData }) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if (!r.ok) throw new Error(j.error || ("HTTP " + r.status)); return j; }); });
+  }
+  function fmt(ms){ var d = new Date(ms); return ("0" + d.getDate()).slice(-2) + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear(); }
+  function render(){
+    var note = $("premNote"), btn = $("premBtn");
+    if (!note || !btn) return;
+    if (!st) { note.textContent = "Больше распознаваний еды по фото"; btn.textContent = "Подробнее"; }
+    else if (st.premium) { note.textContent = "Активен до " + fmt(st.until) + " · до " + st.daily + " фото в день"; btn.textContent = "Подробнее"; }
+    else { note.textContent = "Фото сегодня: осталось " + st.left + " из " + st.free + ". С Premium — до " + st.daily + " в день"; btn.textContent = st.price + " ⭐"; }
+    if (st) {
+      $("premPrice").textContent = st.price; $("premDaily").textContent = st.daily; $("premFree").textContent = st.free;
+      $("premBuy").style.display = st.premium ? "none" : "";
+      if (st.premium) $("premSheetNote").textContent = "Premium активен до " + fmt(st.until) + ". Продлится автоматически.";
+    }
+  }
+  function refresh(){
+    return call("premium").then(function(s){ st = s; render(); return s; }, function(){ render(); return st; });
+  }
+  function open(reason){
+    if (isOpen) return; isOpen = true;
+    $("premReason").textContent = reason || "Больше возможностей для твоего прогресса.";
+    if (!st || !st.premium) $("premSheetNote").textContent = "";
+    render();
+    $("premSheet").classList.add("open"); $("premBg").classList.add("open");
+    document.body.style.overflow = "hidden";
+    try { tg.BackButton.onClick(close); tg.BackButton.show(); } catch(e){}
+    refresh();
+  }
+  function close(){
+    if (!isOpen) return; isOpen = false;
+    $("premSheet").classList.remove("open"); $("premBg").classList.remove("open");
+    document.body.style.overflow = "";
+    try { tg.BackButton.offClick(close); tg.BackButton.hide(); } catch(e){}
+  }
+  function resetBuy(){ busy = false; $("premBuy").disabled = false; $("premBuy").innerHTML = "Подключить за <span id=\"premPrice\">" + ((st && st.price) || 150) + "</span> ⭐ в месяц"; }
+  function poll(n){
+    refresh().then(function(s){
+      if (s && s.premium) {
+        $("premSheetNote").textContent = "⭐ Premium подключён! Спасибо за поддержку FitHub.";
+        notify("success");
+      } else if (n < 10) setTimeout(function(){ poll(n + 1); }, 1500);
+      else $("premSheetNote").textContent = "Оплата получена. Premium включится в течение минуты — загляни сюда чуть позже.";
+    });
+  }
+  function buy(){
+    if (busy) return;
+    if (!tg || !tg.openInvoice || !tg.initData) { $("premSheetNote").textContent = "Оплата работает только в приложении внутри Telegram."; return; }
+    busy = true; $("premBuy").disabled = true; $("premBuy").textContent = "Открываю оплату…"; $("premSheetNote").textContent = "";
+    call("invoice").then(function(r){
+      tg.openInvoice(r.link, function(status){
+        resetBuy();
+        if (status === "paid") { $("premSheetNote").textContent = "Оплата прошла, включаю Premium…"; poll(0); }
+        else if (status === "failed") { notify("error"); $("premSheetNote").textContent = "Оплата не прошла. Попробуй ещё раз."; }
+      });
+    }).catch(function(){
+      resetBuy(); notify("error");
+      $("premSheetNote").textContent = "Не удалось открыть оплату. Попробуй чуть позже.";
+    });
+  }
+  function init(){
+    if (!$("premCard")) return;
+    $("premBtn").onclick = function(){ open(); };
+    $("premClose").onclick = close;
+    $("premBg").onclick = close;
+    $("premBuy").onclick = buy;
+    var nav = document.querySelector('nav [data-tab="profile"]');
+    if (nav) nav.addEventListener("click", function(){ refresh(); });
+    refresh();
+  }
+  window.FitHubPremium = { open: open, close: close, refresh: refresh };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
 </script>
 </body>
