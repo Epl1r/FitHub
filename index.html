@@ -454,6 +454,20 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 .premlist li{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.45}
 .premlist li:last-child{border-bottom:0}
 .premlist i{font-style:normal;flex:none;width:22px;text-align:center}
+/* поля даты, времени и списки: на iPhone не вылезают из своей колонки */
+.row>div,.goalrow>div{min-width:0}
+input[type="date"],input[type="time"]{-webkit-appearance:none;appearance:none;display:block;min-width:0;max-width:100%;min-height:47px;line-height:1.3;text-align:left}
+input[type="date"]::-webkit-date-and-time-value,input[type="time"]::-webkit-date-and-time-value{text-align:left;margin:0}
+input[type="date"]::-webkit-calendar-picker-indicator,input[type="time"]::-webkit-calendar-picker-indicator{filter:invert(.75);opacity:.8}
+select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238294bd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:12px 8px}
+.rem3 input[type="time"]{padding:12px 6px}
+/* онбординг: кнопка «Назад» и отметки у нескольких целей */
+.onb-back{background:none;border:0;color:var(--text);font:inherit;font-size:26px;line-height:1;cursor:pointer;padding:0 8px 2px 0;visibility:hidden}
+.onb-opt em.onb-chk{margin-left:auto;width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;font-style:normal;color:transparent}
+.onb-opt.on em.onb-chk{background:var(--accent);border-color:var(--accent);color:#fff}
+/* Арни при прокрутке и вводе становится прозрачным и не перехватывает нажатия */
+#mascot{transition:opacity .3s}
+#mascot.faded{opacity:.18;pointer-events:none}
 </style>
 </head>
 <body>
@@ -890,19 +904,20 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 <!-- ОНБОРДИНГ: 3 шага для нового пользователя -->
 <div class="onb" id="onb" role="dialog" aria-modal="true" aria-label="Настройка FitHub">
   <div class="onb-top">
+    <button class="onb-back" id="onbPrev" type="button" aria-label="Назад">‹</button>
     <div class="onb-bar" id="onbBar"><i></i><i></i><i></i></div>
     <button class="onb-skip" id="onbSkip" type="button">Пропустить</button>
   </div>
 
   <div class="onb-step" data-s="1">
     <h2>Привет! Я Арни 💪</h2>
-    <div class="lead">Отвечу на 3 вопроса — и соберу план тренировок и питания под вас. Займёт минуту.<br><b style="color:var(--text)">Какая у вас цель?</b></div>
+    <div class="lead">Отвечу на 3 вопроса — и соберу план тренировок и питания под вас. Займёт минуту.<br><b style="color:var(--text)">Какая у вас цель?</b> Можно выбрать несколько.</div>
     <div class="onb-opts" id="onbGoal">
-      <button type="button" class="onb-opt" data-g="Похудеть на 5 кг"><i>🔥</i><span>Похудеть<small>Сжечь жир и сохранить мышцы</small></span></button>
-      <button type="button" class="onb-opt" data-g="Набрать мышечную массу"><i>💪</i><span>Набрать массу<small>Больше мышц, рельеф</small></span></button>
-      <button type="button" class="onb-opt" data-g="Стать сильнее"><i>🏋️</i><span>Стать сильнее<small>Рост рабочих весов</small></span></button>
-      <button type="button" class="onb-opt" data-g="Улучшить выносливость"><i>🫀</i><span>Выносливость<small>Дыхание, сердце, энергия</small></span></button>
-      <button type="button" class="onb-opt" data-g="Быть в форме"><i>✨</i><span>Быть в форме<small>Тонус и здоровье</small></span></button>
+      <button type="button" class="onb-opt" data-g="Похудеть на 5 кг"><i>🔥</i><span>Похудеть<small>Сжечь жир и сохранить мышцы</small></span><em class="onb-chk">✓</em></button>
+      <button type="button" class="onb-opt" data-g="Набрать мышечную массу"><i>💪</i><span>Набрать массу<small>Больше мышц, рельеф</small></span><em class="onb-chk">✓</em></button>
+      <button type="button" class="onb-opt" data-g="Стать сильнее"><i>🏋️</i><span>Стать сильнее<small>Рост рабочих весов</small></span><em class="onb-chk">✓</em></button>
+      <button type="button" class="onb-opt" data-g="Улучшить выносливость"><i>🫀</i><span>Выносливость<small>Дыхание, сердце, энергия</small></span><em class="onb-chk">✓</em></button>
+      <button type="button" class="onb-opt" data-g="Быть в форме"><i>✨</i><span>Быть в форме<small>Тонус и здоровье</small></span><em class="onb-chk">✓</em></button>
     </div>
     <div class="onb-foot"><button class="btn" id="onbN1" type="button">Дальше</button></div>
   </div>
@@ -2494,6 +2509,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   var SCHEME = {
     strength:  { main: [5, 5, 150], acc: [3, 8, 120], iso: [3, 10, 75] },
     gain:      { main: [4, 8, 120], acc: [3, 10, 90], iso: [3, 12, 60] },
+    recomp:    { main: [4, 8, 105], acc: [3, 10, 75], iso: [3, 12, 60] },
     lose:      { main: [3, 10, 75], acc: [3, 12, 60], iso: [2, 15, 45] },
     endurance: { main: [3, 15, 45], acc: [3, 15, 40], iso: [2, 20, 30] },
     glutes:    { main: [4, 10, 90], acc: [3, 12, 60], iso: [3, 15, 45] },
@@ -2541,16 +2557,17 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   }
   function buildSplit(g, u, lvl, restAdd){
     var lim = u.lim || [], P = makePicker(g.type, u, lvl, restAdd), choose = P.choose, prescribe = P.prescribe;
+    function gHas(x){ return g.type === x || (g.all || []).indexOf(x) >= 0; }   // основная или дополнительная цель
     var keys = SPLITS[u.days] || SPLITS[3], days = SCHEDULE[u.days] || SCHEDULE[3];
     if (lim.indexOf("shoulders") >= 0 && u.days >= 5) keys = u.days === 5 ? ["upA", "loA", "upB", "loB", "fbA"] : ["upA", "loA", "fbA", "upB", "loB", "fbB"];   // без жимов отдельные жимовые дни не нужны
     var cap = { beg: 5, mid: 6, adv: 7 }[lvl] || 6;
     if (g.type === "health") cap = Math.min(cap, 5);
     return keys.map(function(key, di){
       var T = DAY_T[key], slots = T[1].slice(), lower = /^(fb|lo|legs)/.test(key);
-      if (g.type === "glutes" && !slots.some(function(s){ return s[0] === "glute"; })) slots.splice(lower ? 1 : slots.length - 1, 0, ["glute", lower ? "acc" : "iso", di]);
-      if (g.type === "glutes" && lower) slots = slots.filter(function(s){ return s[0] !== "calves"; });
-      if (g.type === "core") slots.push(["core", "core", di + 1]);
-      if (g.type === "lose" || g.type === "endurance") slots.push(["cond", "cond", di]);
+      if (gHas("glutes") && !slots.some(function(s){ return s[0] === "glute"; })) slots.splice(lower ? 1 : slots.length - 1, 0, ["glute", lower ? "acc" : "iso", di]);
+      if (gHas("glutes") && lower) slots = slots.filter(function(s){ return s[0] !== "calves"; });
+      if (gHas("core")) slots.push(["core", "core", di + 1]);
+      if (gHas("lose") || gHas("endurance")) slots.push(["cond", "cond", di]);
       if (g.type === "health") slots = slots.filter(function(s){ return s[1] !== "iso"; });
       var used = {}, items = [];
       slots.forEach(function(s){
@@ -3445,8 +3462,11 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   }
   function parseGoal(text){
     var t = norm(text), type = null, label = null;
-    for (var i = 0; i < GOAL_TYPES.length; i++) if (GOAL_TYPES[i][2].test(t)) { type = GOAL_TYPES[i][0]; label = GOAL_TYPES[i][1]; break; }
-    var res = { type: type || "health", label: label || "Здоровье и тонус", recognized: !!type, kg: null, abs: false, weeks: null };
+    var all = [];
+    for (var i = 0; i < GOAL_TYPES.length; i++) if (GOAL_TYPES[i][2].test(t)) { all.push(GOAL_TYPES[i][0]); if (!type) { type = GOAL_TYPES[i][0]; label = GOAL_TYPES[i][1]; } }
+    // похудеть и одновременно набрать мышцы — рекомпозиция
+    if (type === "lose" && /набрать|набор|накач|нарастить|мышечн|увеличить мышц/.test(t)) { type = "recomp"; label = "Похудение и набор мышц"; }
+    var res = { type: type || "health", label: label || "Здоровье и тонус", recognized: !!type, kg: null, abs: false, weeks: null, all: all };
     var m = t.match(/(\d+(?:[.,]\d+)?)\s*(кг|килограм|кило)/);
     if (m) {
       var n = parseFloat(m[1].replace(",", "."));
@@ -3480,13 +3500,14 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     if (/подтяг|турник/.test(norm(text)) && eq !== "gym") notes.push("Подтягиваний в плане нет, для них нужен турник. Тяги и планка укрепят спину, руки и корпус — это хорошая подготовка к подтягиваниям.");
     if (lvl === "beg" && u.days >= 5) notes.push("Для новичка " + u.days + " тренировок в неделю — много. Если чувствуете усталость, начните с 3 и добавляйте дни постепенно.");
     if (eq === "home") notes.push("Дома без инвентаря нагрузка растёт за счёт повторов. Если появятся гантели или зал, укажите это в профиле — план станет разнообразнее.");
+    if (g.type === "recomp") notes.push("Совмещаю две цели: небольшой дефицит калорий, много белка и силовые тренировки. Вес будет снижаться медленно, зато жир уходит, а мышцы растут — смотрите на объёмы и зеркало, а не только на весы.");
     var days = SCHEDULE[u.days] || SCHEDULE[3];
 
     // --- питание ---
     var bmr = 10 * w + 6.25 * u.h - 5 * u.age + (u.sex === "m" ? 5 : -161);
     var act = { 2: 1.375, 3: 1.45, 4: 1.55, 5: 1.65, 6: 1.7 }[u.days] || 1.45;
     var tdee = bmr * act;
-    var adj = { lose: -0.15, gain: 0.10, strength: 0.05 }[g.type] || 0;
+    var adj = { lose: -0.15, gain: 0.10, strength: 0.05, recomp: bmi >= 25 ? -0.15 : -0.05 }[g.type] || 0;
     if (g.type === "lose" && bmi >= 30) adj = -0.2;
     if (g.type === "lose" && bmi < 20) { adj = 0; warns.push("Ваш индекс массы тела " + bmi.toFixed(1) + " — уже в нижней части нормы. Калории не урезаю: лучше сосредоточиться на силовых тренировках и белке."); }
     if (u.age < 18) { adj = Math.max(-0.1, Math.min(0.1, adj)); warns.push("До 18 лет калории сильно не урезаю и не завышаю: растущему организму нужна энергия. Обсудите питание с врачом."); }
@@ -3494,7 +3515,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     var minK = Math.max(Math.round(bmr * 1.1), u.sex === "m" ? 1500 : 1200);
     if (kcal < minK) kcal = Math.round(minK / 10) * 10;
     var refW = bmi > 30 ? 25 * Math.pow(u.h / 100, 2) : w;
-    var p = Math.round(refW * ({ lose: 2, gain: 1.8, strength: 1.8 }[g.type] || 1.6));
+    var p = Math.round(refW * ({ lose: 2, gain: 1.8, strength: 1.8, recomp: 2 }[g.type] || 1.6));
     var f = Math.round(refW * (g.type === "lose" ? 0.8 : 0.9));
     var c = Math.max(50, Math.round((kcal - p * 4 - f * 9) / 4));
     var water = Math.round(w * 0.03 * 10) / 10;
@@ -3522,7 +3543,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     if (!g.recognized) warns.push("Не удалось точно понять цель, поэтому составил общий план для формы и здоровья. Уточните цель, например «похудеть на 5 кг» или «накачать ягодицы».");
 
     var habits = [{ text: "💧 Вода " + String(water).replace(".", ",") + " л", time: "" }];
-    if (g.type === "lose") habits.push({ text: "🚶 10 000 шагов", time: "" });
+    if (g.type === "lose" || g.type === "recomp") habits.push({ text: "🚶 10 000 шагов", time: "" });
     else if (g.type === "endurance" || g.type === "health") habits.push({ text: "🚶 8 000 шагов", time: "" });
     habits.push({ text: "🥩 Белок " + p + " г", time: "" });
     habits.push({ text: "😴 Сон 7–9 часов", time: "23:00" });
@@ -3628,11 +3649,22 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   }
 
   $("goalEx").innerHTML = GOAL_EX.map(function(x){ return '<button type="button" class="chip">' + x + '</button>'; }).join("");
+  // подсказки целей: можно выбрать несколько, повторное нажатие убирает цель
+  function goalExSync(){
+    var v = $("goalText").value.toLowerCase();
+    [].forEach.call($("goalEx").children, function(c){ c.classList.toggle("on", v.indexOf(c.textContent.toLowerCase()) >= 0); });
+  }
   $("goalEx").onclick = function(e){
     var b = e.target.closest ? e.target.closest(".chip") : null;
     if (!b) return;
-    haptic(); $("goalText").value = b.textContent; $("goalText").focus();
+    haptic();
+    var x = b.textContent, parts = $("goalText").value.split(/\s*,\s*/).filter(Boolean);
+    var i = parts.map(function(p){ return p.toLowerCase(); }).indexOf(x.toLowerCase());
+    if (i >= 0) parts.splice(i, 1); else parts.push(x);
+    $("goalText").value = parts.join(", ");
+    goalExSync();
   };
+  $("goalText").addEventListener("input", goalExSync);
   $("goalGen").onclick = function(){
     var text = $("goalText").value.trim();
     if (!text) { notify("error"); $("goalText").focus(); $("goalText").placeholder = "Сначала напишите цель, например: похудеть на 5 кг"; return; }
@@ -3663,6 +3695,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     goalOpen = true;
     if (chatOpen) closeChat();
     if (userGoal) { $("goalText").value = userGoal.text; $("goalTime").value = userGoal.time || "18:00"; }
+    goalExSync();
     renderGoalProfile();
     if (!goalDraft) renderGoalResult(userGoal ? userGoal.plan : null, userGoal ? userGoal.applied : null);
     $("goalGen").textContent = userGoal || goalDraft ? "🤖 Подобрать заново" : "🤖 Подобрать план";
@@ -4013,7 +4046,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   var MW = 72, MH = 88;
   var reduce = false;
   try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch(e){}
-  var mx = Math.max(4, (window.innerWidth - MW) / 2), my = 6;   // появляется сверху посередине
+  var mx = Math.max(4, window.innerWidth - MW - 8), my = Math.max(6, window.innerHeight - (navEl.offsetHeight || 64) - MH - 16);   // появляется справа внизу, над панелью
   var tx = mx, ty = my, facing = 1, chatOpen = false, dragging = false;
 
   function clampT(){
@@ -4036,6 +4069,63 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     mascot.style.transform = "translate(" + mx.toFixed(1) + "px," + my.toFixed(1) + "px)";
     requestAnimationFrame(tick);
   }
+
+  // при прокрутке и вводе данных Арни становится прозрачным и не перехватывает нажатия
+  var fadeTimer = null, inField = false;
+  function fadeMascot(on){ mascot.classList.toggle("faded", !!on && !dragging && !chatOpen); }
+  window.addEventListener("scroll", function(){
+    fadeMascot(true); clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(function(){ if (!inField) fadeMascot(false); }, 900);
+  }, { passive: true });
+  document.addEventListener("focusin", function(e){
+    var el = e.target;
+    if (el && /^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName) && !chatEl.contains(el)) { inField = true; fadeMascot(true); }
+  });
+  document.addEventListener("focusout", function(){
+    inField = false; clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(function(){ if (!inField) { fadeMascot(false); stepAside(); } }, 300);
+  });
+  // если Арни закрывает кнопку, поле или текст — он сам отходит на свободное место
+  function textAt(x, y){
+    var r = document.caretRangeFromPoint ? document.caretRangeFromPoint(x, y) : null;
+    if (!r || !r.startContainer || r.startContainer.nodeType !== 3 || !/\S/.test(r.startContainer.nodeValue)) return false;
+    var rr = document.createRange(); rr.selectNodeContents(r.startContainer);
+    var rs = rr.getClientRects();
+    for (var i = 0; i < rs.length; i++) { var b = rs[i]; if (x >= b.left - 3 && x <= b.right + 3 && y >= b.top - 3 && y <= b.bottom + 3) return true; }
+    return false;
+  }
+  function coverScore(x, y){   // сколько полезного под Арни: кнопки и поля важнее текста
+    var s = 0;
+    for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) {
+      var px = x + 12 + i * (MW - 24) / 2, py = y + 12 + j * (MH - 24) / 2;
+      var el = document.elementFromPoint(px, py);
+      if (!el || (el.closest && el.closest("nav"))) continue;
+      if (el.closest && el.closest("button, a, input, select, textarea, [role=button], .chip, svg")) s += 3;
+      else if (textAt(px, py)) s += 1;
+    }
+    return s;
+  }
+  function stepAside(){
+    if (docked || flying || dragging || chatOpen || mascot.classList.contains("hidden")) return;
+    var pe = mascot.style.pointerEvents; mascot.style.pointerEvents = "none";
+    try {
+      var cur = coverScore(tx, ty);
+      if (cur > 0) {
+        var W = window.innerWidth, H = window.innerHeight, maxY = H - navEl.offsetHeight - MH - 4;
+        var xs = [tx, Math.max(4, W - MW - 4), 4], best = null, bestS = cur;
+        outer: for (var d = 24; d <= H; d += 24) for (var s = -1; s <= 1; s += 2) for (var k = 0; k < xs.length; k++) {
+          var y = ty + s * d;
+          if (y < 4 || y > maxY) continue;
+          var sc = coverScore(xs[k], y);
+          if (sc < bestS) { bestS = sc; best = [xs[k], y]; if (!sc) break outer; }
+        }
+        if (best) { tx = best[0]; ty = best[1]; }
+      }
+    } finally { mascot.style.pointerEvents = pe; }
+  }
+  window.addEventListener("scroll", function(){ clearTimeout(window.__asideT); window.__asideT = setTimeout(function(){ if (!inField) stepAside(); }, 950); }, { passive: true });
+  navEl.addEventListener("click", function(){ setTimeout(stepAside, 400); });
+  setTimeout(stepAside, 1500);
 
   // реплики над маскотом
   var bubbleTimer;
@@ -4475,12 +4565,13 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
   })();
 
   // === ОНБОРДИНГ: цель → данные → тренировки → готовый план ===
-  var onb = { step: 1, goal: "", sex: "", lvl: "beg", eq: "home", days: 3, lim: [] };
+  var onb = { step: 1, goal: "", goals: [], sex: "", lvl: "beg", eq: "home", days: 3, lim: [] };
   function onbStep(n){
     onb.step = n;
     [].forEach.call(document.querySelectorAll(".onb-step"), function(el){ el.classList.toggle("on", +el.dataset.s === n); });
     [].forEach.call($("onbBar").children, function(el, i){ el.classList.toggle("on", i < n); });
     $("onbSkip").style.visibility = n >= 4 ? "hidden" : "visible";
+    $("onbPrev").style.visibility = n > 1 && n < 4 ? "visible" : "hidden";
     $("onb").scrollTop = 0;
     track("onb_step", { step: n });
   }
@@ -4511,15 +4602,22 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     else { var i = onb.lim.indexOf(l); if (i >= 0) onb.lim.splice(i, 1); else onb.lim.push(l); }
     onbChips();
   };
+  // цели: можно выбрать несколько, дальше — только по кнопке
+  function onbGoalSync(){
+    onb.goal = onb.goals.join(", ");
+    [].forEach.call($("onbGoal").children, function(x){ x.classList.toggle("on", onb.goals.indexOf(x.dataset.g) >= 0); });
+    $("onbN1").textContent = onb.goals.length > 1 ? "Дальше · целей: " + onb.goals.length : "Дальше";
+  }
   $("onbGoal").onclick = function(e){
     var b = e.target.closest ? e.target.closest("[data-g]") : null; if (!b) return;
-    haptic(); onb.goal = b.dataset.g;
-    [].forEach.call($("onbGoal").children, function(x){ x.classList.toggle("on", x === b); });
-    setTimeout(function(){ onbStep(2); }, 180);   // выбрали — сразу дальше
+    haptic();
+    var i = onb.goals.indexOf(b.dataset.g);
+    if (i >= 0) onb.goals.splice(i, 1); else onb.goals.push(b.dataset.g);
+    onbGoalSync();
   };
   $("onbN1").onclick = function(){
-    if (!onb.goal) { notify("error"); $("onbGoal").children[4].click(); return; }   // без выбора — «Быть в форме»
-    onbStep(2);
+    if (!onb.goals.length) { onb.goals = ["Быть в форме"]; onbGoalSync(); }   // без выбора — «Быть в форме»
+    haptic(); onbStep(2);
   };
   $("onbN2").onclick = function(){
     var age = num($("onbAge").value), h = num($("onbH").value), w = num(String($("onbW").value).replace(",", "."));
@@ -4564,6 +4662,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
     try { tg.BackButton.offClick(onbBack); tg.BackButton.hide(); } catch(e){}
   }
   function onbBack(){ if (onb.step > 1 && onb.step < 4) onbStep(onb.step - 1); }
+  $("onbPrev").onclick = function(){ haptic(); onbBack(); };
   $("onbSkip").onclick = function(){ haptic(); track("onb_skip", { step: onb.step }); onbClose(false); };
   $("onbGo").onclick = function(){
     haptic("medium");
