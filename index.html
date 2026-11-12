@@ -542,6 +542,36 @@ button{font-size:14px}
 .onb label{margin:10px 0 6px}
 .onb-top{margin-bottom:12px}
 .onb-seg.three button{font-size:14px;padding:10px 4px}
+/* разбор техники по видео */
+.tq-how{font-size:14px;line-height:1.5;margin:0}
+.tq .btn{margin-top:10px}
+.tq-note{font-size:12px;color:var(--hint);margin-top:8px;line-height:1.4}
+.tq-note a{color:var(--accent);font-weight:600;cursor:pointer}
+.tq-prog{margin-top:12px;font-size:14px;color:var(--hint);display:flex;align-items:center;gap:10px}
+.tq-prog i{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:tqSpin .8s linear infinite;flex:none}
+@keyframes tqSpin{to{transform:rotate(360deg)}}
+.tq-res{margin-top:12px;border:1px solid var(--line);border-radius:16px;padding:12px;background:var(--bg)}
+.tq-head{display:flex;align-items:center;gap:12px}
+.tq-score{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:22px;font-weight:800;color:#fff;flex:none;line-height:1}
+.tq-score small{display:block;font-size:12px;font-weight:600;opacity:.85;margin-top:2px}
+.tq-score.s-hi{background:linear-gradient(135deg,#22c55e,#15803d)}
+.tq-score.s-mid{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.tq-score.s-lo{background:linear-gradient(135deg,#ef4444,#b91c1c)}
+.tq-score.s-no{background:var(--line);color:var(--text);font-size:24px}
+.tq-sum{font-size:14px;line-height:1.45}
+.tq-img{display:block;width:100%;border-radius:12px;margin-top:12px;background:#0b1020}
+.tq-res h5{margin:14px 0 6px;font-size:14px}
+.tq-good{margin:0;padding:0;list-style:none;font-size:14px;line-height:1.45}
+.tq-good li{padding:3px 0 3px 22px;position:relative}
+.tq-good li::before{content:"✓";position:absolute;left:2px;color:var(--ok,#22c55e);font-weight:800}
+.tq-iss{border-left:3px solid var(--line);padding:6px 0 6px 10px;margin:8px 0;font-size:14px;line-height:1.45}
+.tq-iss.high{border-left-color:#ef4444}
+.tq-iss.medium{border-left-color:#f59e0b}
+.tq-iss.low{border-left-color:var(--hint)}
+.tq-iss .fr{display:inline-block;font-size:12px;font-weight:700;color:var(--hint);margin-right:6px}
+.tq-iss .fx{display:block;color:var(--hint);margin-top:2px}
+.tq-safe{margin-top:12px;font-size:14px;line-height:1.45;padding:10px;border-radius:12px;background:rgba(239,68,68,.12)}
+.tq-prev{font-size:12px;color:var(--hint);margin-top:10px}
 </style>
 <script>(function(){try{var m=null;try{m=JSON.parse(localStorage.getItem("fithub_theme"))}catch(e){}var t=window.Telegram&&window.Telegram.WebApp,s=(m==="light"||m==="dark")?m:(t&&t.initData?t.colorScheme:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"));if(s==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
 </head>
@@ -657,6 +687,11 @@ button{font-size:14px}
     <div class="ai-h"><span class="ai-ico">🤖</span><div><b>ИИ-тренер</b><div class="sub">Следит за техникой по камере</div></div></div>
     <div class="note">Поставьте телефон так, чтобы камера видела вас целиком. ИИ считает повторения, подсказывает по технике голосом и сам ведёт по плану: подходы, отдых, следующее упражнение.</div>
     <div class="note">🔒 Видео обрабатывается прямо на телефоне и никуда не отправляется.</div>
+  </div>
+
+  <div class="card">
+    <div class="ai-h"><span class="ai-ico">📹</span><div><b>Разбор техники по видео</b><div class="sub">ИИ найдёт ошибки и подскажет, как исправить</div></div></div>
+    <div class="note">Нажмите на упражнение в плане ниже и выберите «Разобрать моё видео». Само видео остаётся на телефоне — для разбора отправляются только 8 кадров.</div>
   </div>
 
   <div class="card">
@@ -1055,6 +1090,7 @@ button{font-size:14px}
     <ul class="premlist">
       <li><i>📸</i><span>До <b id="premDaily">30</b> распознаваний еды по фото в день вместо <b id="premFree">3</b></span></li>
       <li><i>🤖</i><span>Арни отвечает на вопросы с помощью ИИ: до <b id="premChat">50</b> в день вместо <b id="premChatFree">5</b></span></li>
+      <li><i>📹</i><span>Разбор техники по видео: до <b id="premVideo">10</b> в день (без Premium — <b id="premVideoFree">1</b> пробный)</span></li>
       <li><i>💪</i><span>Поддержка FitHub: новые функции выходят быстрее</span></li>
       <li><i>🔁</i><span>Подписка на 30 дней с автопродлением. Отменить можно в любой момент: Telegram → Настройки → Мои звёзды → Подписки</span></li>
     </ul>
@@ -1082,6 +1118,7 @@ button{font-size:14px}
 </div>
 
 <!-- КАРТОЧКА УПРАЖНЕНИЯ -->
+<input type="file" id="tqFile" accept="video/*" style="display:none">
 <div class="sheet-bg" id="exBg"></div>
 <div class="sheet" id="exSheet" role="dialog" aria-modal="true" aria-labelledby="exTitle">
   <div class="sheet-top" id="exTop">
@@ -2975,6 +3012,7 @@ button{font-size:14px}
       h += '<div class="exm-best">' + (E.load ? 'Во время тренировки записывайте вес и повторы после каждого подхода — здесь появится ваш прогресс.' : 'После тренировки здесь появятся ваши результаты.') + '</div>';
     }
     h += '<h4>Как выполнять</h4><p>' + esc(E.tips) + '</p>';
+    h += tqSection();
     if (E.cam) h += '<h4>📱 ИИ-тренер</h4><p>Это упражнение ИИ-тренер считает по камере. ' + esc(E.view) + '</p>';
     h += '<h4>Видео техники</h4><p>Подробные видео с объяснением от тренеров:</p>' +
       '<div class="exm-vid"><button class="btn ghost" type="button" data-v="https://vk.com/video?q=' + q + '">VK Видео</button><button class="btn ghost" type="button" data-v="https://www.youtube.com/results?search_query=' + q + '">YouTube</button></div>';
@@ -3006,6 +3044,8 @@ button{font-size:14px}
   $("exBg").onclick = closeEx;
   document.addEventListener("keydown", function(e){ if (e.key === "Escape" && exOpen) closeEx(); });
   $("exBody").onclick = function(e){
+    if (e.target.closest && e.target.closest("#tqBtn")) { tqPick(); return; }
+    if (e.target.closest && e.target.closest("#tqPrem")) { haptic(); try { window.FitHubPremium.open("Больше разборов техники по видео."); } catch(err){} return; }
     var t = e.target.closest ? e.target.closest("[data-t]") : null;
     if (t) { haptic(); exTab = t.dataset.t; $("exMediaBox").innerHTML = exMedia(); exStartAnim(); return; }
     var v = e.target.closest ? e.target.closest("[data-v]") : null;
@@ -3223,6 +3263,206 @@ button{font-size:14px}
     c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
     renderWs();
     if (W.reps >= curIt().reps) setDone(false);
+  }
+
+
+  // === РАЗБОР ТЕХНИКИ ПО ВИДЕО ===
+  // Видео не уходит с телефона: берём 8 кадров из первых 20 секунд, рисуем на них скелет (MediaPipe, если загрузился),
+  // считаем углы суставов, склеиваем кадры в одну картинку с номерами и отправляем её в функцию (action "technique").
+  var TQ_FRAMES = 8, TQ_MAX_SEC = 20, tqBusy = false, tqRes = null;
+  var tqHist = load("fithub_tech", {});   // { упражнение: [{ d, score, visible, summary, good, issues, safety }] }, до 3 последних
+  function tqLeftText(){
+    var st = null; try { st = window.FitHubPremium.state(); } catch(e){}
+    if (!st || st.videoLeft == null) return "Без Premium — " + 1 + " пробный разбор, с Premium — до 10 в день.";
+    if (st.premium) return "Разборов сегодня осталось: " + st.videoLeft + " из " + st.videoDaily + ".";
+    return st.videoLeft > 0 ? "Доступен пробный разбор. С Premium — до " + st.videoDaily + " в день." :
+      'Пробный разбор использован. <a id="tqPrem" role="button">С Premium — до ' + st.videoDaily + ' в день</a>';
+  }
+  function tqSection(){
+    var h = '<h4>📹 Разбор вашей техники</h4><div class="tq">' +
+      '<p class="tq-how">Снимите 1–3 повторения сбоку: телефон на уровне пояса, всё тело в кадре. ИИ посмотрит 8 кадров и подскажет, что поправить.</p>' +
+      '<button class="btn" id="tqBtn" type="button">' + (tqBusy ? "Разбираю…" : "Разобрать моё видео") + '</button>' +
+      '<div class="tq-note" id="tqNote">' + tqLeftText() + ' 🔒 Видео остаётся на телефоне, кадры не сохраняются.</div>' +
+      '<div id="tqOut">';
+    if (tqRes && tqRes.ex === exCur.ex) h += tqResultHtml(tqRes.r, tqRes.img);
+    else {
+      var last = (tqHist[exCur.ex] || [])[0];
+      if (last) h += '<div class="tq-prev">Прошлый разбор (' + last.d.split("-").reverse().slice(0, 2).join(".") + '):</div>' + tqResultHtml(last, null);
+    }
+    return h + '</div></div>';
+  }
+  function tqResultHtml(r, img){
+    var cls = !r.visible ? "s-no" : r.score >= 8 ? "s-hi" : r.score >= 5 ? "s-mid" : "s-lo";
+    var h = '<div class="tq-res"><div class="tq-head"><div class="tq-score ' + cls + '">' + (r.visible ? r.score + '<small>из 10</small>' : '?') + '</div>' +
+      '<div class="tq-sum">' + esc(r.summary || (r.visible ? "" : "Не получилось разобрать видео.")) + '</div></div>';
+    if (img) h += '<img class="tq-img" src="' + img + '" alt="Кадры из вашего видео">';
+    if (r.good && r.good.length) h += '<h5>Что получается</h5><ul class="tq-good">' + r.good.map(function(g){ return '<li>' + esc(g) + '</li>'; }).join("") + '</ul>';
+    if (r.issues && r.issues.length) h += '<h5>Что поправить</h5>' + r.issues.map(function(x){
+      return '<div class="tq-iss ' + esc(x.severity) + '">' + (x.frame ? '<span class="fr">КАДР ' + x.frame + '</span>' : '') + esc(x.problem) +
+        '<span class="fx">→ ' + esc(x.fix) + '</span></div>';
+    }).join("");
+    if (r.safety) h += '<div class="tq-safe">⚠️ ' + esc(r.safety) + '</div>';
+    return h + '</div>';
+  }
+  function tqSet(html){ var o = $("tqOut"); if (o) o.innerHTML = html; }
+  function tqProg(text){ tqSet('<div class="tq-prog"><i></i><span>' + esc(text) + '</span></div>'); }
+  function tqPick(){
+    if (tqBusy) return;
+    haptic();
+    var st = null; try { st = window.FitHubPremium.state(); } catch(e){}
+    if (st && st.videoLeft === 0) { try { window.FitHubPremium.open(st.premium ? "Разборы техники на сегодня закончились — завтра будут снова." : "Пробный разбор техники уже использован. С Premium — до " + st.videoDaily + " разборов в день."); } catch(e){} return; }
+    var f = $("tqFile"); f.value = ""; f.click();   // выбор файла — сразу в обработчике нажатия, иначе iOS его не откроет
+  }
+  $("tqFile").addEventListener("change", function(){
+    var file = this.files && this.files[0];
+    if (!file || !exCur) return;
+    var it = exCur;
+    tqBusy = true; var b = $("tqBtn"); if (b) { b.disabled = true; b.textContent = "Разбираю…"; }
+    track("tech_start", { ex: it.ex });
+    tqRun(file, it).then(function(x){
+      tqBusy = false;
+      tqRes = { ex: it.ex, r: x.r, img: x.img };
+      if (x.r.visible) {
+        var arr = tqHist[it.ex] = [{ d: localDay(new Date()), score: x.r.score, visible: true, summary: x.r.summary, good: x.r.good, issues: x.r.issues, safety: x.r.safety }].concat(tqHist[it.ex] || []).slice(0, 3);
+        save("fithub_tech", tqHist);
+      }
+      notify(x.r.visible ? "success" : "warning");
+      track("tech_done", { ex: it.ex, score: x.r.score });
+      try { window.FitHubPremium.refresh().then(function(){ if (exOpen && exCur && exCur.ex === it.ex) { var n = $("tqNote"); if (n) n.innerHTML = tqLeftText() + ' 🔒 Видео остаётся на телефоне, кадры не сохраняются.'; } }); } catch(e){}
+      if (exOpen && exCur && exCur.ex === it.ex) { renderEx(); var o = $("tqOut"); if (o && o.scrollIntoView) o.scrollIntoView({ block: "start", behavior: "smooth" }); }
+    }).catch(function(err){
+      tqBusy = false;
+      var m = String(err && err.message || err);
+      var b2 = $("tqBtn"); if (b2) { b2.disabled = false; b2.textContent = "Разобрать моё видео"; }
+      notify("error");
+      if (m === "video_limit") { tqSet(""); try { window.FitHubPremium.open("Пробный разбор техники уже использован. С Premium — до 10 разборов в день."); } catch(e){} return; }
+      var txt = m === "no_video" ? "Не получилось открыть видео. Попробуйте другое видео (MP4 или MOV, до 1 минуты)." :
+        m === "too_short" ? "Видео слишком короткое — снимите хотя бы одно полное повторение (3–15 секунд)." :
+        m === "no_tg" ? "Разбор работает в приложении внутри Telegram — откройте FitHub через бота." :
+        m === "too_fast" ? "Слишком часто — подождите минуту и попробуйте снова." :
+        m === "ai_timeout" || m === "timeout" ? "ИИ не успел ответить. Попробуйте ещё раз — попытка не списана." :
+        "Не получилось разобрать видео (" + m + "). Попробуйте ещё раз — попытка не списана.";
+      tqSet('<div class="tq-note" style="font-size:14px;margin-top:12px">' + esc(txt) + '</div>');
+    });
+  });
+  function tqWait(el, ev, ms){
+    return new Promise(function(res, rej){
+      var done = false, to = setTimeout(function(){ if (!done) { done = true; rej(new Error("no_video")); } }, ms);
+      el.addEventListener(ev, function h(){ if (done) return; done = true; clearTimeout(to); el.removeEventListener(ev, h); res(); });
+      el.addEventListener("error", function(){ if (!done) { done = true; clearTimeout(to); rej(new Error("no_video")); } }, { once: true });
+    });
+  }
+  function tqAngle(a, b, c){   // угол в точке b, в градусах
+    var v1x = a.x - b.x, v1y = a.y - b.y, v2x = c.x - b.x, v2y = c.y - b.y;
+    var d = Math.sqrt(v1x * v1x + v1y * v1y) * Math.sqrt(v2x * v2x + v2y * v2y);
+    if (!d) return null;
+    return Math.round(Math.acos(Math.max(-1, Math.min(1, (v1x * v2x + v1y * v2y) / d))) * 180 / Math.PI);
+  }
+  var TQ_BONES = [[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28],[27,31],[28,32]];
+  function tqPose(lm, w, h){   // углы для стороны, которую лучше видно
+    var P = function(i){ return { x: lm[i].x * w, y: lm[i].y * h, v: lm[i].visibility == null ? 1 : lm[i].visibility }; };
+    var vis = function(ids){ return ids.reduce(function(s, i){ return s + P(i).v; }, 0); };
+    var L = vis([11, 13, 15, 23, 25, 27]) >= vis([12, 14, 16, 24, 26, 28]);
+    var S = L ? [11, 13, 15, 23, 25, 27] : [12, 14, 16, 24, 26, 28], p = S.map(P);
+    var out = { side: L ? "левая" : "правая", knee: tqAngle(p[3], p[4], p[5]), hip: tqAngle(p[0], p[3], p[4]), elbow: tqAngle(p[0], p[1], p[2]) };
+    var dx = p[0].x - p[3].x, dy = p[3].y - p[0].y;   // наклон корпуса от вертикали
+    out.lean = Math.round(Math.abs(Math.atan2(dx, dy) * 180 / Math.PI));
+    return out;
+  }
+  function tqDrawPose(g, lm, x0, y0, w, h){
+    g.save(); g.lineWidth = Math.max(2, w / 110); g.strokeStyle = "rgba(56,189,248,.95)"; g.fillStyle = "#fde047";
+    TQ_BONES.forEach(function(bn){
+      var a = lm[bn[0]], c = lm[bn[1]];
+      if (!a || !c || (a.visibility != null && a.visibility < .3) || (c.visibility != null && c.visibility < .3)) return;
+      g.beginPath(); g.moveTo(x0 + a.x * w, y0 + a.y * h); g.lineTo(x0 + c.x * w, y0 + c.y * h); g.stroke();
+    });
+    [11,12,13,14,15,16,23,24,25,26,27,28].forEach(function(i){
+      var a = lm[i]; if (!a || (a.visibility != null && a.visibility < .3)) return;
+      g.beginPath(); g.arc(x0 + a.x * w, y0 + a.y * h, Math.max(2.5, w / 80), 0, 7); g.fill();
+    });
+    g.restore();
+  }
+  function tqRun(file, it){
+    var initData = ""; try { initData = (tg && tg.initData) || ""; } catch(e){}
+    if (!initData || !AI_ENDPOINT) return Promise.reject(new Error("no_tg"));
+    var E = EXERCISES[it.ex], url = URL.createObjectURL(file);
+    var v = document.createElement("video");
+    v.muted = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.setAttribute("muted", ""); v.preload = "auto"; v.src = url;
+    var frames = [], img = null, angles = "", pose = null;
+    tqProg("Открываю видео…");
+    var posePromise = new Promise(function(res){   // поза не обязательна: не загрузилась за 15 с — разбираем без неё
+      var t = setTimeout(function(){ res(null); }, 15000);
+      loadPose().then(function(pl){ clearTimeout(t); res(pl); }, function(){ clearTimeout(t); res(null); });
+    });
+    return tqWait(v, "loadedmetadata", 15000).then(function(){
+      var dur = v.duration;
+      if (!isFinite(dur) || !(dur > 0)) dur = 0;
+      if (dur && dur < 1) throw new Error("too_short");
+      if (!v.videoWidth || !v.videoHeight) return tqWait(v, "loadeddata", 10000).then(function(){ return dur; });
+      return dur;
+    }).then(function(dur){
+      // iOS отдаёт кадры при перемотке только после того, как видео хоть раз запускали (без звука это разрешено)
+      try { var pp = v.play(); if (pp && pp.then) pp.then(function(){ v.pause(); }, function(){}); else v.pause(); } catch(e){}
+      var span = Math.min(dur || TQ_MAX_SEC, TQ_MAX_SEC), vw = v.videoWidth || 720, vh = v.videoHeight || 1280;
+      var cw = vh >= vw ? 300 : 600, ch = Math.round(cw * vh / vw);
+      var chain = Promise.resolve();
+      for (var k = 0; k < TQ_FRAMES; k++) (function(k){
+        chain = chain.then(function(){
+          tqProg("Готовлю кадры… " + (k + 1) + " из " + TQ_FRAMES);
+          var tt = Math.min(span - 0.05, (k + 0.5) * span / TQ_FRAMES);
+          var seek = tqWait(v, "seeked", 6000);
+          v.currentTime = Math.max(0, tt);
+          return seek.then(function(){
+            var c = document.createElement("canvas"); c.width = cw; c.height = ch;
+            c.getContext("2d").drawImage(v, 0, 0, cw, ch);
+            frames.push(c);
+          });
+        });
+      })(k);
+      return chain;
+    }).then(function(){
+      URL.revokeObjectURL(url);
+      tqProg("Ищу позу на кадрах…");
+      return posePromise;
+    }).then(function(pl){
+      var lines = [], marks = [], ts = window.performance ? performance.now() : Date.now();   // метки времени для позы должны только расти
+      frames.forEach(function(c, i){
+        var lm = null;
+        if (pl) { try { var r = pl.detectForVideo(c, ts + i + 1); lm = r && r.landmarks && r.landmarks[0]; } catch(e){ lm = null; } }
+        marks.push(lm);
+        if (lm) {
+          var a = tqPose(lm, c.width, c.height);
+          lines.push("Кадр " + (i + 1) + ": колено " + a.knee + "°, таз " + a.hip + "°, локоть " + a.elbow + "°, наклон корпуса " + a.lean + "° (видна " + a.side + " сторона)");
+        } else if (pl) lines.push("Кадр " + (i + 1) + ": поза не найдена");
+      });
+      angles = lines.join("\n");
+      // склейка: вертикальное видео — 4×2, горизонтальное — 2×4; номер кадра в левом верхнем углу
+      var cw = frames[0].width, ch = frames[0].height, cols = cw < ch ? 4 : 2, rows = TQ_FRAMES / cols, gap = 4;
+      var C = document.createElement("canvas"); C.width = cols * cw + (cols - 1) * gap; C.height = rows * ch + (rows - 1) * gap;
+      var g = C.getContext("2d"); g.fillStyle = "#0b1020"; g.fillRect(0, 0, C.width, C.height);
+      frames.forEach(function(c, i){
+        var x = (i % cols) * (cw + gap), y = Math.floor(i / cols) * (ch + gap);
+        g.drawImage(c, x, y);
+        if (marks[i]) tqDrawPose(g, marks[i], x, y, cw, ch);
+        var r = Math.round(cw / 12);
+        g.fillStyle = "rgba(3,6,15,.78)"; g.beginPath(); g.arc(x + r + 6, y + r + 6, r, 0, 7); g.fill();
+        g.fillStyle = "#fff"; g.font = "bold " + Math.round(r * 1.2) + "px -apple-system,Segoe UI,Roboto,sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
+        g.fillText(String(i + 1), x + r + 6, y + r + 7);
+      });
+      var q = 0.82; img = C.toDataURL("image/jpeg", q);
+      while (img.length > 2600000 && q > 0.45) { q -= 0.12; img = C.toDataURL("image/jpeg", q); }
+      tqProg("ИИ смотрит технику… обычно 10–40 секунд");
+      var ctrl = window.AbortController ? new AbortController() : null, timer = setTimeout(function(){ try { ctrl.abort(); } catch(e){} }, 58000);
+      return fetch(AI_ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, signal: ctrl ? ctrl.signal : undefined,
+        body: JSON.stringify({ action: "technique", image: img, name: E.name, tips: E.tips || "", angles: angles, initData: initData }) })
+        .then(function(r){ clearTimeout(timer); return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok, status: r.status, j: j }; }); },
+              function(e){ clearTimeout(timer); throw new Error(e && e.name === "AbortError" ? "timeout" : "network"); });
+    }).then(function(x){
+      if (x.ok && x.j && x.j.ok) return { r: x.j, img: img };
+      if (x.status === 402) throw new Error("video_limit");
+      if (x.status === 429) throw new Error("too_fast");
+      throw new Error((x.j && x.j.error) || ("HTTP " + x.status));
+    }, function(e){ try { URL.revokeObjectURL(url); } catch(e2){} throw e; });
   }
 
   // --- камера и ИИ ---
@@ -5108,6 +5348,7 @@ button{font-size:14px}
     if (st) {
       $("premPrice").textContent = st.price; $("premDaily").textContent = st.daily; $("premFree").textContent = st.free;
       if (st.chatDaily) { $("premChat").textContent = st.chatDaily; $("premChatFree").textContent = st.chatFree; }
+      if (st.videoDaily) { $("premVideo").textContent = st.videoDaily; $("premVideoFree").textContent = st.videoFree; }
       $("premBuy").style.display = st.premium ? "none" : "";
       if (st.premium) $("premSheetNote").textContent = "Premium активен до " + fmt(st.until) + "." + (st.auto === false ? " Это бонусные дни: сами они не продлеваются, после них можно оформить подписку." : " Продлится автоматически.");
     }
@@ -5185,7 +5426,7 @@ button{font-size:14px}
     if (nav) nav.addEventListener("click", function(){ refresh(); });
     refresh();
   }
-  window.FitHubPremium = { open: open, close: close, refresh: refresh };
+  window.FitHubPremium = { open: open, close: close, refresh: refresh, state: function(){ return st; } };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
 </script>
