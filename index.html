@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="dark light">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>FitHub</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -22,57 +23,57 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 body{padding:0 16px calc(84px + env(safe-area-inset-bottom));min-height:100vh}
-header{padding:20px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{font-size:26px;font-weight:800;letter-spacing:-.5px}
+header{padding:14px 0 6px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:20px;font-weight:800;letter-spacing:-.5px;line-height:1.1}
 .logo{color:var(--accent)}
 .logo span{color:inherit}
 .brand{display:flex;align-items:center;gap:12px}
-.badge{width:52px;height:52px;border-radius:50%;background:#070e20;flex:none;box-shadow:0 0 0 1px var(--line)}
+.badge{width:40px;height:40px;border-radius:50%;background:#070e20;flex:none;box-shadow:0 0 0 1px var(--line)}
 .badge svg{width:100%;height:100%;display:block;padding:5px}
 .ringcard{display:flex;align-items:center;gap:16px}
 .ring{position:relative;width:84px;height:84px;flex:none}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
 .rb{fill:none;stroke:rgba(120,150,220,.18);stroke-width:8}
 .rf{fill:none;stroke:url(#lg);stroke-width:8;stroke-linecap:round;stroke-dasharray:264;stroke-dashoffset:264;transition:stroke-dashoffset .5s}
-.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:15px}
-.sub{color:var(--hint);font-size:13px;margin-top:2px}
-.chan{background:var(--grad);color:var(--accent-text);border:0;border-radius:999px;padding:9px 14px;font-weight:700;font-size:13px;cursor:pointer}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:16px}
+.sub{color:var(--hint);font-size:14px;margin-top:2px}
+.chan{background:var(--grad);color:var(--accent-text);border:0;border-radius:999px;padding:12px 16px;font-weight:700;font-size:14px;cursor:pointer}
 h2{font-size:18px;margin:18px 0 10px}
 .card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-label{display:block;font-size:13px;color:var(--hint);margin:12px 0 6px}
+label{display:block;font-size:14px;color:var(--hint);margin:12px 0 6px}
 input,select,textarea{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:16px;outline:none;font-family:inherit}
 textarea{resize:vertical;line-height:1.4}
 input:focus,select:focus,textarea:focus{border-color:var(--accent)}
-.imp{font-size:11.5px;line-height:1.4;color:var(--hint);margin-top:6px;padding-left:8px;border-left:2px solid #f5b544}
-.gprof{background:var(--bg);border-radius:12px;padding:12px;margin-top:14px;font-size:13.5px;line-height:1.45}
-.gprof a{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:600}
+.imp{font-size:12px;line-height:1.4;color:var(--hint);margin-top:6px;padding-left:8px;border-left:2px solid #f5b544}
+.gprof{background:var(--bg);border-radius:12px;padding:12px;margin-top:14px;font-size:14px;line-height:1.45}
+.gprof a{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:600;display:inline-block;padding:8px 0}
 .gres{margin-top:16px}
 .gsec{background:var(--bg);border-radius:14px;padding:14px;margin-bottom:10px;font-size:14px;line-height:1.5}
-.gsec h4{margin:0 0 6px;font-size:15px}
+.gsec h4{margin:0 0 6px;font-size:16px}
 .gsec p{margin:4px 0 0}
-.gsec .muted{color:var(--hint);font-size:12.5px}
-.gsec .warn{color:#f5b544;font-size:13px}
+.gsec .muted{color:var(--hint);font-size:14px}
+.gsec .warn{color:#f5b544;font-size:14px}
 .gsec .gl{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
 .gsec .gl:last-of-type{border-bottom:0}
 .gsec .macros .macro{background:var(--card)}
 .gok{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);border-radius:12px;padding:12px;font-size:14px;line-height:1.45;margin-top:4px}
 .gnav{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.gnav .btn{margin-top:0;padding:12px 4px;font-size:13px}
+.gnav .btn{margin-top:0;padding:12px 4px;font-size:14px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .btn{width:100%;margin-top:16px;background:var(--grad);color:var(--accent-text);border:0;border-radius:14px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit}
 .btn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--line)}
-.note{color:var(--hint);font-size:12.5px;line-height:1.5;margin-top:12px}
-.entry{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:15px}
+.note{color:var(--hint);font-size:14px;line-height:1.5;margin-top:12px}
+.entry{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:16px}
 .entry:last-child{border-bottom:0}
-.entry button{background:none;border:0;color:var(--hint);font-size:18px;cursor:pointer;padding:0 4px}
-.delta{font-size:13px;margin-left:8px}
+.entry button{background:none;border:0;color:var(--hint);font-size:18px;cursor:pointer;padding:0}
+.delta{font-size:14px;margin-left:8px}
 .up{color:#e5534b}.down{color:var(--ok)}
 .empty{color:var(--hint);text-align:center;padding:14px 0;font-size:14px}
 nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:10}
-nav button{flex:1 1 0;min-width:0;background:none;border:0;color:var(--hint);font-size:11px;padding:6px 0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:inherit;white-space:nowrap;transition:flex-grow .45s cubic-bezier(.2,.8,.2,1)}
+nav button{flex:1 1 0;min-width:0;background:none;border:0;color:var(--hint);font-size:12px;padding:6px 0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:inherit;white-space:nowrap;transition:flex-grow .45s cubic-bezier(.2,.8,.2,1)}
 nav{transition:box-shadow .2s,background .2s}
 nav.dockhint{box-shadow:inset 0 3px 0 var(--accent),0 -10px 30px rgba(47,140,240,.25)}
-.navm{flex:0 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0 6px;color:var(--hint);font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;transition:flex-grow .45s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.navm{flex:0 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0 6px;color:var(--hint);font-size:12px;white-space:nowrap;opacity:0;pointer-events:none;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;transition:flex-grow .45s cubic-bezier(.2,.8,.2,1),opacity .3s}
 nav.with-mascot .navm{flex-grow:1;opacity:1;pointer-events:auto}
 .navm-ico{display:block;width:30px;height:28px;flex:none;margin-top:1px}
 .navm-ico svg{width:100%;height:100%;display:block;overflow:hidden}
@@ -82,20 +83,20 @@ nav.with-mascot .navm{flex-grow:1;opacity:1;pointer-events:auto}
 #mascot.todock{opacity:.75}
 #mascot.hidden{visibility:hidden;pointer-events:none}
 @media (prefers-reduced-motion:reduce){nav button,.navm{transition:none}.navm.pop .navm-ico{animation:none}}
-nav button i{font-style:normal;font-size:21px}
+nav button i{font-style:normal;font-size:20px}
 nav button.on{color:var(--accent);font-weight:700}
 .tab{display:none}
 .tab.on{display:block}
 
 /* профиль */
 .prof-head{display:flex;align-items:center;gap:14px}
-.avatar{width:64px;height:64px;border-radius:50%;background:var(--grad);color:var(--accent-text);display:grid;place-items:center;font-size:28px;font-weight:800;overflow:hidden;flex:none}
+.avatar{width:64px;height:64px;border-radius:50%;background:var(--grad);color:var(--accent-text);display:grid;place-items:center;font-size:24px;font-weight:800;overflow:hidden;flex:none}
 .avatar img{width:100%;height:100%;object-fit:cover}
-.pname{font-size:19px;font-weight:800}
+.pname{font-size:18px;font-weight:800}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .stat{background:var(--card);border-radius:var(--radius);padding:14px}
 .stat b{display:block;font-size:24px;font-weight:800;letter-spacing:-.5px}
-.stat span{font-size:12.5px;color:var(--hint)}
+.stat span{font-size:14px;color:var(--hint)}
 .pctrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .pctrow b{font-size:18px}
 .goalrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;margin-top:6px}
@@ -107,17 +108,17 @@ nav button.on{color:var(--accent);font-weight:700}
 .ach{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .a{background:var(--bg);border-radius:12px;padding:12px;text-align:center;opacity:.45}
 .a.ok{opacity:1}
-.a em{font-style:normal;font-size:26px;display:block;margin-bottom:4px}
-.a span{font-size:12.5px;line-height:1.3;display:block}
+.a em{font-style:normal;font-size:24px;display:block;margin-bottom:4px}
+.a span{font-size:14px;line-height:1.3;display:block}
 
 /* календарь (компактный) */
 .calcard{padding:12px}
 .calhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.calhead b{font-size:15px}
-.calhead button{background:var(--bg);border:1px solid var(--line);color:var(--text);width:30px;height:30px;border-radius:10px;font-size:17px;cursor:pointer;padding:0;line-height:1}
+.calhead b{font-size:16px}
+.calhead button{position:relative;background:var(--bg);border:1px solid var(--line);color:var(--text);width:34px;height:34px;border-radius:10px;font-size:18px;cursor:pointer;padding:0;line-height:1}
 .wd,.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.wd span{text-align:center;font-size:11px;color:var(--hint);padding-bottom:2px}
-.cd{position:relative;height:34px;border:0;border-radius:9px;background:var(--bg);color:var(--text);font-size:13px;cursor:pointer;display:grid;place-items:center;padding:0;font-family:inherit}
+.wd span{text-align:center;font-size:12px;color:var(--hint);padding-bottom:2px}
+.cd{position:relative;height:34px;border:0;border-radius:9px;background:var(--bg);color:var(--text);font-size:14px;cursor:pointer;display:grid;place-items:center;padding:0;font-family:inherit}
 .cd.blank{background:none;cursor:default}
 .cd.today{outline:2px solid var(--accent);outline-offset:-2px}
 .cd.sel{background:var(--grad);color:var(--accent-text);font-weight:800}
@@ -125,92 +126,94 @@ nav button.on{color:var(--accent);font-weight:700}
 .cd i.part{background:var(--accent)}
 .cd i.full{background:var(--ok)}
 .cd.sel i{box-shadow:0 0 0 1.5px var(--accent-text)}
-.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--hint)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--hint)}
 .legend span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;background:var(--hint)}
 .legend .p::before{background:var(--accent)}
 .legend .f::before{background:var(--ok)}
 .task{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
 .task:last-child{border-bottom:0}
-.ck{width:28px;height:28px;border-radius:9px;border:2px solid var(--line);background:none;color:transparent;font-size:16px;cursor:pointer;flex:none;display:grid;place-items:center;padding:0}
+.ck{position:relative;width:28px;height:28px;border-radius:9px;border:2px solid var(--line);background:none;color:transparent;font-size:16px;cursor:pointer;flex:none;display:grid;place-items:center;padding:0}
 .task.done .ck{background:var(--ok);border-color:var(--ok);color:#fff}
 .task.done .tt{text-decoration:line-through;color:var(--hint)}
-.tt{flex:1;font-size:15px;line-height:1.35;word-break:break-word}
+.tt{flex:1;font-size:16px;line-height:1.35;word-break:break-word}
 .tm{font-weight:700;color:var(--accent);margin-right:6px}
-.tt small{display:block;color:var(--hint);font-size:11.5px}
-.task .x{background:none;border:0;color:var(--hint);font-size:18px;cursor:pointer;padding:0 4px}
+.tt small{display:block;color:var(--hint);font-size:12px}
+.task .x{background:none;border:0;color:var(--hint);font-size:18px;cursor:pointer;padding:0}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 10px}
-.chip{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:7px 13px;font-size:13px;cursor:pointer;font-family:inherit}
+.chip{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 14px;min-height:36px;font-size:14px;cursor:pointer;font-family:inherit}
 .taskrow{display:grid;grid-template-columns:116px 1fr;gap:10px}
 .chk{display:flex;align-items:center;gap:10px;color:var(--text);font-size:14px;margin:12px 0 0}
 .chk input{width:20px;height:20px;accent-color:var(--accent);padding:0}
 .remsec{border-top:1px solid var(--line);margin-top:12px;padding-top:2px}
-.fbcard{display:flex;align-items:center;gap:12px}.fbcard>div{flex:1}.fbcard .btn{width:auto;margin:0;padding:11px 16px;font-size:15px}
+.fbcard{display:flex;align-items:center;gap:12px}.fbcard>div{flex:1}.fbcard .btn{width:auto;margin:0;padding:11px 16px;font-size:16px}
 .onb{position:fixed;inset:0;z-index:80;background:var(--bg);display:none;flex-direction:column;padding:calc(14px + env(safe-area-inset-top)) 16px calc(14px + env(safe-area-inset-bottom));overflow-y:auto}
 .onb.open{display:flex}
 .onb-top{display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .onb-bar{flex:1;display:flex;gap:6px}.onb-bar i{flex:1;height:4px;border-radius:4px;background:var(--line)}.onb-bar i.on{background:var(--grad)}
-.onb-skip{background:none;border:0;color:var(--hint);font:inherit;font-size:14px;cursor:pointer;padding:4px}
+.onb-skip{background:none;border:0;color:var(--hint);font:inherit;font-size:14px;cursor:pointer;padding:12px 4px;margin:-8px 0}
 .onb h2{font-size:24px;line-height:1.25;margin:4px 0 6px}
-.onb .lead{color:var(--hint);font-size:14.5px;line-height:1.5;margin-bottom:16px}
+.onb .lead{color:var(--hint);font-size:14px;line-height:1.5;margin-bottom:14px}
 .onb-step{display:none;flex:1;flex-direction:column}.onb-step.on{display:flex}
 .onb-opts{display:grid;gap:10px}
-.onb-opt{display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;color:var(--text);font:inherit;font-size:16px;font-weight:600;cursor:pointer}
-.onb-opt i{font-style:normal;font-size:26px;width:32px;text-align:center}
-.onb-opt small{display:block;font-weight:400;color:var(--hint);font-size:13px;margin-top:2px}
+.onb-opt{display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:11px 16px;color:var(--text);font:inherit;font-size:16px;font-weight:600;cursor:pointer}
+.onb-opt i{font-style:normal;font-size:24px;width:32px;text-align:center}
+.onb-opt small{display:block;font-weight:400;color:var(--hint);font-size:14px;margin-top:2px}
 .onb-opt.on{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
 .onb-seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .onb-seg.three{grid-template-columns:1fr 1fr 1fr}
-.onb-seg button{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 6px;color:var(--text);font:inherit;font-size:14.5px;font-weight:600;cursor:pointer}
+.onb-seg button{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 6px;color:var(--text);font:inherit;font-size:16px;font-weight:600;cursor:pointer}
 .onb-seg button.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--card))}
 .onb-row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.onb-row3>div{min-width:0}.onb-row3 input{min-width:0}
 .onb-foot{margin-top:auto;padding-top:18px}
-.onb-err{color:#ff6b6b;font-size:13.5px;min-height:18px;margin-top:10px}
+.onb-err{color:#ff6b6b;font-size:14px;min-height:18px;margin-top:10px}
 .onb-sum{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
-.onb-sum b{display:block;font-size:15px;margin-bottom:4px}
+.onb-sum b{display:block;font-size:16px;margin-bottom:4px}
 .onb-sum div{color:var(--hint);font-size:14px;line-height:1.5}
 .remsec .chk{font-weight:700}
 .remsec .body{display:none}.remsec.on .body{display:block}
-.remdays{display:flex;gap:4px;margin-top:10px}.remdays .chip{flex:1;padding:7px 0;text-align:center}
-.rem3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.rem3>div{min-width:0}.rem3 input{min-width:0;padding:12px 6px;font-size:15px}
+.remdays{display:flex;gap:4px;margin-top:10px}.remdays .chip{flex:1;padding:8px 0;text-align:center}
+.rem3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.rem3>div{min-width:0}.rem3 input{min-width:0;padding:12px 6px;font-size:16px}
 
 /* главная */
 .stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
 .stats3 .stat{padding:12px 8px;text-align:center}
-.stats3 .stat b{font-size:19px}
+.stats3 .stat b{font-size:18px}
 .qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
-.qgrid .qbtn{padding:14px 6px;font-size:13px;text-align:center;line-height:1.25}
+.qgrid .qbtn{padding:14px 6px;font-size:14px;text-align:center;line-height:1.25}
 .qbtn{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:var(--radius);padding:16px 12px;font-size:14px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:inherit}
 .qbtn i{font-style:normal;font-size:24px}
 .qbtn.on{background:var(--grad);border-color:transparent;color:#fff}
 
 /* тренировка */
-.backbtn{background:none;border:0;color:var(--accent);font-size:15px;font-weight:600;padding:14px 0 0;cursor:pointer;font-family:inherit}
+.backbtn{background:none;border:0;color:var(--accent);font-size:16px;font-weight:600;padding:16px 12px 8px 0;cursor:pointer;font-family:inherit}
 .ai-h{display:flex;align-items:center;gap:12px}
 .ai-ico{width:46px;height:46px;border-radius:14px;background:var(--grad);display:grid;place-items:center;font-size:24px;flex:none}
 .pex{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
 .pex:last-child{border-bottom:0}
-.pex .pi{font-size:22px;width:40px;height:40px;border-radius:12px;background:var(--bg);display:grid;place-items:center;flex:none}
-.pex .pn{flex:1;min-width:0;font-size:15px;font-weight:700}
+.pex .pi{font-size:20px;width:46px;height:46px;border-radius:12px;background:var(--bg);display:grid;place-items:center;flex:none;overflow:hidden}
+.pex .pi img{width:100%;height:100%;object-fit:cover;display:block}
+.pex .pn small.last{color:var(--accent)}
+.pex .pn{flex:1;min-width:0;font-size:16px;font-weight:700}
 .pex .pn small{display:block;color:var(--hint);font-weight:400;font-size:12px;margin-top:2px}
 .steps{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px}
 .step{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--hint);font-weight:400}
-.step button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:16px;cursor:pointer;padding:0;line-height:1;font-family:inherit}
+.step button{position:relative;width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:16px;cursor:pointer;padding:0;line-height:1;font-family:inherit}
 .step span{min-width:34px;text-align:center;font-size:14px;color:var(--text);font-weight:700;font-variant-numeric:tabular-nums}
 .thist{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
 .thist:last-child{border-bottom:0}
 .thist small{display:block;color:var(--hint);font-size:12px;margin-top:2px}
 .thist b{white-space:nowrap}
-.ws{position:fixed;inset:0;z-index:60;background:#05080f;display:none;flex-direction:column}
+.ws{position:fixed;inset:0;z-index:60;background:#05080f;display:none;flex-direction:column;color-scheme:dark;--bg:#0a1226;--card:#111b38;--text:#e8eefc;--hint:#8294bd;--accent:#2f8cf0;--line:rgba(120,150,220,.2);color:var(--text)}
 .ws.open{display:flex}
 .ws-stage{position:relative;flex:1;overflow:hidden;background:#05080f}
 .ws-stage video,.ws-stage canvas{position:absolute;inset:0;width:100%;height:100%}
 .ws-stage video{object-fit:cover}
 .ws-stage video.mirror{transform:scaleX(-1)}
 .ws-top{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 12px 26px;background:linear-gradient(rgba(0,0,0,.7),transparent);z-index:4}
-.ws-top button{width:40px;height:40px;border-radius:12px;border:0;background:rgba(17,27,56,.8);color:#fff;font-size:17px;cursor:pointer;flex:none}
+.ws-top button{width:40px;height:40px;border-radius:12px;border:0;background:rgba(17,27,56,.8);color:#fff;font-size:18px;cursor:pointer;flex:none}
 .ws-title{flex:1;min-width:0;color:#fff}
-.ws-title b{display:block;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ws-title span{font-size:12.5px;color:#c7d2ee}
+.ws-title b{display:block;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ws-title span{font-size:14px;color:#c7d2ee}
 .ws-prog{position:absolute;left:12px;right:12px;top:calc(62px + env(safe-area-inset-top));height:4px;border-radius:2px;background:rgba(255,255,255,.18);z-index:4;overflow:hidden}
 .ws-prog i{display:block;height:100%;width:0;background:var(--grad);transition:width .4s}
 .ws-count{position:absolute;right:12px;top:calc(76px + env(safe-area-inset-top));z-index:2;background:rgba(10,18,38,.8);border-radius:18px;padding:8px 14px;color:#fff;text-align:center;min-width:92px}
@@ -218,20 +221,21 @@ nav button.on{color:var(--accent);font-weight:700}
 .ws-count span{display:block;font-size:12px;color:#c7d2ee;margin-top:3px}
 .ws-count.bump b{animation:bump .35s}
 @keyframes bump{40%{transform:scale(1.25)}}
-.ws-cue{position:absolute;left:12px;right:12px;bottom:14px;z-index:2;background:rgba(10,18,38,.88);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;padding:12px 14px;color:#fff;font-size:15px;line-height:1.4;font-weight:600}
+.ws-cue{position:absolute;left:12px;right:12px;bottom:14px;z-index:2;background:rgba(10,18,38,.88);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;padding:12px 14px;color:#fff;font-size:16px;line-height:1.4;font-weight:600}
 .ws-cue:empty{display:none}
 .ws-cue.warn{border-left-color:#f5b544}
 .ws-cue.good{border-left-color:#34d399}
 .ws-ph{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:150px 28px 110px;text-align:center;color:#c7d2ee;font-size:14px;line-height:1.5}
 .ws-ph.show{display:flex}
 .ws-ph em{font-style:normal;font-size:64px}
+.ws-ph img{width:min(100%,340px);aspect-ratio:3/2;object-fit:cover;border-radius:16px;background:#0b1020;margin-bottom:6px}
 .ws-ph b{color:#fff;font-size:18px}
 .ws-panel{position:absolute;inset:0;z-index:3;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:90px 20px 24px;background:rgba(5,8,15,.9);color:#fff;text-align:center;overflow-y:auto}
 .ws-panel.show{display:flex}
 .ws-panel .big{font-size:72px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
 .ws-panel .lbl{color:#c7d2ee;font-size:14px;text-transform:uppercase;letter-spacing:.6px}
 .ws-panel .nx{background:rgba(17,27,56,.95);border:1px solid var(--line);border-radius:16px;padding:14px;max-width:360px;width:100%;font-size:14px;line-height:1.45;text-align:left}
-.ws-panel .nx b{display:block;font-size:17px;margin-bottom:4px}
+.ws-panel .nx b{display:block;font-size:18px;margin-bottom:4px}
 .ws-panel .nx .tg{color:var(--accent);font-weight:700}
 .ws-panel .nx p{margin:6px 0 0;color:#c7d2ee}
 .ws-panel .rows{max-width:360px;width:100%;text-align:left}
@@ -251,53 +255,53 @@ nav button.on{color:var(--accent);font-weight:700}
 .sheet-top{touch-action:none;cursor:grab}
 .sheet-grip{width:40px;height:5px;border-radius:3px;background:rgba(130,148,189,.45);margin:8px auto 2px}
 .sheet-head{display:flex;align-items:center;gap:10px;padding:8px 16px 12px;border-bottom:1px solid var(--line)}
-.sheet-head b{flex:1;font-size:17px}
-.sheet-head button{background:none;border:0;color:var(--hint);font-size:20px;cursor:pointer;padding:0 2px}
+.sheet-head b{flex:1;font-size:18px}
+.sheet-head button{background:none;border:0;color:var(--hint);font-size:20px;cursor:pointer;padding:0;width:44px;height:44px;margin:-10px -12px -10px 0;display:grid;place-items:center;flex:none}
 .sheet-body{overflow-y:auto;padding:12px 16px 20px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 /* карточка упражнения */
 .pex.tap{cursor:pointer}
 .pex.tap .pn{flex:1}
-.pex .chev{color:var(--hint);font-size:22px;line-height:1;align-self:center}
+.pex .chev{color:var(--hint);font-size:20px;line-height:1;align-self:center}
 .gl.tap{cursor:pointer}
 .gl.tap span{text-decoration:underline dotted rgba(130,148,189,.6);text-underline-offset:3px}
 .exm-tabs{display:flex;gap:6px;margin-bottom:10px}
-.exm-tabs button{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:12px;padding:9px 6px;font-size:14px;cursor:pointer}
+.exm-tabs button{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:12px;padding:12px 6px;font-size:14px;cursor:pointer}
 .exm-tabs button.on{background:var(--accent);border-color:transparent;color:var(--accent-text);font-weight:600}
 .exm-media{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:3/2;background:#0b1020}
 .exm-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .35s ease}
-.exm-media .lbl{position:absolute;left:10px;bottom:10px;background:rgba(3,6,15,.72);color:#fff;font-size:12.5px;padding:5px 9px;border-radius:9px}
+.exm-media .lbl{position:absolute;left:10px;bottom:10px;background:rgba(3,6,15,.72);color:#fff;font-size:14px;padding:5px 9px;border-radius:9px}
 .exm-media .live{position:absolute;right:10px;top:10px;background:rgba(3,6,15,.72);color:#fff;font-size:12px;padding:4px 8px;border-radius:9px}
 .exm-media .live i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#f87171;margin-right:5px;animation:exmBlink 1s infinite}
 @keyframes exmBlink{50%{opacity:.25}}
 .exm-photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .exm-photos figure{margin:0}
 .exm-photos img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;background:#0b1020;display:block}
-.exm-photos figcaption{font-size:12.5px;color:var(--hint);margin-top:4px;text-align:center}
+.exm-photos figcaption{font-size:14px;color:var(--hint);margin-top:4px;text-align:center}
 .exm-none{border-radius:16px;background:var(--bg);padding:26px 14px;text-align:center;color:var(--hint);font-size:14px}
 .exm-none em{display:block;font-style:normal;font-size:44px;margin-bottom:6px}
-.exm-plan{margin:12px 0 4px;font-size:15px}
+.exm-plan{margin:12px 0 4px;font-size:16px}
 .exm-plan b{font-size:16px}
-.exm h4{margin:14px 0 6px;font-size:15px}
+.exm h4{margin:14px 0 6px;font-size:16px}
 .exm p{margin:0;font-size:14px;line-height:1.5}
 .exm-vid{display:flex;gap:8px;margin-top:12px}
 .exm-vid .btn{margin:0;flex:1;padding:12px 8px;font-size:14px}
-.exm-src{font-size:11.5px;color:var(--hint);margin-top:12px;text-align:center}
+.exm-src{font-size:12px;color:var(--hint);margin-top:12px;text-align:center}
 .chip.on{background:var(--grad);color:#fff;border-color:transparent;font-weight:700}
 .sp{background:var(--bg);border-radius:14px;margin-bottom:10px;overflow:hidden}
 .sp-h{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;color:var(--text);padding:12px;text-align:left;cursor:pointer;font-family:inherit}
 .sp-i{font-size:24px;width:42px;height:42px;border-radius:12px;background:var(--card);display:grid;place-items:center;flex:none}
 .sp-t{flex:1;min-width:0}
-.sp-t b{display:block;font-size:15px}
-.sp-t small{display:block;color:var(--hint);font-size:12.5px;margin-top:2px;line-height:1.35}
-.ev{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text);margin-top:6px}
+.sp-t b{display:block;font-size:16px}
+.sp-t small{display:block;color:var(--hint);font-size:14px;margin-top:2px;line-height:1.35}
+.ev{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text);margin-top:6px}
 .ev i{width:8px;height:8px;border-radius:50%;display:inline-block}
 .sp .chev{color:var(--hint);transition:transform .2s;font-size:18px}
 .sp.open .chev{transform:rotate(90deg)}
-.sp-d{display:none;padding:0 12px 14px;font-size:13.5px;line-height:1.5}
+.sp-d{display:none;padding:0 12px 14px;font-size:14px;line-height:1.5}
 .sp.open .sp-d{display:block}
-.sp-d h4{margin:12px 0 3px;font-size:11.5px;color:var(--hint);text-transform:uppercase;letter-spacing:.5px}
+.sp-d h4{margin:12px 0 3px;font-size:12px;color:var(--hint);text-transform:uppercase;letter-spacing:.5px}
 .sp-d p{margin:0}
-.warnbox{background:rgba(217,119,6,.12);border:1px solid rgba(217,119,6,.35);border-radius:12px;padding:12px;font-size:12.5px;line-height:1.5;margin-top:6px}
+.warnbox{background:rgba(217,119,6,.12);border:1px solid rgba(217,119,6,.35);border-radius:12px;padding:12px;font-size:14px;line-height:1.5;margin-top:6px}
 
 /* огонёк серии */
 .fire{display:flex;align-items:center;gap:16px;margin-top:10px}
@@ -316,17 +320,17 @@ nav button.on{color:var(--accent);font-weight:700}
 .flame-btn.out::after{opacity:0}
 .flame-btn.pop .flame{transform:scale(1.18)}
 .fcount{font-size:32px;font-weight:800;letter-spacing:-.5px;line-height:1}
-.fcount small{font-size:15px;color:var(--hint);font-weight:600;margin-left:6px}
-.plus1{position:absolute;right:-8px;top:0;background:var(--grad);color:#fff;font-weight:800;font-size:13px;padding:3px 8px;border-radius:999px;opacity:0;transform:translateY(8px) scale(.8);transition:all .4s;pointer-events:none}
+.fcount small{font-size:16px;color:var(--hint);font-weight:600;margin-left:6px}
+.plus1{position:absolute;right:-8px;top:0;background:var(--grad);color:#fff;font-weight:800;font-size:14px;padding:3px 8px;border-radius:999px;opacity:0;transform:translateY(8px) scale(.8);transition:all .4s;pointer-events:none}
 .plus1.show{opacity:1;transform:none}
 .spark{position:absolute;left:50%;top:58%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;pointer-events:none;animation:spark .75s ease-out forwards}
 @keyframes spark{to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
 .fweek{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:16px}
-.fd{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--hint)}
+.fd{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--hint)}
 .fd svg{width:22px;height:27px}
 .fd.off svg{filter:grayscale(1);opacity:.22}
 .fd.today span{color:var(--text);font-weight:700}
-.ftip{font-size:12.5px;color:var(--hint);margin-top:12px;line-height:1.45}
+.ftip{font-size:14px;color:var(--hint);margin-top:12px;line-height:1.45}
 @media (prefers-reduced-motion:reduce){.flame .fo,.flame .fi,.flame-btn::after{animation:none}}
 
 /* питание */
@@ -336,16 +340,16 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 .pbtn i{font-style:normal;font-size:24px}
 .pbtn input{display:none}
 .fprev{display:none;width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-top:12px}
-.fstatus{display:none;font-size:13.5px;color:var(--hint);margin-top:12px;line-height:1.45}
+.fstatus{display:none;font-size:14px;color:var(--hint);margin-top:12px;line-height:1.45}
 .fstatus.show{display:block}
 .aip{background:rgba(47,140,240,.08);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
 .aip-top{display:flex;justify-content:space-between;align-items:center;font-weight:600;color:var(--text);font-size:14px}
-.aip-time{font-variant-numeric:tabular-nums;color:var(--hint);font-weight:500;font-size:12.5px}
+.aip-time{font-variant-numeric:tabular-nums;color:var(--hint);font-weight:500;font-size:14px}
 .aip-bar{height:6px;border-radius:3px;background:rgba(120,150,220,.18);overflow:hidden;margin:10px 0 8px}
 .aip-bar i{display:block;height:100%;width:0;background:var(--grad);border-radius:3px;transition:width .4s linear}
-.aip-steps{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:13px}
+.aip-steps{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:14px}
 .aip-steps li{display:flex;align-items:center;gap:8px;color:var(--hint);transition:color .3s}
-.aip-steps li b{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(120,150,220,.35);flex:none;display:grid;place-items:center;font-size:10px;font-weight:700}
+.aip-steps li b{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(120,150,220,.35);flex:none;display:grid;place-items:center;font-size:12px;font-weight:700}
 .aip-steps li.now{color:var(--text)}
 .aip-steps li.now b{border-color:var(--accent);border-top-color:transparent;animation:aipspin .8s linear infinite}
 .aip-steps li.done{color:var(--text)}
@@ -354,34 +358,34 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 @media (prefers-reduced-motion:reduce){.aip-steps li.now b{animation:none}.aip-bar i{transition:none}}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px;margin-right:6px}
 @keyframes sp{to{transform:rotate(360deg)}}
-.fname{font-size:17px;font-weight:800;line-height:1.3}
+.fname{font-size:18px;font-weight:800;line-height:1.3}
 .macros{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
 .macro{background:var(--bg);border-radius:12px;padding:10px 4px;text-align:center}
-.macro b{display:block;font-size:17px}
-.macro span{font-size:11.5px;color:var(--hint)}
+.macro b{display:block;font-size:16px}
+.macro span{font-size:12px;color:var(--hint)}
 .inrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}
 .inrow .btn{margin-top:0;width:auto;padding:12px 16px}
-.sitem{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;background:none;border:0;border-bottom:1px solid var(--line);color:var(--text);padding:11px 0;font-size:15px;text-align:left;cursor:pointer;font-family:inherit}
+.sitem{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;background:none;border:0;border-bottom:1px solid var(--line);color:var(--text);padding:11px 0;font-size:16px;text-align:left;cursor:pointer;font-family:inherit}
 .sitem:last-child{border-bottom:0}
 .sitem small{color:var(--hint);font-size:12px;white-space:nowrap}
 .meal{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .meal:last-child{border-bottom:0}
-.meal .mn{flex:1;min-width:0;font-size:14.5px;line-height:1.35;word-break:break-word}
+.meal .mn{flex:1;min-width:0;font-size:16px;line-height:1.35;word-break:break-word}
 .meal .mn small{display:block;color:var(--hint);font-size:12px}
 .meal .mk{font-weight:700;white-space:nowrap}
 .meal img{width:40px;height:40px;border-radius:10px;object-fit:cover;flex:none}
 .dish-h{display:flex;align-items:flex-start;gap:12px}
 .dish-h img{display:none;width:64px;height:64px;border-radius:12px;object-fit:cover;flex:none}
-.xbtn{background:none;border:0;color:var(--hint);font-size:20px;cursor:pointer;padding:0 2px;line-height:1}
+.xbtn{background:none;border:0;color:var(--hint);font-size:20px;cursor:pointer;padding:0;line-height:1;width:44px;height:44px;margin:-10px -12px 0 0;display:grid;place-items:center;flex:none}
 .drow{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
 .drow:first-child{margin-top:8px}
 .drow .dn{flex:1;min-width:0;font-size:14px;line-height:1.3}
 .drow .dn small{display:block;color:var(--hint);font-size:12px}
-.drow .dn em{font-style:normal;color:#f5b544;font-size:11.5px;margin-left:4px}
-.drow input{width:74px;padding:8px 8px;font-size:15px;text-align:center}
+.drow .dn em{font-style:normal;color:#f5b544;font-size:12px;margin-left:4px}
+.drow input{width:74px;padding:8px 8px;font-size:16px;text-align:center}
 .drow .dg{font-size:12px;color:var(--hint)}
-.drow button{background:none;border:0;color:var(--hint);font-size:18px;cursor:pointer;padding:0 2px}
-.meal button{background:none;border:0;color:var(--hint);font-size:18px;cursor:pointer;padding:0 4px}
+.drow button{background:none;border:0;color:var(--hint);font-size:18px;cursor:pointer;padding:0}
+.meal button{background:none;border:0;color:var(--hint);font-size:18px;cursor:pointer;padding:0}
 
 /* шкалы КБЖУ */
 .insight{display:flex;gap:10px;align-items:flex-start;width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0 4px;color:var(--text);font-size:14px;line-height:1.45;text-align:left;font-family:inherit;cursor:pointer}
@@ -392,17 +396,17 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 .vs.dim{opacity:.4}
 .vs.open{background:var(--bg)}
 .vs svg{width:100%;max-width:84px;display:block;margin:0 auto 6px;overflow:visible}
-.vs b{display:block;font-size:13px}
-.vs .vv{display:block;font-size:11.5px;color:var(--hint);font-variant-numeric:tabular-nums;margin-top:1px}
-.vs .vn{display:block;font-size:11.5px;color:var(--hint);margin-top:2px;line-height:1.25}
+.vs b{display:block;font-size:14px}
+.vs .vv{display:block;font-size:12px;color:var(--hint);font-variant-numeric:tabular-nums;margin-top:1px}
+.vs .vn{display:block;font-size:12px;color:var(--hint);margin-top:2px;line-height:1.25}
 .vs.low .vn{color:var(--text);font-weight:700}
 .lvl{transition:transform 1.4s cubic-bezier(.2,.8,.2,1)}
 .wv{animation:wave 3s linear infinite}
 .wv.w2{animation-duration:5s;animation-direction:reverse}
 @keyframes wave{from{transform:translateX(0)}to{transform:translateX(-100px)}}
 @media (prefers-reduced-motion:reduce){.wv{animation:none}.lvl{transition:none}}
-.vpct{font-size:19px;font-weight:800;fill:#fff;paint-order:stroke;stroke:rgba(5,10,25,.6);stroke-width:3px;stroke-linejoin:round}
-.mxd2{display:none;margin-top:8px;background:var(--bg);border-radius:12px;padding:12px;font-size:13.5px;line-height:1.5}
+.vpct{font-size:18px;font-weight:800;fill:#fff;paint-order:stroke;stroke:rgba(5,10,25,.6);stroke-width:3px;stroke-linejoin:round}
+.mxd2{display:none;margin-top:8px;background:var(--bg);border-radius:12px;padding:12px;font-size:14px;line-height:1.5}
 .mxd2.open{display:block}
 .mxd2 .dt{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:4px}
 .mxd2 .dt .sw{margin-top:0}
@@ -411,11 +415,11 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 .sitem .sn{min-width:0}
 .sitem .sn small{display:block;margin-top:2px;white-space:normal}
 .mgoal{margin-top:12px}
-.mgoal summary{cursor:pointer;color:var(--accent);font-size:14px;font-weight:600}
+.mgoal summary{cursor:pointer;color:var(--accent);font-size:14px;font-weight:600;padding:8px 0}
 .mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 
 /* маскот */
-#mascot{position:fixed;left:0;top:0;width:72px;height:88px;z-index:30;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:pointer;will-change:transform;outline:none}
+#mascot{position:fixed;left:0;top:0;width:54px;height:66px;z-index:30;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:pointer;will-change:transform;outline:none}
 #mascot .flip{width:100%;height:100%;transition:transform .15s}
 #mascot svg{width:100%;height:100%;overflow:visible;display:block}
 .mbody{transform-box:fill-box;transform-origin:50% 100%;animation:mIdle 2.4s ease-in-out infinite}
@@ -435,8 +439,8 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 #chat{position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));max-height:62vh;background:var(--card);border:1px solid var(--line);border-radius:20px;display:none;flex-direction:column;z-index:40;box-shadow:0 12px 40px rgba(0,0,0,.45);overflow:hidden}
 #chat.open{display:flex}
 .chead{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
-.chead b{flex:1;font-size:15px}
-.chead button{background:none;border:0;color:var(--hint);font-size:20px;cursor:pointer;padding:0 2px}
+.chead b{flex:1;font-size:16px}
+.chead button{background:none;border:0;color:var(--hint);font-size:20px;cursor:pointer;padding:0;width:44px;height:44px;margin:-12px -12px -12px 0;display:grid;place-items:center;flex:none}
 .cmsgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:140px}
 .msg{max-width:85%;padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.45;white-space:pre-line;word-break:break-word}
 .msg.bot{background:var(--bg);align-self:flex-start;border-bottom-left-radius:4px}
@@ -451,7 +455,7 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 .premcard .btn,#premBuy{background:linear-gradient(135deg,#ffd54a,#ff9f1c);color:#1a1200}
 .premcard .btn{white-space:nowrap}
 .premlist{list-style:none;margin:4px 0 0;padding:0}
-.premlist li{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.45}
+.premlist li{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:16px;line-height:1.45}
 .premlist li:last-child{border-bottom:0}
 .premlist i{font-style:normal;flex:none;width:22px;text-align:center}
 /* поля даты, времени и списки: на iPhone не вылезают из своей колонки */
@@ -462,15 +466,86 @@ input[type="date"]::-webkit-calendar-picker-indicator,input[type="time"]::-webki
 select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238294bd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:12px 8px}
 .rem3 input[type="time"]{padding:12px 6px}
 /* онбординг: кнопка «Назад» и отметки у нескольких целей */
-.onb-back{background:none;border:0;color:var(--text);font:inherit;font-size:26px;line-height:1;cursor:pointer;padding:0 8px 2px 0;visibility:hidden}
-.onb-opt em.onb-chk{margin-left:auto;width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;font-style:normal;color:transparent}
+.onb-back{background:none;border:0;color:var(--text);font:inherit;font-size:24px;line-height:1;cursor:pointer;padding:0 8px 2px 0;min-width:40px;min-height:40px;margin:-8px 0;text-align:left;visibility:hidden}
+.onb-opt em.onb-chk{margin-left:auto;width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:14px;font-style:normal;color:transparent}
 .onb-opt.on em.onb-chk{background:var(--accent);border-color:var(--accent);color:#fff}
 /* Арни при прокрутке и вводе становится прозрачным и не перехватывает нажатия */
 #mascot{transition:opacity .3s}
 #mascot.faded{opacity:.18;pointer-events:none}
+
+/* ---- светлая тема (как в Telegram или по выбору в профиле) ---- */
+html.light{color-scheme:light;--bg:#f1f4fa;--card:#ffffff;--text:#0f1b33;--hint:#5d6b8c;--accent:#1f74e8;--ok:#12a150;--line:rgba(30,60,130,.16)}
+html.light .card,html.light .stat,html.light .qbtn,html.light .onb-opt,html.light .onb-sum{box-shadow:0 1px 2px rgba(15,27,51,.06)}
+html.light .badge{background:#fff}
+html.light .rb{stroke:rgba(30,60,130,.12)}
+html.light input[type="date"]::-webkit-calendar-picker-indicator,html.light input[type="time"]::-webkit-calendar-picker-indicator{filter:none;opacity:.55}
+html.light .vpct{fill:#0f1b33;stroke:rgba(255,255,255,.8)}
+html.light .sheet-bg{background:rgba(15,27,51,.4)}
+html.light #chat{box-shadow:0 12px 40px rgba(15,27,51,.2)}
+html.light .gsec .warn,html.light .drow .dn em{color:#b45309}
+html.light .onb-err{color:#d92d20}
+html.light .sheet-grip{background:rgba(93,107,140,.4)}
+html.light .flame-btn.dim .flame{filter:grayscale(.85) brightness(.9);opacity:.5}
+html.light .flame-btn.out .flame{filter:grayscale(1) brightness(.85);opacity:.35}
+html.light .ws input{color-scheme:dark}
+::placeholder{color:var(--hint);opacity:.55}
+/* шапка с логотипом — только на главной */
+body:not([data-tab="home"]) header{display:none}
+body:not([data-tab="home"]) .tab>h2:first-child{margin-top:20px}
+/* невидимое расширение области нажатия у мелких кнопок */
+.ck::after,.calhead button::after,.step button::after{content:"";position:absolute;inset:-8px}
+.entry button,.task .x,.meal button,.drow button{width:40px;height:40px;margin:-8px -10px -8px 0;display:grid;place-items:center;flex:none}
+/* сворачиваемые блоки профиля */
+.fold>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700;font-size:16px;min-height:28px}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary::after{content:"›";color:var(--hint);font-size:20px;font-weight:400;transition:transform .2s;flex:none}
+.fold[open]>summary::after{transform:rotate(90deg)}
+.fold>summary small{display:block;font-weight:400;color:var(--hint);font-size:14px;margin-top:2px;line-height:1.35}
+.fold[open]>summary{margin-bottom:6px}
+.fold.in{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.fold.in>summary{font-size:14px;font-weight:600;color:var(--accent)}
+.pstats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px;text-align:center}
+.pstats div{background:var(--bg);border-radius:12px;padding:10px 2px}
+.pstats b{display:block;font-size:16px;font-weight:800;white-space:nowrap}
+.pstats span{display:block;font-size:12px;color:var(--hint);margin-top:2px;line-height:1.2}
+.prof-wrap{flex:1;min-width:0}
+/* дневник питания по приёмам пищи */
+.mgrp{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:14px;font-weight:700;color:var(--hint);padding:14px 0 2px}
+.mgrp:first-child{padding-top:6px}
+.mealsel{display:flex;gap:6px;margin:10px 0 2px}
+.mealsel .chip{flex:1;padding:8px 2px;text-align:center}
+/* запись веса и повторов в тренировке */
+.lgf{background:rgba(17,27,56,.95);border:1px solid var(--line);border-radius:16px;padding:12px 14px;max-width:360px;width:100%;text-align:left}
+.lgf .tg{color:var(--accent);font-weight:700;font-size:14px}
+.lgrow{display:flex;gap:8px;margin-top:10px}
+.lgbox{flex:1;min-width:0;display:flex;align-items:center;gap:2px;background:#0a1226;border:1px solid var(--line);border-radius:12px;padding:4px}
+.lgbox button{width:40px;height:40px;border:0;border-radius:9px;background:#1a2748;color:#fff;font-size:20px;flex:none;cursor:pointer;font-family:inherit;padding:0}
+.lgbox input{flex:1;min-width:0;width:auto;border:0;background:none;color:#fff;text-align:center;font-size:18px;font-weight:700;padding:6px 0;border-radius:0}
+.lgbox small{font-size:12px;color:#c7d2ee;padding-right:4px;flex:none}
+.lgf .prev{font-size:14px;color:#c7d2ee;margin-top:8px;line-height:1.4}
+.ws-panel .big.sm{font-size:56px}
+/* прогресс по упражнению */
+.exm-hist .hr{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.exm-hist .hr:last-child{border-bottom:0}
+.exm-hist .hr span{color:var(--hint);flex:none}
+.exm-hist .hr b{text-align:right}
+.exm-best{font-size:14px;color:var(--hint);margin-top:6px}
+.exm-spark{display:block;width:100%;height:56px;margin:4px 0 2px}
+/* чат */
+.cnote{font-size:12px;color:var(--hint);padding:0 14px 8px;line-height:1.4}
+.cnote:empty{display:none}
+.cnote a{color:var(--accent);font-weight:600;cursor:pointer}
+.msg.wait{color:var(--hint)}
+#themeSel .chip{flex:1 1 auto;padding:8px 6px;white-space:nowrap}
+button{font-size:14px}
+.chead,.cchips,.cnote,.cform{flex:none}
+.onb label{margin:10px 0 6px}
+.onb-top{margin-bottom:12px}
+.onb-seg.three button{font-size:14px;padding:10px 4px}
 </style>
+<script>(function(){try{var m=null;try{m=JSON.parse(localStorage.getItem("fithub_theme"))}catch(e){}var t=window.Telegram&&window.Telegram.WebApp,s=(m==="light"||m==="dark")?m:(t&&t.initData?t.colorScheme:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"));if(s==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
 </head>
-<body>
+<body data-tab="home">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -517,6 +592,11 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     </div>
   </div>
 
+  <div class="card fbcard" id="nextCard" style="display:none">
+    <div><b id="nextTitle"></b><div class="note" id="nextNote" style="margin-top:2px"></div></div>
+    <button class="btn" id="nextBtn" type="button">Открыть</button>
+  </div>
+
   <div class="card">
     <div class="sub" style="margin-bottom:4px">Ближайшие задачи</div>
     <div id="homeTasks"></div>
@@ -536,7 +616,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
 
   <div class="card">
     <div class="sub">Совет дня</div>
-    <div id="tip" style="margin-top:6px;line-height:1.5;font-size:15px"></div>
+    <div id="tip" style="margin-top:6px;line-height:1.5;font-size:16px"></div>
   </div>
 </section>
 
@@ -603,7 +683,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     <button class="insight" id="insight" type="button"></button>
     <div id="mxList"></div>
     <div class="inrow" style="margin-top:6px">
-      <div><label>Норма в день, ккал</label><input id="fGoal" type="number" inputmode="numeric" placeholder="2200"></div>
+      <div><label>Норма в день, ккал</label><input id="fGoal" type="number" inputmode="numeric" placeholder="ккал"></div>
       <button class="btn" id="fGoalBtn">Сохранить</button>
     </div>
     <details class="mgoal">
@@ -621,6 +701,13 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     </details>
   </div>
 
+  <div class="card" id="diaryCard">
+    <div class="pctrow"><b>Дневник за сегодня</b><span class="sub" id="dCount"></span></div>
+    <div id="diary"></div>
+    <label>Новую еду записывать как</label>
+    <div class="mealsel" id="mealSel"></div>
+  </div>
+
   <div class="card">
     <b>КБЖУ по фото</b>
     <div class="note" id="photoNote" style="margin-top:6px">Сфотографируйте штрихкод на упаковке: крупно, ровно и при хорошем свете. Для продуктов без упаковки используйте поиск ниже.</div>
@@ -631,7 +718,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     <img class="fprev" id="fprev" alt="Фото продукта">
     <div class="fstatus" id="fstatus"></div>
     <div class="inrow" style="margin-top:4px">
-      <div><label>Или введите штрихкод</label><input id="bcIn" type="text" inputmode="numeric" maxlength="14" placeholder="4600000000000" autocomplete="off"></div>
+      <div><label>Или введите штрихкод</label><input id="bcIn" type="text" inputmode="numeric" maxlength="14" placeholder="Цифры под штрихкодом" autocomplete="off"></div>
       <button class="btn" id="bcBtn">Найти</button>
     </div>
   </div>
@@ -673,51 +760,26 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     <div id="fList"></div>
   </div>
 
-  <div class="card">
-    <div class="pctrow"><b>Дневник за сегодня</b><span class="sub" id="dCount"></span></div>
-    <div id="diary"></div>
-  </div>
   <p class="note">КБЖУ по штрихкоду берётся из открытой базы Open Food Facts, во встроенном списке указаны средние значения. Цифры приблизительные: сверяйтесь с этикеткой.</p>
 </section>
 
 <!-- ПРОФИЛЬ -->
 <section class="tab" id="tab-profile">
   <h2>Мой профиль</h2>
-  <div class="card prof-head">
-    <div class="avatar" id="avatar">F</div>
-    <div>
-      <div class="pname" id="pname">Спортсмен</div>
-      <div class="sub" id="puser"></div>
+  <div class="card">
+    <div class="prof-head">
+      <div class="avatar" id="avatar">F</div>
+      <div class="prof-wrap">
+        <div class="pname" id="pname">Спортсмен</div>
+        <div class="sub" id="puser"></div>
+      </div>
     </div>
-  </div>
-
-  <div class="card" id="udCard">
-    <b>Мои данные</b>
-    <div class="imp">Важно: указывайте данные честно и точно — по ним подбирается план тренировок и питания под вашу цель. Данные сохраняются в вашем облаке Telegram и восстановятся на новом телефоне.</div>
-    <div class="row">
-      <div><label>Пол</label><select id="udSex"><option value="">Не указан</option><option value="m">Мужской</option><option value="f">Женский</option></select></div>
-      <div><label>Возраст</label><input id="udAge" type="number" inputmode="numeric" placeholder="25"></div>
+    <div class="pstats">
+      <div><b id="sCur">—</b><span>вес</span></div>
+      <div><b id="sDelta">—</b><span>с начала</span></div>
+      <div><b id="sWork">0</b><span>тренировок</span></div>
+      <div><b id="sStreak">0</b><span>подряд</span></div>
     </div>
-    <div class="row">
-      <div><label>Рост, см</label><input id="udH" type="number" inputmode="numeric" placeholder="175"></div>
-      <div><label>Вес, кг</label><input id="udW" type="number" inputmode="decimal" placeholder="75"></div>
-    </div>
-    <label>Уровень подготовки</label>
-    <select id="udLvl"><option value="beg">Новичок</option><option value="mid">Тренируюсь иногда</option><option value="adv">Тренируюсь регулярно</option></select>
-    <label>Где тренируетесь</label>
-    <select id="udEq"><option value="home">Дома без инвентаря</option><option value="db">Дома с гантелями</option><option value="gym">В тренажёрном зале</option></select>
-    <label>Сколько раз в неделю готовы тренироваться</label>
-    <div class="chips" id="udDays"></div>
-    <label>Есть ограничения по здоровью?</label>
-    <div class="chips" id="udLim"></div>
-    <button class="btn" id="udSave" type="button">Сохранить данные</button>
-  </div>
-
-  <div class="stats">
-    <div class="stat"><b id="sCur">—</b><span>Текущий вес</span></div>
-    <div class="stat"><b id="sDelta">—</b><span>Изменение с начала</span></div>
-    <div class="stat"><b id="sWork">0</b><span>Тренировок всего</span></div>
-    <div class="stat"><b id="sStreak">0</b><span>Серия тренировок</span></div>
   </div>
 
   <div class="card">
@@ -739,17 +801,6 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     <div class="ftip" id="fTip"></div>
   </div>
 
-  <div class="card ringcard">
-    <div class="ring">
-      <svg viewBox="0 0 100 100"><circle class="rb" cx="50" cy="50" r="42"/><circle class="rf" id="dayFill" cx="50" cy="50" r="42"/></svg>
-      <b id="dayPct">—</b>
-    </div>
-    <div>
-      <div class="sub">Распорядок сегодня</div>
-      <div class="note" id="dayTxt" style="margin-top:4px"></div>
-    </div>
-  </div>
-
   <div class="card">
     <div class="ringcard">
       <div class="ring">
@@ -757,30 +808,31 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
         <b id="pct">0%</b>
       </div>
       <div>
-        <div class="sub">Путь к цели</div>
+        <div class="sub">Вес и путь к цели</div>
         <div class="note" id="goalTxt" style="margin-top:4px"></div>
       </div>
     </div>
-    <div class="goalrow">
-      <div><label>Целевой вес, кг</label><input id="goalIn" type="number" inputmode="decimal" placeholder="70"></div>
-      <button class="btn" id="goalBtn">Сохранить</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="sub">Записать вес</div>
     <div class="row">
-      <div><label>Вес, кг</label><input id="wIn" type="number" inputmode="decimal" placeholder="75.5"></div>
+      <div><label>Вес сегодня, кг</label><input id="wIn" type="number" inputmode="decimal" placeholder="кг"></div>
       <div><label>Дата</label><input id="dIn" type="date"></div>
     </div>
-    <button class="btn" id="addBtn">Добавить запись</button>
+    <button class="btn" id="addBtn">Записать вес</button>
+    <div id="chartCard" style="display:none;margin-top:14px">
+      <div class="sub" style="margin-bottom:6px">Динамика веса</div>
+      <svg id="chart" viewBox="0 0 320 140" width="100%" height="140"></svg>
+    </div>
+    <details class="fold in" id="goalFold">
+      <summary>Целевой вес</summary>
+      <div class="goalrow">
+        <div><label>Целевой вес, кг</label><input id="goalIn" type="number" inputmode="decimal" placeholder="кг"></div>
+        <button class="btn" id="goalBtn">Сохранить</button>
+      </div>
+    </details>
+    <details class="fold in" id="histFold">
+      <summary>История записей<span class="sub" id="histCount" style="margin-left:auto;font-weight:400"></span></summary>
+      <div id="history"></div>
+    </details>
   </div>
-
-  <div class="card" id="chartCard" style="display:none">
-    <div class="sub" style="margin-bottom:6px">Динамика веса</div>
-    <svg id="chart" viewBox="0 0 320 140" width="100%" height="140"></svg>
-  </div>
-  <div class="card" id="history"></div>
 
   <div class="card">
     <div class="sub">Тренировки за 14 дней</div>
@@ -788,28 +840,40 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     <button class="btn" id="workBtn">Отметить тренировку сегодня</button>
   </div>
 
-  <div class="card">
-    <div class="sub" style="margin-bottom:10px">Достижения</div>
+  <details class="card fold" id="achFold">
+    <summary><span>Достижения<small id="achSum"></small></span></summary>
     <div class="ach" id="ach"></div>
-  </div>
-
-  <div class="card fbcard" id="ownerCard" style="display:none">
-    <div><b>📊 Сводка для автора</b><div class="note" style="margin-top:2px" id="ownerNote">Статистика за последние 7 дней придёт от бота</div></div>
-    <button class="btn" id="ownerDigest" type="button">Прислать</button>
-  </div>
+  </details>
 
   <div class="card fbcard premcard" id="premCard">
-    <div><b>⭐ FitHub Premium</b><div class="note" style="margin-top:2px" id="premNote">Больше распознаваний еды по фото</div></div>
+    <div><b>⭐ FitHub Premium</b><div class="note" style="margin-top:2px" id="premNote">Больше фото еды и вопросов к ИИ</div></div>
     <button class="btn" id="premBtn" type="button">Подробнее</button>
   </div>
 
-  <div class="card fbcard">
-    <div><b>💬 Есть идея или нашли ошибку?</b><div class="note" style="margin-top:2px">Напишите — я читаю каждое сообщение</div></div>
-    <button class="btn" id="fbOpen" type="button">Написать</button>
-  </div>
+  <details class="card fold" id="udCard">
+    <summary><span>Мои данные<small id="udSum">Пол, возраст, рост, вес и условия тренировок</small></span></summary>
+    <div class="imp">Важно: указывайте данные честно и точно — по ним подбирается план тренировок и питания под вашу цель. Данные сохраняются в вашем облаке Telegram и восстановятся на новом телефоне.</div>
+    <div class="row">
+      <div><label>Пол</label><select id="udSex"><option value="">Не указан</option><option value="m">Мужской</option><option value="f">Женский</option></select></div>
+      <div><label>Возраст</label><input id="udAge" type="number" inputmode="numeric" placeholder="лет"></div>
+    </div>
+    <div class="row">
+      <div><label>Рост, см</label><input id="udH" type="number" inputmode="numeric" placeholder="см"></div>
+      <div><label>Вес, кг</label><input id="udW" type="number" inputmode="decimal" placeholder="кг"></div>
+    </div>
+    <label>Уровень подготовки</label>
+    <select id="udLvl"><option value="beg">Новичок</option><option value="mid">Тренируюсь иногда</option><option value="adv">Тренируюсь регулярно</option></select>
+    <label>Где тренируетесь</label>
+    <select id="udEq"><option value="home">Дома без инвентаря</option><option value="db">Дома с гантелями</option><option value="gym">В тренажёрном зале</option></select>
+    <label>Сколько раз в неделю готовы тренироваться</label>
+    <div class="chips" id="udDays"></div>
+    <label>Есть ограничения по здоровью?</label>
+    <div class="chips" id="udLim"></div>
+    <button class="btn" id="udSave" type="button">Сохранить данные</button>
+  </details>
 
-  <div class="card" id="remCard">
-    <div class="sub">🔔 Напоминания от бота</div>
+  <details class="card fold" id="remCard">
+    <summary><span>🔔 Напоминания от бота<small id="remSum">Выключены</small></span></summary>
     <div class="note" style="margin-top:4px">Бот пришлёт сообщение в Telegram — с кнопкой, которая сразу откроет FitHub.</div>
     <div class="remsec" id="remW">
       <label class="chk"><input type="checkbox" id="remWOn"> О тренировках</label>
@@ -843,6 +907,21 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     </div>
     <button class="btn" id="remSave" type="button">Сохранить напоминания</button>
     <div class="note" id="remNote" style="text-align:center"></div>
+  </details>
+
+  <div class="card">
+    <b>Оформление</b>
+    <div class="mealsel" id="themeSel"><button type="button" class="chip" data-t="auto">Как в Telegram</button><button type="button" class="chip" data-t="light">Светлое</button><button type="button" class="chip" data-t="dark">Тёмное</button></div>
+  </div>
+
+  <div class="card fbcard">
+    <div><b>💬 Есть идея или нашли ошибку?</b><div class="note" style="margin-top:2px">Напишите — я читаю каждое сообщение</div></div>
+    <button class="btn" id="fbOpen" type="button">Написать</button>
+  </div>
+
+  <div class="card fbcard" id="ownerCard" style="display:none">
+    <div><b>📊 Сводка для автора</b><div class="note" style="margin-top:2px" id="ownerNote">Статистика за последние 7 дней придёт от бота</div></div>
+    <button class="btn" id="ownerDigest" type="button">Прислать</button>
   </div>
 
   <p class="note" style="text-align:center;margin:6px 0 18px"><a id="privLink" href="privacy.html" target="_blank" rel="noopener" style="color:var(--hint)">Политика конфиденциальности</a> · Рекомендации FitHub не заменяют консультацию врача</p>
@@ -854,7 +933,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   <div class="navm" id="navMascot" role="button" tabindex="-1" aria-label="Арни. Смахните вверх, чтобы вернуть на экран, нажмите, чтобы открыть чат">
     <span class="navm-ico" id="navMascotIco"></span><span class="navm-lbl">Арни</span>
   </div>
-  <button data-tab="food"><i>🍽️</i>Питание</button>
+  <button data-tab="food"><i>🥗</i>Питание</button>
   <button data-tab="profile"><i>👤</i>Профиль</button>
 </nav>
 
@@ -887,7 +966,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
 <div class="sheet" id="goalSheet" role="dialog" aria-modal="true" aria-labelledby="goalTitle">
   <div class="sheet-top" id="goalTop">
     <div class="sheet-grip"></div>
-    <div class="sheet-head"><span style="font-size:22px">🎯</span><b id="goalTitle">Моя цель</b><button id="goalClose" type="button" aria-label="Закрыть">✕</button></div>
+    <div class="sheet-head"><span style="font-size:20px">🎯</span><b id="goalTitle">Моя цель</b><button id="goalClose" type="button" aria-label="Закрыть">✕</button></div>
   </div>
   <div class="sheet-body">
     <label style="margin-top:0">Какой цели хотите достичь?</label>
@@ -927,9 +1006,9 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     <div class="lead">Нужно, чтобы посчитать калории и подобрать нагрузку. Данные хранятся только у вас в Telegram.</div>
     <div class="onb-seg" id="onbSex"><button type="button" data-v="m">👨 Мужской</button><button type="button" data-v="f">👩 Женский</button></div>
     <div class="onb-row3" style="margin-top:4px">
-      <div><label>Возраст</label><input id="onbAge" type="number" inputmode="numeric" placeholder="25"></div>
-      <div><label>Рост, см</label><input id="onbH" type="number" inputmode="numeric" placeholder="175"></div>
-      <div><label>Вес, кг</label><input id="onbW" type="number" inputmode="decimal" placeholder="75"></div>
+      <div><label>Возраст</label><input id="onbAge" type="number" inputmode="numeric" placeholder="лет"></div>
+      <div><label>Рост, см</label><input id="onbH" type="number" inputmode="numeric" placeholder="см"></div>
+      <div><label>Вес, кг</label><input id="onbW" type="number" inputmode="decimal" placeholder="кг"></div>
     </div>
     <div class="onb-err" id="onbErr2"></div>
     <div class="onb-foot"><button class="btn" id="onbN2" type="button">Дальше</button></div>
@@ -965,12 +1044,13 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
 <div class="sheet" id="premSheet" role="dialog" aria-modal="true" aria-labelledby="premTitle">
   <div class="sheet-top">
     <div class="sheet-grip"></div>
-    <div class="sheet-head"><span style="font-size:22px">⭐</span><b id="premTitle">FitHub Premium</b><button id="premClose" type="button" aria-label="Закрыть">✕</button></div>
+    <div class="sheet-head"><span style="font-size:20px">⭐</span><b id="premTitle">FitHub Premium</b><button id="premClose" type="button" aria-label="Закрыть">✕</button></div>
   </div>
   <div class="sheet-body">
     <div class="note" id="premReason" style="margin-top:0"></div>
     <ul class="premlist">
       <li><i>📸</i><span>До <b id="premDaily">30</b> распознаваний еды по фото в день вместо <b id="premFree">3</b></span></li>
+      <li><i>🤖</i><span>Арни отвечает на вопросы с помощью ИИ: до <b id="premChat">50</b> в день вместо <b id="premChatFree">5</b></span></li>
       <li><i>💪</i><span>Поддержка FitHub: новые функции выходят быстрее</span></li>
       <li><i>🔁</i><span>Подписка на 30 дней с автопродлением. Отменить можно в любой момент: Telegram → Настройки → Мои звёзды → Подписки</span></li>
     </ul>
@@ -985,7 +1065,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
 <div class="sheet" id="fbSheet" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
   <div class="sheet-top">
     <div class="sheet-grip"></div>
-    <div class="sheet-head"><span style="font-size:22px">💬</span><b id="fbTitle">Отзыв о FitHub</b><button id="fbClose" type="button" aria-label="Закрыть">✕</button></div>
+    <div class="sheet-head"><span style="font-size:20px">💬</span><b id="fbTitle">Отзыв о FitHub</b><button id="fbClose" type="button" aria-label="Закрыть">✕</button></div>
   </div>
   <div class="sheet-body">
     <div class="chips" id="fbKinds"><button type="button" class="chip on" data-k="💡 Идея">💡 Идея</button><button type="button" class="chip" data-k="🐞 Ошибка">🐞 Ошибка</button><button type="button" class="chip" data-k="❤️ Нравится">❤️ Нравится</button><button type="button" class="chip" data-k="😕 Неудобно">😕 Неудобно</button></div>
@@ -1001,7 +1081,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
 <div class="sheet" id="exSheet" role="dialog" aria-modal="true" aria-labelledby="exTitle">
   <div class="sheet-top" id="exTop">
     <div class="sheet-grip"></div>
-    <div class="sheet-head"><span style="font-size:22px" id="exIco">💪</span><b id="exTitle">Упражнение</b><button id="exClose" type="button" aria-label="Закрыть">✕</button></div>
+    <div class="sheet-head"><span style="font-size:20px" id="exIco">💪</span><b id="exTitle">Упражнение</b><button id="exClose" type="button" aria-label="Закрыть">✕</button></div>
   </div>
   <div class="sheet-body exm" id="exBody"></div>
 </div>
@@ -1011,7 +1091,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
 <div class="sheet" id="suppSheet" role="dialog" aria-modal="true" aria-labelledby="suppTitle">
   <div class="sheet-top" id="suppTop">
     <div class="sheet-grip"></div>
-    <div class="sheet-head"><span style="font-size:22px">🥤</span><b id="suppTitle">Спортивные добавки</b><button id="suppClose" type="button" aria-label="Закрыть">✕</button></div>
+    <div class="sheet-head"><span style="font-size:20px">🥤</span><b id="suppTitle">Спортивные добавки</b><button id="suppClose" type="button" aria-label="Закрыть">✕</button></div>
   </div>
   <div class="sheet-body" id="suppBody">
     <div class="note" style="margin-top:0">Самые популярные добавки: что они дают, кому подходят и как их принимают. Добавки не заменяют питание, сон и тренировки, они только помогают.</div>
@@ -1044,8 +1124,8 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
         <!-- ноги -->
         <rect x="27" y="64" width="11" height="22" rx="5" fill="#f0b48a"/>
         <rect x="42" y="64" width="11" height="22" rx="5" fill="#f0b48a"/>
-        <rect x="24" y="83" width="16" height="7" rx="3.5" fill="#e8eefc"/>
-        <rect x="40" y="83" width="16" height="7" rx="3.5" fill="#e8eefc"/>
+        <rect x="24" y="83" width="16" height="7" rx="3.5" fill="#e8eefc" stroke="#1b2a5a" stroke-width=".8"/>
+        <rect x="40" y="83" width="16" height="7" rx="3.5" fill="#e8eefc" stroke="#1b2a5a" stroke-width=".8"/>
         <!-- шорты -->
         <path d="M24 60 H56 V74 H42 L40 69 L38 74 H24 Z" fill="#1b2a5a"/>
         <!-- шея и майка -->
@@ -1071,8 +1151,9 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   <div class="chead"><span>💪</span><b>Арни FitHub</b><button id="chatClose" aria-label="Закрыть">✕</button></div>
   <div class="cmsgs" id="cmsgs"></div>
   <div class="cchips" id="cchips"></div>
+  <div class="cnote" id="cnote"></div>
   <form class="cform" id="cform">
-    <input id="cin" type="text" placeholder="Задайте вопрос…" maxlength="200" autocomplete="off">
+    <input id="cin" type="text" placeholder="Задайте вопрос…" maxlength="300" autocomplete="off">
     <button type="submit" aria-label="Отправить">➤</button>
   </form>
 </div>
@@ -1096,10 +1177,26 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   var tgUser = null;
   if (tg) {
     try { tg.ready(); tg.expand(); } catch(e){}
-    try { tg.setHeaderColor("#0a1226"); tg.setBackgroundColor("#0a1226"); } catch(e){}
     try { tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user; } catch(e){}
     if (tgUser && tgUser.first_name) $("hello").textContent = "Привет, " + tgUser.first_name + "! Развиваем тело";
   }
+
+  // тема оформления: как в Telegram либо выбранная в профиле
+  function themeNow(){
+    var m = load("fithub_theme", "auto");
+    if (m === "light" || m === "dark") return m;
+    try { if (tg && tg.initData) return tg.colorScheme === "light" ? "light" : "dark"; } catch(e){}
+    try { return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"; } catch(e){}
+    return "dark";
+  }
+  function applyTheme(){
+    var light = themeNow() === "light", c = light ? "#f1f4fa" : "#0a1226";
+    document.documentElement.classList.toggle("light", light);
+    try { tg.setHeaderColor(c); tg.setBackgroundColor(c); } catch(e){}
+    try { if (tg.setBottomBarColor) tg.setBottomBarColor(light ? "#ffffff" : "#111b38"); } catch(e){}
+  }
+  applyTheme();
+  try { tg.onEvent("themeChanged", applyTheme); } catch(e){}
 
   $("chanBtn").onclick = function(){
     haptic();
@@ -1118,7 +1215,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   // а миниатюры фото еды в облако не кладём (они остаются только на устройстве).
   var CLOUD_KEYS = ["fithub_user", "fithub_user_goal", "fithub_goal", "fithub_weights", "fithub_workouts", "fithub_food",
     "fithub_kcal_goal", "fithub_macro_goal", "fithub_daytasks", "fithub_done", "fithub_routine", "fithub_visits",
-    "fithub_visit_best", "fithub_my_plan", "fithub_plan_custom", "fithub_plan_sel", "fithub_train_log", "fithub_voice", "fithub_first_seen", "fithub_ret", "fithub_rem", "fithub_onb"];
+    "fithub_visit_best", "fithub_my_plan", "fithub_plan_custom", "fithub_plan_sel", "fithub_train_log", "fithub_lifts", "fithub_voice", "fithub_first_seen", "fithub_ret", "fithub_rem", "fithub_onb"];
   var CHUNK = 4000, cloudDirty = {}, cloudTimer = null, cloudBusy = false;
   var cs = null;
   try { if (tg && tg.CloudStorage && tg.isVersionAtLeast && tg.isVersionAtLeast("6.9")) cs = tg.CloudStorage; } catch(e){}
@@ -1289,6 +1386,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     navBtns.forEach(function(x){ x.classList.toggle("on", x.dataset.tab === name); });
     tabs.forEach(function(x){ x.classList.remove("on"); });
     $("tab-" + name).classList.add("on");
+    document.body.setAttribute("data-tab", name);
     window.scrollTo(0,0);
     onTabShown(name);
     track("tab", { tab: name });
@@ -1359,25 +1457,12 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     renderFlame();
     renderUserData();
 
-    // распорядок сегодня
-    var ds = dayStats(localDay(new Date()));
-    if (!ds.total) {
-      $("dayPct").textContent = "—";
-      setRing("dayFill", 0);
-      $("dayTxt").textContent = "На сегодня задач нет. Добавьте их в календаре: кнопка «Календарь» на главной.";
-    } else {
-      var dp = Math.round(ds.done / ds.total * 100);
-      $("dayPct").textContent = ds.done + " из " + ds.total;
-      setRing("dayFill", dp);
-      $("dayTxt").textContent = ds.done === ds.total ? "Распорядок на сегодня выполнен, отличная работа!" : "Выполнено " + dp + "% задач на сегодня.";
-    }
-
     // цель
     var pct = 0, txt = "";
     if (!goalW) {
-      txt = "Задайте целевой вес, чтобы видеть прогресс.";
+      txt = has ? "Сейчас " + last + " кг. Задайте целевой вес, чтобы видеть путь к цели." : "Запишите вес и задайте целевой — здесь появится путь к цели.";
     } else if (!has) {
-      txt = "Цель: " + goalW + " кг. Добавьте первую запись веса ниже.";
+      txt = "Цель: " + goalW + " кг. Запишите свой вес ниже.";
     } else {
       if (first === goalW) pct = (last === goalW) ? 100 : 0;
       else pct = Math.max(0, Math.min(100, Math.round((first - last) / (first - goalW) * 100)));
@@ -1417,6 +1502,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     $("ach").innerHTML = list.map(function(a){
       return '<div class="a' + (a[2] ? " ok" : "") + '"><em>' + a[0] + '</em><span>' + a[1] + '</span></div>';
     }).join("");
+    $("achSum").textContent = "Открыто " + list.filter(function(a){ return a[2]; }).length + " из " + list.length;
     renderHome();
   }
 
@@ -1447,6 +1533,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     var chartCard = $("chartCard");
     if (!entries.length) {
       hist.innerHTML = '<div class="empty">Пока нет записей веса.</div>';
+      $("histCount").textContent = "";
       chartCard.style.display = "none";
       renderProfile();
       return;
@@ -1462,6 +1549,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
       html += '<div class="entry"><span>'+dt+'</span><span><b>'+e.w+' кг</b>'+delta+'</span><button data-i="'+i+'" aria-label="Удалить">✕</button></div>';
     }
     hist.innerHTML = html;
+    $("histCount").textContent = entries.length;
     hist.querySelectorAll("button").forEach(function(b){
       b.onclick = function(){ haptic(); entries.splice(+b.dataset.i, 1); save("fithub_weights", entries); renderWeights(); };
     });
@@ -1647,6 +1735,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
       $("homeTasks").innerHTML = '<div class="empty">' + (st.total ? "Всё выполнено 🎉" : "Задач на сегодня пока нет") + '</div>';
     }
 
+    renderNext();
     $("hStreak").textContent = visitStreak() + " 🔥";
     $("hWork").textContent = workouts.length;
     $("hWeight").textContent = entries.length ? entries[entries.length - 1].w + " кг" : "—";
@@ -1654,6 +1743,53 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     var doy = Math.floor((now2 - new Date(now2.getFullYear(), 0, 0)) / 86400000);
     $("tip").textContent = TIPS[doy % TIPS.length];
   }
+
+  // карточка «следующая тренировка»: сегодня, завтра или в какой день недели
+  var WD_IN = ["в воскресенье", "в понедельник", "во вторник", "в среду", "в четверг", "в пятницу", "в субботу"];
+  var nextAct = null;
+  function renderNext(){
+    var card = $("nextCard");
+    if (typeof myPlans !== "function" || typeof WD_SHORT === "undefined" || !WD_SHORT) { card.style.display = "none"; return; }
+    var plans = myPlans().filter(function(p){ return p.wd != null; });
+    card.style.display = "";
+    if (!plans.length && myPlans().length) {   // план без дней недели
+      $("nextTitle").textContent = "Ваш план тренировок";
+      $("nextNote").textContent = "Откройте, когда будете готовы заниматься";
+      $("nextBtn").textContent = "Открыть"; nextAct = "train";
+      return;
+    }
+    if (!plans.length) {
+      $("nextTitle").textContent = "План тренировок не подобран";
+      $("nextNote").textContent = "Расскажите о цели — соберу тренировки и питание под вас";
+      $("nextBtn").textContent = "Подобрать"; nextAct = "goal";
+      return;
+    }
+    var today = localDay(new Date()), doneToday = workouts.indexOf(today) >= 0, t = new Date().getDay(), nx = null, todayPlan = null;
+    for (var k = 0; k < 8 && !nx; k++) {
+      var p = plans.filter(function(x){ return x.wd === (t + k) % 7; })[0];
+      if (!p) continue;
+      if (k === 0) { todayPlan = p; if (doneToday) continue; }
+      nx = { p: p, k: k };
+    }
+    var nm = function(p){ return p.name.split(" · ").slice(1).join(" · ") || p.name; };
+    var when = function(x){ return x.k === 1 ? "завтра" : x.k === 7 ? "через неделю" : WD_IN[(t + x.k) % 7]; };
+    var time = userGoal && userGoal.time ? " в " + userGoal.time : "";
+    if (nx && nx.k === 0) {
+      var mins = planMinutes(nx.p.items.map(function(it){ return progress(it, planWeek()); }));
+      $("nextTitle").textContent = "Сегодня тренировка" + time;
+      $("nextNote").textContent = nm(nx.p) + " · около " + mins + " мин";
+      $("nextBtn").textContent = "Начать"; nextAct = nx.p.id;
+    } else {
+      $("nextTitle").textContent = doneToday ? "Тренировка выполнена ✓" : "Сегодня день отдыха";
+      $("nextNote").textContent = nx ? "Следующая — " + when(nx) + time + ": " + nm(nx.p) : "Мышцы растут во время отдыха";
+      $("nextBtn").textContent = "План"; nextAct = nx ? nx.p.id : "train";
+    }
+  }
+  $("nextBtn").onclick = function(){
+    if (nextAct === "goal") { haptic(); openGoal(); return; }
+    if (nextAct && nextAct !== "train") { planSel = nextAct; save("fithub_plan_sel", planSel); renderPlan(); }
+    goTab("train");
+  };
 
   function goTab(name){ haptic(); showTab(name); }
   $("homeTasks").onclick = function(e){
@@ -1697,6 +1833,10 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   var food = load("fithub_food", {});            // дневник: {дата: [приёмы пищи]}
   var kcalGoal = load("fithub_kcal_goal", null);
   var cur = null;                                // продукт в карточке результата (на 100 г)
+  // приёмы пищи: новая запись попадает в выбранный, по умолчанию — по времени суток
+  var MEALS = [["b", "Завтрак"], ["l", "Обед"], ["d", "Ужин"], ["s", "Перекус"]];
+  function mealNow(){ var h = new Date().getHours(); return h >= 5 && h < 11 ? "b" : h >= 11 && h < 16 ? "l" : h >= 16 && h < 22 ? "d" : "s"; }
+  var mealSel = mealNow();
   var SPIN = '<span class="spin"></span>';
 
   function r1(x){ return Math.round(x * 10) / 10; }
@@ -1743,7 +1883,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     var g = num(String($("frG").value).replace(",", "."));
     if (!g || g <= 0 || g > 5000) { notify("error"); alert("Введите вес порции в граммах"); return; }
     var m = g / 100, key = localDay(new Date());
-    (food[key] = food[key] || []).push({ id: uid(), name: cur.name, g: Math.round(g), k: Math.round(cur.k * m), p: r1(cur.p * m), f: r1(cur.f * m), c: r1(cur.c * m) });
+    (food[key] = food[key] || []).push({ id: uid(), ml: mealSel, name: cur.name, g: Math.round(g), k: Math.round(cur.k * m), p: r1(cur.p * m), f: r1(cur.f * m), c: r1(cur.c * m) });
     save("fithub_food", food);
     track("food_add", { source: /штрихкод/.test(cur.src || "") ? "barcode" : "search" });
     notify("success");
@@ -1849,11 +1989,11 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
       var pct = g ? v / g * 100 : 0;
       var lvl = g ? Math.min(pct, 100) / 100 : 0;
       var y = lvl > 0 ? 96 - 92 * lvl : 104;        // уровень воды внутри круга
-      var left = g - v, status, isLow = low && low.m.k === m.k;
+      var left = g - v, status, isLow = low && low.m.k === m.k, un = m.k === "k" ? "" : " " + m.unit;   // у калорий единица уже есть строкой выше
       if (!g) status = "нет нормы";
-      else if (left > m.tol) status = "ещё " + fmtV(m, left) + " " + m.unit;
+      else if (left > m.tol) status = "ещё " + fmtV(m, left) + un;
       else if (left >= -m.tol) status = "норма ✓";
-      else status = "+" + fmtV(m, -left) + " " + m.unit + " сверх";
+      else status = "+" + fmtV(m, -left) + un + " сверх";
       var open = openMx === m.k;
       var cls = "vs" + (open ? " open" : "") + (openMx && !open ? " dim" : "") + (isLow ? " low" : "");
       html += '<button type="button" class="' + cls + '" data-k="' + m.k + '" aria-expanded="' + open + '"' +
@@ -1861,7 +2001,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
         '<svg viewBox="0 0 100 100" aria-hidden="true">' +
           '<defs><clipPath id="vc-' + m.k + '"><circle cx="50" cy="50" r="43"/></clipPath></defs>' +
           '<circle cx="50" cy="50" r="47.5" fill="none" stroke="' + m.color + '" stroke-width="' + (isLow ? 3.5 : 2) + '" stroke-opacity="' + (isLow ? 1 : 0.45) + '"/>' +
-          '<circle cx="50" cy="50" r="43" fill="#0a1226"/>' +
+          '<circle cx="50" cy="50" r="43" style="fill:var(--bg)"/>' +
           '<g clip-path="url(#vc-' + m.k + ')"><g class="lvl" style="transform:translateY(104px)" data-y="' + y.toFixed(1) + '">' +
             '<path class="wv w2" d="' + WAVE + '" fill="' + m.color + '" opacity=".45"/>' +
             '<path class="wv" d="' + WAVE + '" fill="' + m.color + '"/>' +
@@ -1869,7 +2009,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
           '<text class="vpct" x="50" y="57" text-anchor="middle">' + (g ? Math.round(pct) + "%" : "—") + '</text>' +
         '</svg>' +
         '<b>' + m.name + '</b>' +
-        '<span class="vv">' + fmtV(m, v) + (g ? "/" + g : "") + ' ' + m.unit + '</span>' +
+        '<span class="vv">' + fmtV(m, v) + (g ? "/" + g : "") + (m.k === "k" ? "" : ' ' + m.unit) + '</span>' +
         '<span class="vn">' + status + '</span>' +
         '</button>';
       details += '<div class="mxd2' + (open ? " open" : "") + '" data-for="' + m.k + '">' +
@@ -1977,15 +2117,31 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     fillMacroInputs();
     if (kcalGoal && document.activeElement !== $("fGoal")) $("fGoal").value = kcalGoal;
     $("dCount").textContent = d.list.length ? Math.round(t.k) + " ккал" : "";
+    $("mealSel").innerHTML = MEALS.map(function(M){
+      return '<button type="button" class="chip' + (M[0] === mealSel ? " on" : "") + '" data-m="' + M[0] + '">' + M[1] + '</button>';
+    }).join("");
     if (!d.list.length) {
-      $("diary").innerHTML = '<div class="empty">Пока пусто. Сфотографируйте продукт или найдите его в поиске.</div>';
+      $("diary").innerHTML = '<div class="empty">Пока пусто. Сфотографируйте еду или найдите продукт в поиске ниже.</div>';
       return;
     }
-    $("diary").innerHTML = d.list.map(function(m){
+    var row = function(m){
       return '<div class="meal">' + (m.img && /^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(m.img) ? '<img src="' + m.img + '" alt="">' : '') + '<div class="mn">' + esc(m.name) + '<small>' + m.g + ' г · Б ' + m.p + ' · Ж ' + m.f + ' · У ' + m.c + '</small></div>' +
         '<span class="mk">' + m.k + ' ккал</span><button data-id="' + m.id + '" aria-label="Удалить">✕</button></div>';
+    };
+    var known = {}; MEALS.forEach(function(M){ known[M[0]] = 1; });
+    $("diary").innerHTML = MEALS.concat([["", "Другое"]]).map(function(M){
+      var items = d.list.filter(function(m){ return M[0] ? m.ml === M[0] : !known[m.ml]; });
+      if (!items.length) return "";
+      var k = 0; items.forEach(function(m){ k += m.k; });
+      return '<div class="mgrp"><span>' + M[1] + '</span><span>' + Math.round(k) + ' ккал</span></div>' + items.map(row).join("");
     }).join("");
   }
+  $("mealSel").onclick = function(e){
+    var b = e.target.closest ? e.target.closest("[data-m]") : null;
+    if (!b) return;
+    haptic(); mealSel = b.dataset.m;
+    [].forEach.call($("mealSel").children, function(x){ x.classList.toggle("on", x === b); });
+  };
   $("diary").onclick = function(e){
     var b = e.target.closest ? e.target.closest("button[data-id]") : null;
     if (!b) return;
@@ -2006,7 +2162,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   };
   function foodInfo(){
     var d = dayFood();
-    if (!d.list.length) return "Сегодня в дневнике питания пусто. Добавь продукты во вкладке «Питание».";
+    if (!d.list.length) return "Сегодня в дневнике питания пусто. Добавьте продукты во вкладке «Питание».";
     var s = "Сегодня съедено " + Math.round(d.t.k) + " ккал: белки " + r1(d.t.p) + " г, жиры " + r1(d.t.f) + " г, углеводы " + r1(d.t.c) + " г.";
     if (kcalGoal) s += " Норма " + kcalGoal + " ккал, " + (kcalGoal - d.t.k >= 0 ? "осталось " + Math.round(kcalGoal - d.t.k) + "." : "превышена на " + Math.round(d.t.k - kcalGoal) + ".");
     var G = goals(), low = G ? lacking(d.t, G) : null;
@@ -2264,7 +2420,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     var t = aiTotals(), key = localDay(new Date());
     var name = items.length === 1 ? items[0].name.charAt(0).toUpperCase() + items[0].name.slice(1)
       : "Блюдо: " + items.map(function(d){ return d.name.split(",")[0]; }).join(", ");
-    var entry = { id: uid(), name: name.slice(0, 120), g: Math.round(t.g), k: Math.round(t.k), p: r1(t.p), f: r1(t.f), c: r1(t.c) };
+    var entry = { id: uid(), ml: mealSel, name: name.slice(0, 120), g: Math.round(t.g), k: Math.round(t.k), p: r1(t.p), f: r1(t.f), c: r1(t.c) };
     if (aiThumb) entry.img = aiThumb;
     (food[key] = food[key] || []).push(entry);
     save("fithub_food", food);
@@ -2648,6 +2804,48 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   var planCustom = load("fithub_plan_custom", {});
   var planSel = load("fithub_plan_sel", "full");
   var trainLog = load("fithub_train_log", []);
+  // журнал результатов по упражнениям: {упражнение: [{d: дата, s: [[кг, повторы], ...]}]}; без веса кг = 0
+  var lifts = load("fithub_lifts", {});
+  function lastLift(ex){ var a = lifts[ex]; return a && a.length ? a[a.length - 1] : null; }
+  function fmtKg(w){ return String(Math.round(w * 10) / 10).replace(".", ","); }
+  function liftText(L, sec){   // «40 кг × 10, 10, 8» или «12, 12, 10 повт.»
+    if (!L || !L.s.length) return "";
+    var ws = L.s.map(function(x){ return x[0]; }), same = ws.every(function(w){ return w === ws[0]; });
+    if (ws[0] && same) return fmtKg(ws[0]) + " кг × " + L.s.map(function(x){ return x[1]; }).join(", ");
+    if (ws.some(Boolean)) return L.s.map(function(x){ return (x[0] ? fmtKg(x[0]) + "×" : "") + x[1]; }).join(", ");
+    return L.s.map(function(x){ return x[1]; }).join(", ") + (sec ? " сек" : " повт.");
+  }
+  function better(a, b){ return !b || a[0] > b[0] || (a[0] === b[0] && a[1] > b[1]); }   // тяжелее, а при том же весе — больше повторов
+  function liftBest(ex){
+    var best = null;
+    (lifts[ex] || []).forEach(function(L){ L.s.forEach(function(x){ if (better(x, best)) best = x; }); });
+    return best;
+  }
+  function bestText(b, sec){ return b ? (b[0] ? fmtKg(b[0]) + " кг × " + b[1] : b[1] + (sec ? " сек" : " повт.")) : ""; }
+  function liftStep(E){ return E.eq === "g" ? 2.5 : 1; }
+  function liftHint(it){   // что делать с весом в этот раз
+    var E = EXERCISES[it.ex], L = lastLift(it.ex);
+    if (!L || !E.load || !L.s[0][0]) return "";
+    var w = L.s[0][0];
+    var all = L.s.length >= it.sets && L.s.every(function(x){ return x[0] >= w && x[1] >= it.reps; });
+    return all ? "Все подходы получились — попробуйте " + fmtKg(w + liftStep(E)) + " кг." : "Оставьте " + fmtKg(w) + " кг и доберите повторы.";
+  }
+  function liftSpark(a){   // маленький график: лучший вес (или повторы) по тренировкам
+    var v = a.map(function(L){ return Math.max.apply(null, L.s.map(function(x){ return x[0] || x[1]; })); });
+    if (v.length < 3) return "";
+    var mn = Math.min.apply(null, v), mx = Math.max.apply(null, v);
+    if (mx === mn) { mx += 1; mn -= 1; }
+    var pts = v.map(function(y, i){ return (6 + 308 * i / (v.length - 1)).toFixed(1) + " " + (50 - 44 * (y - mn) / (mx - mn)).toFixed(1); });
+    return '<svg class="exm-spark" viewBox="0 0 320 56" preserveAspectRatio="none" aria-hidden="true"><path d="M' + pts.join(" L") +
+      '" fill="none" stroke="#2f8cf0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>';
+  }
+  function exThumb(E){
+    return E.img ? '<img src="' + exImg(E, 0) + '" alt="" loading="lazy" data-ico="' + E.ico + '" onerror="__exThumbErr(this)">' : E.ico;
+  }
+  window.__exThumbErr = function(el){   // нет фото — возвращаем значок
+    if (!el.dataset.fb) { el.dataset.fb = "1"; el.src = el.src.replace(IMG_CDN[0], IMG_CDN[1]); return; }
+    if (el.parentNode) el.parentNode.textContent = el.dataset.ico;
+  };
   var voiceOn = load("fithub_voice", true);
   function todayMyPlan(){
     var t = new Date().getDay();
@@ -2714,8 +2912,10 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     $("planDesc").textContent = desc;
     $("planList").innerHTML = items.map(function(it, i){
       var E = EXERCISES[it.ex];
-      return '<div class="pex tap" data-ex="' + it.ex + '" data-i="' + i + '" role="button" tabindex="0"><span class="pi">' + E.ico + '</span><div class="pn">' + E.name +
-        '<small>' + setsText(it) + (E.load ? ' · с весом' : '') + '</small></div><span class="chev">›</span></div>';
+      var L = lastLift(it.ex);
+      return '<div class="pex tap" data-ex="' + it.ex + '" data-i="' + i + '" role="button" tabindex="0"><span class="pi">' + exThumb(E) + '</span><div class="pn">' + E.name +
+        '<small>' + setsText(it) + (E.load ? ' · с весом' : '') + '</small>' +
+        (L ? '<small class="last">Прошлый раз: ' + liftText(L, E.unit === "sec") + '</small>' : '') + '</div><span class="chev">›</span></div>';
     }).join("");
   }
   $("planChips").onclick = function(e){
@@ -2759,6 +2959,14 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     $("exIco").textContent = E.ico; $("exTitle").textContent = E.name;
     var h = '<div id="exMediaBox">' + exMedia() + '</div>';
     if (exCur.sets) h += '<div class="exm-plan">Ваше задание: <b>' + setsText(exCur) + '</b>' + (E.load ? ' · с весом' : '') + '</div>';
+    var hist = lifts[exCur.ex] || [], secU = E.unit === "sec";
+    if (hist.length) {
+      h += '<h4>Ваш прогресс</h4>' + liftSpark(hist) + '<div class="exm-hist">' + hist.slice(-4).reverse().map(function(L){
+        return '<div class="hr"><span>' + L.d.split("-").reverse().slice(0, 2).join(".") + '</span><b>' + liftText(L, secU) + '</b></div>';
+      }).join("") + '</div><div class="exm-best">🏆 Рекорд: ' + bestText(liftBest(exCur.ex), secU) + (liftHint(exCur) ? ' · ' + liftHint(exCur) : '') + '</div>';
+    } else if (exCur.sets) {
+      h += '<div class="exm-best">' + (E.load ? 'Во время тренировки записывайте вес и повторы после каждого подхода — здесь появится ваш прогресс.' : 'После тренировки здесь появятся ваши результаты.') + '</div>';
+    }
     h += '<h4>Как выполнять</h4><p>' + esc(E.tips) + '</p>';
     if (E.cam) h += '<h4>📱 ИИ-тренер</h4><p>Это упражнение ИИ-тренер считает по камере. ' + esc(E.view) + '</p>';
     h += '<h4>Видео техники</h4><p>Подробные видео с объяснением от тренеров:</p>' +
@@ -2817,7 +3025,8 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   function renderTrainHist(){
     if (!trainLog.length) { $("trainHist").innerHTML = '<div class="empty">Здесь появятся ваши тренировки.</div>'; return; }
     $("trainHist").innerHTML = trainLog.slice(-5).reverse().map(function(t){
-      return '<div class="thist"><div>' + esc(t.plan) + '<small>' + t.d.split("-").reverse().join(".") + ' · ' + t.min + ' мин · ' + t.sets + ' ' + plural(t.sets, ["подход", "подхода", "подходов"]) + '</small></div>' +
+      return '<div class="thist"><div>' + esc(t.plan) + '<small>' + t.d.split("-").reverse().join(".") + ' · ' + t.min + ' мин · ' + t.sets + ' ' + plural(t.sets, ["подход", "подхода", "подходов"]) +
+        (t.vol ? ' · поднято ' + t.vol.toLocaleString("ru-RU") + ' кг' : '') + (t.pr ? ' · 🏆 ' + t.pr : '') + '</small></div>' +
         '<b>' + (t.q != null ? "техника " + t.q + "%" : "без камеры") + '</b></div>';
     }).join("");
   }
@@ -3135,14 +3344,48 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     renderWs();
   }
   function setDone(manual){
-    var it = curIt();
+    var it = curIt(), E = EXERCISES[it.ex], sec = E.unit === "sec";
     W.setsDone++;
     W.setsByItem[W.i] = (W.setsByItem[W.i] || 0) + 1;
+    // сразу записываем подход: вес — как в прошлом подходе или в прошлый раз, повторы — что насчитал ИИ или по плану
+    var arr = W.log[W.i] = W.log[W.i] || [], L = lastLift(it.ex);
+    var w0 = !E.load ? 0 : arr.length ? arr[arr.length - 1][0] : (L ? L.s[0][0] : 0);
+    arr.push([w0, sec ? (Math.round(W.secs) || it.reps) : (W.reps > 0 ? W.reps : it.reps)]);
     notify("success");
     if (W.set < it.sets) startRest(it.rest, false);
     else if (W.i < W.items.length - 1) startRest(Math.max(it.rest, 30), true);
+    else if (!sec) { W.state = "last"; speak("Последний подход выполнен. Проверьте результат и завершите тренировку."); renderWs(); }
     else finishWorkout(false);
   }
+  // форма «запишите подход» на экране отдыха
+  function logCur(){ var a = W && W.log[W.i]; return a && a.length ? a[a.length - 1] : null; }
+  function logForm(){
+    var it = curIt(), E = EXERCISES[it.ex], x = logCur();
+    if (E.unit === "sec" || !x) return "";
+    var L = lastLift(it.ex), st = liftStep(E);
+    return '<div class="lgf"><span class="tg">Результат подхода ' + W.log[W.i].length + '</span><div class="lgrow">' +
+      (E.load ? '<div class="lgbox"><button type="button" data-lg="w" data-d="-' + st + '" aria-label="Меньше вес">−</button>' +
+        '<input id="lgW" type="text" inputmode="decimal" maxlength="6" value="' + (x[0] ? fmtKg(x[0]) : "") + '" placeholder="вес" aria-label="Вес, кг"><small>кг</small>' +
+        '<button type="button" data-lg="w" data-d="' + st + '" aria-label="Больше вес">+</button></div>' : '') +
+      '<div class="lgbox"><button type="button" data-lg="r" data-d="-1" aria-label="Меньше повторов">−</button>' +
+        '<input id="lgR" type="text" inputmode="numeric" maxlength="3" value="' + x[1] + '" aria-label="Повторы"><small>повт.</small>' +
+        '<button type="button" data-lg="r" data-d="1" aria-label="Больше повторов">+</button></div></div>' +
+      '<div class="prev">' + (L ? 'В прошлый раз: ' + liftText(L) : E.load ? 'Укажите вес — в следующий раз подскажу, сколько взять.' : 'Поправьте число, если сделали больше или меньше.') + '</div></div>';
+  }
+  $("wsPanel").addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("[data-lg]") : null, x = logCur();
+    if (!b || !x) return;
+    haptic();
+    var d = parseFloat(b.dataset.d);
+    if (b.dataset.lg === "w") { x[0] = Math.max(0, Math.min(500, Math.round((x[0] + d) * 2) / 2)); $("lgW").value = x[0] ? fmtKg(x[0]) : ""; }
+    else { x[1] = Math.max(0, Math.min(200, x[1] + d)); $("lgR").value = x[1]; }
+  });
+  $("wsPanel").addEventListener("input", function(e){
+    var x = logCur(); if (!x) return;
+    if (e.target.id === "lgW") { var w = parseFloat(String(e.target.value).replace(",", ".")); x[0] = isFinite(w) && w > 0 ? Math.min(500, Math.round(w * 10) / 10) : 0; }
+    else if (e.target.id === "lgR") { var r = parseInt(e.target.value, 10); x[1] = isFinite(r) && r >= 0 ? Math.min(200, r) : 0; }
+  });
+  function logTyping(){ var ae = document.activeElement; return !!(ae && (ae.id === "lgW" || ae.id === "lgR")); }
   function startRest(sec, nextEx){
     W.state = "rest"; W.left = sec; W.restTotal = sec; W.nextEx = nextEx; W.lastSpoken = null;
     speak("Подход выполнен. Отдых " + sec + " " + plural(sec, ["секунда", "секунды", "секунд"]) + ".");
@@ -3159,11 +3402,12 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   }
 
   function wsTick(){
-    if (!W || W.paused || W.state === "done") return;
+    if (!W || W.paused || W.state === "done" || W.state === "last") return;
     if (W.state === "intro" || W.state === "rest") {
       W.left -= 0.25;
       var s = Math.ceil(W.left);
       if (s <= 3 && s > 0 && s !== W.lastSpoken) { W.lastSpoken = s; speak(String(s)); haptic(); }
+      if (W.left <= 0 && W.state === "rest" && logTyping()) { W.left = 0; return; }   // отдых кончился, но человек ещё вводит вес — ждём
       if (W.left <= 0) { if (W.state === "intro") beginWork(); else endRest(); return; }
       var t = $("wsLeft"); if (t) t.textContent = Math.ceil(W.left);
       return;
@@ -3193,7 +3437,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     $("wsEx").textContent = E.ico + " " + E.name;
     $("wsSet").textContent = W.state === "done" ? "Тренировка завершена" :
       "Упражнение " + (W.i + 1) + " из " + W.items.length + " · подход " + W.set + " из " + it.sets;
-    var doneCount = W.state === "done" ? totalSets() : setsBefore(W.i) + (W.set - 1) + (W.state === "rest" ? 1 : 0);
+    var doneCount = W.state === "done" ? totalSets() : setsBefore(W.i) + (W.set - 1) + (W.state === "rest" || W.state === "last" ? 1 : 0);
     $("wsProg").style.width = (doneCount / totalSets() * 100).toFixed(1) + "%";
     $("wsReps").textContent = sec ? Math.floor(W.secs) : W.reps;
     $("wsTarget").textContent = "из " + it.reps + (sec ? " с" : " повт.");
@@ -3201,14 +3445,17 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     $("wsSound").textContent = voiceOn ? "🔊" : "🔇";
     $("wsFlip").style.display = W.useCam && W.stream ? "" : "none";
     $("wsPause").textContent = W.paused ? "Дальше" : "Пауза";
-    $("wsPause").disabled = W.state === "done";
-    $("wsSkip").disabled = W.state === "done";
+    $("wsPause").disabled = W.state === "done" || W.state === "last";
+    $("wsSkip").disabled = W.state === "done" || W.state === "last";
     $("wsMain").textContent = W.state === "intro" ? "Начать сейчас" : W.state === "rest" ? "Пропустить отдых" :
-      W.state === "done" ? "Готово" : sec ? "Завершить подход" : "Подход выполнен";
+      W.state === "last" ? "Завершить" : W.state === "done" ? "Готово" : sec ? "Завершить подход" : "Подход выполнен";
 
     var ph = $("wsPh");
     if ((!W.useCam || !E.cam) && W.state !== "done") {
-      ph.innerHTML = '<em>' + E.ico + '</em><b>' + E.name + '</b><div>' + E.tips + '</div>';
+      if (ph.getAttribute("data-ex") !== it.ex) {   // фото не перезагружаем при каждом обновлении экрана
+        ph.setAttribute("data-ex", it.ex);
+        ph.innerHTML = (E.img ? '<img src="' + exImg(E, 0) + '" alt="" onerror="this.style.display=\'none\'">' : '<em>' + E.ico + '</em>') + '<b>' + E.name + '</b><div>' + E.tips + '</div>';
+      }
       ph.classList.add("show");
     } else ph.classList.remove("show");
 
@@ -3216,11 +3463,15 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     if (W.state === "intro") {
       p.innerHTML = '<div class="lbl">' + (W.i === 0 ? "Приготовьтесь" : "Следующее упражнение") + '</div><div class="big" id="wsLeft">' + Math.ceil(W.left) + '</div>' +
         '<div class="nx"><b>' + E.ico + ' ' + E.name + '</b><span class="tg">' + setsText(it) + '</span>' +
-        (W.useCam ? '<p>📱 ' + E.view + '</p>' : '') + '<p>💡 ' + E.tips + '</p></div>';
+        (W.useCam ? '<p>📱 ' + E.view + '</p>' : '') + '<p>💡 ' + E.tips + '</p>' +
+        (lastLift(it.ex) ? '<p>📈 В прошлый раз: ' + liftText(lastLift(it.ex), sec) + '. ' + liftHint(it) + '</p>' : '') + '</div>';
+      p.classList.add("show");
+    } else if (W.state === "last") {
+      p.innerHTML = '<div class="lbl">Последний подход выполнен</div><div class="big sm">💪</div>' + logForm();
       p.classList.add("show");
     } else if (W.state === "rest") {
-      var nIt = W.nextEx ? W.items[W.i + 1] : it, nE = EXERCISES[nIt.ex];
-      p.innerHTML = '<div class="lbl">Отдых</div><div class="big" id="wsLeft">' + Math.ceil(W.left) + '</div>' +
+      var nIt = W.nextEx ? W.items[W.i + 1] : it, nE = EXERCISES[nIt.ex], lf = logForm();
+      p.innerHTML = '<div class="lbl">Отдых</div><div class="big' + (lf ? ' sm' : '') + '" id="wsLeft">' + Math.ceil(W.left) + '</div>' + lf +
         '<div class="nx"><span class="tg">Дальше</span><b>' + nE.ico + ' ' + nE.name + '</b>' +
         (W.nextEx ? setsText(nIt) + (W.useCam ? '<p>📱 ' + nE.view + '</p>' : '') : 'Подход ' + (W.set + 1) + ' из ' + it.sets + ' · ' + tgtText(it) + (sec ? '' : ' ' + plural(it.reps, ["повторение", "повторения", "повторений"]))) + '</div>';
       p.classList.add("show");
@@ -3236,7 +3487,21 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     cancelAnimationFrame(W.raf);
     stopCamera();
     var min = Math.max(1, Math.round((Date.now() - W.t0) / 60000));
-    var qs = [], rows = "";
+    var qs = [], rows = "", vol = 0, prN = 0, logged = {}, today0 = localDay(new Date());
+    W.items.forEach(function(it, i){
+      var sets = (W.log[i] || []).filter(function(x){ return x[1] > 0; });
+      if (!sets.length) return;
+      var before = liftBest(it.ex), topSet = null;
+      sets.forEach(function(x){ vol += x[0] * x[1]; if (better(x, topSet)) topSet = x; });
+      var pr = !!before && better(topSet, before);
+      if (pr) prN++;
+      logged[i] = { sets: sets, pr: pr };
+      var a = lifts[it.ex] = lifts[it.ex] || [], le = a[a.length - 1];
+      if (le && le.d === today0) le.s = le.s.concat(sets).slice(-10); else a.push({ d: today0, s: sets });
+      if (a.length > 12) lifts[it.ex] = a.slice(-12);
+    });
+    vol = Math.round(vol);
+    if (Object.keys(logged).length) save("fithub_lifts", lifts);
     W.items.forEach(function(it, i){
       var E = EXERCISES[it.ex], s = W.stats[i], q = null, top = null;
       if (s) {
@@ -3247,18 +3512,25 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
       var topTxt = top ? (top === "depth" ? ISSUES.depth[it.ex] : ISSUES[top]) : null;
       if (q !== null) qs.push(q);
       var sd = W.setsByItem[i] || 0;
+      var lg = logged[i];
       rows += '<div class="sr"><div>' + E.ico + ' ' + E.name + '<small>' + sd + ' из ' + it.sets + ' ' + plural(it.sets, ["подхода", "подходов", "подходов"]) +
+        (lg ? ' · ' + liftText({ s: lg.sets }, E.unit === "sec") + (lg.pr ? ' · 🏆 рекорд' : '') : '') +
         (topTxt ? ' · совет: ' + topTxt.charAt(0).toLowerCase() + topTxt.slice(1) : '') + '</small></div><b>' + (q !== null ? q + '%' : '—') + '</b></div>';
     });
     var qAll = qs.length ? Math.round(qs.reduce(function(a, b){ return a + b; }, 0) / qs.length) : null;
     W.summary = '<div class="lbl">' + (early ? "Тренировка остановлена" : "Тренировка завершена") + '</div><div class="big">🏆</div>' +
-      '<div style="font-size:15px">' + min + ' мин · ' + W.setsDone + ' ' + plural(W.setsDone, ["подход", "подхода", "подходов"]) +
+      '<div style="font-size:16px">' + min + ' мин · ' + W.setsDone + ' ' + plural(W.setsDone, ["подход", "подхода", "подходов"]) +
       (qAll !== null ? ' · техника ' + qAll + '%' : '') + '</div>' +
+      (vol || prN ? '<div style="font-size:16px">' + (vol ? 'Поднято ' + vol.toLocaleString("ru-RU") + ' кг' : '') + (vol && prN ? ' · ' : '') +
+        (prN ? '🏆 ' + prN + ' ' + plural(prN, ["рекорд", "рекорда", "рекордов"]) : '') + '</div>' : '') +
       '<div class="rows">' + rows + '</div>' +
       (qAll === null ? '<div class="lbl" style="text-transform:none;letter-spacing:0">Оценка техники появится, если тренироваться с камерой.</div>' : '');
     if (W.setsDone > 0) {
       var today = localDay(new Date());
-      trainLog.push({ d: today, plan: W.plan, min: min, sets: W.setsDone, q: qAll });
+      var tl = { d: today, plan: W.plan, min: min, sets: W.setsDone, q: qAll };
+      if (vol) tl.vol = vol;
+      if (prN) tl.pr = prN;
+      trainLog.push(tl);
       if (trainLog.length > 50) trainLog = trainLog.slice(-50);
       save("fithub_train_log", trainLog);
       if (workouts.indexOf(today) < 0) { workouts.push(today); save("fithub_workouts", workouts); }
@@ -3268,6 +3540,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
       save("fithub_done", done);
       refreshAll();
       renderTrainHist();
+      renderPlan();
     }
     speak(early ? "Тренировка остановлена. Выполненные подходы сохранены." : "Тренировка завершена! Отличная работа.");
     notify("success");
@@ -3296,7 +3569,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     if (W) return;
     track("workout_start", { cam: !!useCam });
     W = { items: currentItems(), plan: planById(planSel).name, i: 0, set: 1, reps: 0, secs: 0, state: "intro", useCam: useCam,
-      t0: Date.now(), stats: {}, setsDone: 0, setsByItem: {}, paused: false, cueAt: {}, since: {}, facing: "user",
+      t0: Date.now(), stats: {}, log: {}, setsDone: 0, setsByItem: {}, paused: false, cueAt: {}, since: {}, facing: "user",
       ar: 4 / 3, lastPoseAt: 0, pose: null, stream: null, r: newR() };
     if (chatOpen) closeChat();
     $("ws").classList.add("open");
@@ -3336,6 +3609,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     if (W.state === "intro") beginWork();
     else if (W.state === "rest") endRest();
     else if (W.state === "work") setDone(true);
+    else if (W.state === "last") finishWorkout(false);
     else if (W.state === "done") closeWs();
   };
   $("wsSkip").onclick = function(){
@@ -3393,6 +3667,10 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
       udDraft = { days: userData.days || 3, lim: (userData.lim || []).slice() };
     }
     renderUdChips();
+    $("udSum").textContent = profileReady()
+      ? (userData.sex === "f" ? "Женщина" : "Мужчина") + ", " + userData.age + " " + plural(userData.age, ["год", "года", "лет"]) + ", " + userData.h + " см, " + curWeight() + " кг · " +
+        (userData.days || 3) + " " + plural(userData.days || 3, ["раз", "раза", "раз"]) + " в неделю"
+      : "Заполните, чтобы получить план под себя";
   }
   function renderUdChips(){
     $("udDays").innerHTML = [2, 3, 4, 5, 6].map(function(d){
@@ -3563,7 +3841,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
         u.days + ' ' + plural(u.days, ["раз", "раза", "раз"]) + ' в неделю, ' + EQ_LABEL[u.eq || "home"] + (lims.length ? ', ограничения: ' + lims.join(", ") : '') + '. <a id="goalToProf">Изменить ›</a>';
     }
     var a = $("goalToProf");
-    if (a) a.onclick = function(){ closeGoal(); goTab("profile"); setTimeout(function(){ try { $("udCard").scrollIntoView({ behavior: "smooth", block: "start" }); } catch(e){} }, 80); };
+    if (a) a.onclick = function(){ closeGoal(); goTab("profile"); $("udCard").open = true; setTimeout(function(){ try { $("udCard").scrollIntoView({ behavior: "smooth", block: "start" }); } catch(e){} }, 80); };
   }
 
   function renderGoalResult(plan, applied){
@@ -4043,7 +4321,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
 
   // === МАСКОТ «КАЧОК» ===
   var mascot = $("mascot"), flipEl = $("flip"), bubble = $("bubble"), chatEl = $("chat"), navEl = document.querySelector("nav");
-  var MW = 72, MH = 88;
+  var MW = 54, MH = 66;
   var reduce = false;
   try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch(e){}
   var mx = Math.max(4, window.innerWidth - MW - 8), my = Math.max(6, window.innerHeight - (navEl.offsetHeight || 64) - MH - 16);   // появляется справа внизу, над панелью
@@ -4186,7 +4464,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     if (wasDrag) return;
     var now = Date.now();
     if (now - lastTap < 380) { lastTap = 0; openChat(); }
-    else { lastTap = now; say("Нажми ещё раз, и поболтаем", 1500); }
+    else { lastTap = now; say("Нажмите ещё раз — открою чат", 1500); }
   });
   mascot.addEventListener("pointercancel", function(){ activeId = null; dragging = false; inDock = false; navEl.classList.remove("dockhint"); mascot.classList.remove("todock"); });
 
@@ -4226,7 +4504,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     setDocked(true, false);   // иконки начинают раздвигаться
     track("mascot_dock");
     var c = slotCenter();
-    fly(mx, my, 1, c.x - MW / 2, c.y - MH / 2, 0.3, 450).then(function(){
+    fly(mx, my, 1, c.x - MW / 2, c.y - MH / 2, 0.4, 450).then(function(){
       mascot.classList.add("hidden");
       navM.classList.remove("pop"); void navM.offsetWidth; navM.classList.add("pop");
       flying = false;
@@ -4242,7 +4520,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     var toY = window.innerHeight - navEl.offsetHeight - MH - 70;
     mascot.classList.remove("hidden");
     setDocked(false, false);  // иконки сдвигаются обратно
-    fly(c.x - MW / 2, c.y - MH / 2, 0.3, toX, toY, 1, 500).then(function(){
+    fly(c.x - MW / 2, c.y - MH / 2, 0.4, toX, toY, 1, 500).then(function(){
       mx = tx = toX; my = ty = toY; clampT(); mx = tx; my = ty;
       flying = false;
       say("Я снова тут! 💪", 1800);
@@ -4272,7 +4550,9 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     if (e.key === "ArrowUp") { e.preventDefault(); undockMascot(); }
     else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openChat(); }
   });
-  try { if (localStorage.getItem("fithub_mascot_docked") === "1") { setDocked(true, false); mascot.classList.add("hidden"); } } catch(e){}
+  var dockPref = null;
+  try { dockPref = localStorage.getItem("fithub_mascot_docked"); } catch(e){}
+  if (dockPref === "1") { setDocked(true, false); mascot.classList.add("hidden"); }
   mascot.addEventListener("keydown", function(e){
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openChat(); }
   });
@@ -4301,7 +4581,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     if (!greeted) {
       greeted = true;
       var nm = tgUser && tgUser.first_name ? ", " + tgUser.first_name : "";
-      addMsg("Привет" + nm + "! Я Арни 💪 Отвечаю на вопросы про тренировки, питание, сон и твой план в приложении. Я не настоящий тренер и не врач, но подскажу основы.", "bot");
+      addMsg("Привет" + nm + "! Я Арни 💪 Отвечаю на вопросы про тренировки, питание, сон и ваш план в приложении. Я не тренер и не врач, но подскажу основы.", "bot");
     }
     park();
   }
@@ -4316,20 +4596,20 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   // ответы на основе данных приложения
   function tasksInfo(){
     var key = localDay(new Date()), list = tasksFor(key), d = done[key] || {};
-    if (!list.length) return "На сегодня задач нет. Добавь их в календаре: на главной кнопка «Календарь».";
+    if (!list.length) return "На сегодня задач нет. Добавьте их в календаре: на главной кнопка «Календарь».";
     var left = list.filter(function(t){ return !d[t.id]; });
     var s = "Выполнено " + (list.length - left.length) + " из " + list.length + ".";
     if (left.length) s += "\nОсталось:\n" + left.slice(0, 6).map(function(t){ return "• " + (t.time ? t.time + " " : "") + t.text; }).join("\n");
-    else s += " Всё сделано, молодец!";
+    else s += " Всё сделано, отлично!";
     return s;
   }
   function streakInfo(){
     var n = visitStreak();
-    return "Огонёк 🔥: заходишь " + n + " " + plural(n, ["день", "дня", "дней"]) + " подряд, рекорд " + bestVisit + ". " +
+    return "Огонёк 🔥: вы заходите " + n + " " + plural(n, ["день", "дня", "дней"]) + " подряд, рекорд " + bestVisit + ". " +
       "Серия тренировок: " + curStreak(workouts) + " дн. подряд, всего отмечено " + workouts.length + ".";
   }
   function weightInfo(){
-    if (!entries.length) return "Записей веса пока нет. Добавь первую во вкладке «Профиль», в блоке «Записать вес».";
+    if (!entries.length) return "Записей веса пока нет. Добавьте первую во вкладке «Профиль», в блоке «Вес и путь к цели».";
     var first = entries[0].w, last = entries[entries.length - 1].w, df = +(last - first).toFixed(1);
     var s = "Сейчас " + last + " кг, с начала " + (df > 0 ? "+" : "") + df + " кг.";
     if (goalW) s += " Цель " + goalW + " кг, разница " + Math.abs(+(last - goalW).toFixed(1)) + " кг.";
@@ -4337,58 +4617,126 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     return s;
   }
 
+  function liftsInfo(){
+    var ks = Object.keys(lifts).filter(function(k){ return EXERCISES[k] && lifts[k].length; });
+    if (!ks.length) return "Результатов пока нет. Во время тренировки после каждого подхода записывайте вес и повторы — я запомню их и покажу прогресс.";
+    ks.sort(function(a, b){ return lastLift(a).d < lastLift(b).d ? 1 : -1; });
+    return "Последние результаты:\n" + ks.slice(0, 6).map(function(k){
+      var E = EXERCISES[k], b = liftBest(k), sec = E.unit === "sec";
+      return "• " + E.name + ": " + liftText(lastLift(k), sec) + (b && b[0] ? " (рекорд " + fmtKg(b[0]) + " кг)" : "");
+    }).join("\n") + "\nПодробнее — во вкладке «Тренировка»: нажмите на упражнение.";
+  }
   var RULES = [
-    [/привет|здравствуй|добрый день|добрый вечер|доброе утро|салют|(^|[^а-я])хай/, "Привет! Спрашивай про тренировки, питание, сон или свой план на сегодня 💪"],
-    [/спасибо|благодар/, "Всегда рад помочь! Главное, не пропускай тренировки 💪"],
-    [/болит|болят|боль в|боли |травм|растяжение|вывих|онемен|головокруж|тошнит|давление|обморок|в груди/, "Если есть боль или плохое самочувствие, остановите тренировку. Резкая боль, боль в груди, головокружение или онемение — повод обратиться к врачу: я не могу ставить диагнозы. После консультации подберите нагрузку, которая вам подходит."],
-    [/кто ты|как тебя зовут|твое имя|ты кто/, "Я Арни, маскот FitHub. Я отвечаю на частые вопросы по готовому набору советов, поэтому не заменяю ни тренера, ни врача."],
-    [/что умеешь|что ты можешь|помощь|как пользоваться|(^|[^а-я])help/, "Я могу:\n• рассказать, что у тебя запланировано сегодня\n• показать серию тренировок и динамику веса\n• дать советы по тренировкам, питанию, сну, воде и разминке\n• подсказать, как пользоваться приложением\nСпроси, например: «Что у меня сегодня?» или «Сколько белка нужно?»"],
-    [/как.*(добавить|создать|поставить).*(задач|дел)|добавить задач/, "На главной нажми «Календарь», выбери день, введи задачу (можно с временем) и нажми «Добавить в распорядок». Галочка «Повторять каждый день» делает задачу ежедневной."],
-    [/отметить трениров|засчитать трениров/, "На главной нажми «Отметить тренировку» или в «Профиле» кнопку «Отметить тренировку сегодня». Повторное нажатие отменяет отметку."],
-    [/записать вес|добавить вес|внести вес/, "Открой вкладку «Профиль», блок «Записать вес»: введи вес и дату, затем «Добавить запись». Там же появится график."],
-    [/задач|распорядок|план на сегодня|что сегодня|что у меня|расписан/, tasksInfo],
-    [/серия|стрик|подряд|сколько трениров/, streakInfo],
-    [/мой вес|сколько я вешу|моя цель|мой прогресс|динамик/, weightInfo],
-    [/сфотограф|по фото|штрихкод|кбжу продукт|калорийност[ьи] продукт|узнать кбжу|посчитать кбжу|дневник питания/, "Открой вкладку «Питание» и нажми «Сфотографировать»: сфотографируй штрихкод на упаковке, и я найду КБЖУ в базе продуктов. Для еды без упаковки есть поиск по списку. Укажи вес порции и нажми «В дневник»."],
-    [/что я (съел|ел)|сколько (я )?съел|съедено|калори[йи] (я )?(съел|сегодня)/, foodInfo],
-    [/моя цель|мою цель|подбер(и|ите) (мне )?план|план под меня|составь(те)? (мне )?план|индивидуальн/, "На главной нажми «Моя цель» и напиши, чего хочешь достичь, например «похудеть на 5 кг к лету». Сначала заполни «Мои данные» в профиле. По цели и данным подберу план тренировок, расписание в календаре и нормы калорий и БЖУ в «Питании»."],
-    [/ии.?тренер|камер|сним(ать|у) себя|на видео|провер(ить|ь) техник|тренировк[аиу] с ии/, "Открой вкладку «Тренировка», выбери план и нажми «Начать с ИИ-тренером». Поставь телефон так, чтобы было видно всё тело (обычно боком к камере). Я буду считать повторения, подсказывать по технике и сам переключать подходы, отдых и упражнения. Видео обрабатывается прямо на телефоне."],
-    [/похуд|сбросить|сушк|жир|убрать живот/, "Для снижения веса нужен умеренный дефицит калорий: примерно 10–20% от твоей нормы. Безопасный темп — 0,5–1% веса в неделю. Держи белок 1,6–2,2 г на кг веса, делай 2–4 силовые тренировки в неделю и 7–10 тысяч шагов в день, не забывай про сон. Резкое голодание не нужно. При хронических заболеваниях сначала посоветуйся с врачом."],
-    [/набрат|набор массы|масс[уы]|гипертроф|накачат/, "Для набора массы нужен небольшой профицит: +5–15% к норме калорий. Тренируй каждую группу мышц 2 раза в неделю, около 8–20 рабочих подходов на группу в неделю, постепенно добавляя вес или повторения. Белок 1,6–2,2 г на кг, сон 7–9 часов. Прибавка около 0,25–0,5% веса в неделю — хороший темп."],
-    [/белок|белк|протеин/, "Ориентир для тренирующихся: 1,6–2,2 г белка на кг веса в день. При весе 75 кг это примерно 120–165 г. Лучше распределить на 3–5 приёмов пищи. Источники: мясо, рыба, яйца, творог, бобовые. При заболеваниях почек норму уточни у врача."],
-    [/калори|кбжу|рацион|питани|что есть|диет/, "Норму калорий можно прикинуть по формуле Миффлина — Сан-Жеора: 10 × вес (кг) + 6,25 × рост (см) − 5 × возраст, затем +5 для мужчин или −161 для женщин. Умножь на активность: 1,2 (сидячая), 1,375 (1–3 тренировки), 1,55 (3–5), 1,725 (6–7). Для похудения вычти 10–20%, для набора добавь 5–15%. Это ориентир, корректируй по динамике веса за 2–3 недели."],
-    [/сколько спать|высыпа|(^|[^а-я])сон([^а-я]|$)|спать|восстановлен|отдых/, "Спи 7–9 часов: во сне мышцы восстанавливаются, а гормоны аппетита и энергии приходят в норму. Ложись в одно время и за час до сна убирай яркие экраны. Между тяжёлыми тренировками одной группы мышц оставляй около 48 часов."],
-    [/вод[ауы]|пить|гидратац|жидкост/, "Ориентир — около 30 мл воды на кг веса в день, в жару и при нагрузке больше. Пей понемногу в течение дня и во время тренировки. Хороший признак — светло-жёлтая моча."],
+    [/^(привет|здравствуй(те)?|добрый (день|вечер)|доброе утро|салют|хай)[\s!.)]*$/, "Привет! Спрашивайте про тренировки, питание, сон или свой план на сегодня 💪", 1],
+    [/^(спасибо|благодарю)[\s!.)]*$/, "Всегда рад помочь! Главное — не пропускайте тренировки 💪", 1],
+    [/болит|болят|боль в|боли |травм|растяжение|вывих|онемен|головокруж|тошнит|давление|обморок|в груди/, "Если есть боль или плохое самочувствие, остановите тренировку. Резкая боль, боль в груди, головокружение или онемение — повод обратиться к врачу: я не могу ставить диагнозы. После консультации подберите нагрузку, которая вам подходит.", 1],
+    [/кто ты|как тебя зовут|твое имя|ты кто/, "Я Арни, помощник FitHub. Отвечаю на вопросы про тренировки, питание и приложение. Я не заменяю ни тренера, ни врача.", 1],
+    [/что умеешь|что ты можешь|как пользоваться|(^|[^а-я])help/, "Я могу:\n• рассказать, что у вас запланировано сегодня\n• показать серию тренировок, динамику веса и результаты в упражнениях\n• ответить на вопросы про тренировки, питание, сон и восстановление\n• подсказать, как пользоваться приложением\nСпросите, например: «Что у меня сегодня?» или «Сколько белка мне нужно?»", 1],
+    [/как.*(добавить|создать|поставить).*(задач|дел)|добавить задач/, "На главной нажмите «Календарь», выберите день, введите задачу (можно с временем) и нажмите «Добавить в распорядок». Галочка «Повторять каждый день» делает задачу ежедневной.", 1],
+    [/отметить трениров|засчитать трениров/, "В «Профиле» нажмите «Отметить тренировку сегодня», повторное нажатие отменяет отметку. Тренировки, пройденные во вкладке «Тренировка», засчитываются сами.", 1],
+    [/записать вес|добавить вес|внести вес/, "Откройте вкладку «Профиль», блок «Вес и путь к цели»: введите вес и дату и нажмите «Записать вес». Там же появится график.", 1],
+    [/рекорд|рабоч(ий|ие|его) вес|прогресс в (силе|упражнен)|мои результат|мои веса|сколько я (жму|приседаю|тяну|подтягиваюсь|отжимаюсь)/, liftsInfo, 1],
+    [/задач[иа]? на сегодня|мои задачи|распорядок|план на сегодня|что (у меня )?сегодня|что у меня (заплан|на сегодня)|расписан/, tasksInfo, 1],
+    [/серия|стрик|огон[её]к|сколько (у меня|я (уже )?(сделал|провел|отметил)) трениров/, streakInfo, 1],
+    [/мой вес|сколько я вешу|мой прогресс|динамик[аи] веса/, weightInfo, 1],
+    [/сфотограф|по фото|штрихкод|кбжу продукт|калорийност[ьи] продукт|узнать кбжу|посчитать кбжу|дневник питания/, "Откройте вкладку «Питание» и нажмите «Сфотографировать»: по фото блюда ИИ определит состав и КБЖУ, а по штрихкоду на упаковке найдёт продукт в базе. Для еды без упаковки есть поиск по списку. Укажите вес порции и нажмите «В дневник».", 1],
+    [/что я (съел|ел)|сколько (я )?съел|съедено|калори[йи] (я )?(съел|сегодня)/, foodInfo, 1],
+    [/моя цель|мою цель|подбер(и|ите) (мне )?план|план под меня|составь(те)? (мне )?план трениров|индивидуальн/, "На главной нажмите «Моя цель» и напишите, чего хотите достичь, например «похудеть на 5 кг к лету». Сначала заполните «Мои данные» в профиле. По цели и данным подберу план тренировок, расписание в календаре и нормы калорий и БЖУ в «Питании».", 1],
+    [/ии.?тренер|камер|сним(ать|у) себя|на видео|провер(ить|ь) техник|тренировк[аиу] с ии/, "Откройте вкладку «Тренировка», выберите план и нажмите «Начать с ИИ-тренером». Поставьте телефон так, чтобы было видно всё тело (обычно боком к камере). Я буду считать повторения, подсказывать по технике и сам переключать подходы, отдых и упражнения. Видео обрабатывается прямо на телефоне.", 1],
+    [/похуд|сбросить|сушк|жир|убрать живот/, "Для снижения веса нужен умеренный дефицит калорий: примерно 10–20% от вашей нормы. Безопасный темп — 0,5–1% веса в неделю. Держите белок 1,6–2,2 г на кг веса, делайте 2–4 силовые тренировки в неделю и 7–10 тысяч шагов в день, не забывайте про сон. Резкое голодание не нужно. При хронических заболеваниях сначала посоветуйтесь с врачом."],
+    [/набрат|набор массы|масс[уы]|гипертроф|накачат/, "Для набора массы нужен небольшой профицит: +5–15% к норме калорий. Тренируйте каждую группу мышц 2 раза в неделю, около 8–20 рабочих подходов на группу в неделю, постепенно добавляя вес или повторения. Белок 1,6–2,2 г на кг, сон 7–9 часов. Прибавка около 0,25–0,5% веса в неделю — хороший темп."],
+    [/белок|белк|протеин/, "Ориентир для тренирующихся: 1,6–2,2 г белка на кг веса в день. При весе 75 кг это примерно 120–165 г. Лучше распределить на 3–5 приёмов пищи. Источники: мясо, рыба, яйца, творог, бобовые. При заболеваниях почек норму уточните у врача."],
+    [/калори|кбжу|рацион|питани|что есть|диет/, "Вашу норму приложение считает само: на главной откройте «Моя цель». Прикинуть вручную можно по формуле Миффлина — Сан-Жеора: 10 × вес (кг) + 6,25 × рост (см) − 5 × возраст, затем +5 для мужчин или −161 для женщин. Умножьте на активность: 1,2 (сидячая), 1,375 (1–3 тренировки), 1,55 (3–5), 1,725 (6–7). Для похудения вычтите 10–20%, для набора добавьте 5–15%. Это ориентир, корректируйте по динамике веса за 2–3 недели."],
+    [/сколько спать|высыпа|(^|[^а-я])сон([^а-я]|$)|спать|восстановлен|отдых/, "Спите 7–9 часов: во сне мышцы восстанавливаются, а гормоны аппетита и энергии приходят в норму. Ложитесь в одно время и за час до сна убирайте яркие экраны. Между тяжёлыми тренировками одной группы мышц оставляйте около 48 часов."],
+    [/вод[ауы]|пить|гидратац|жидкост/, "Ориентир — около 30 мл воды на кг веса в день, в жару и при нагрузке больше. Пейте понемногу в течение дня и во время тренировки. Хороший признак — светло-жёлтая моча."],
     [/разминк|размять/, "Разминка 5–10 минут: лёгкое кардио до ощущения тепла, суставная гимнастика, затем 1–2 лёгких подхода с малым весом перед рабочим упражнением."],
-    [/растяж|гибкост|шпагат/, "Динамическую растяжку (махи, выпады) делай перед тренировкой, статическую (30–60 секунд на позу) после неё или отдельным занятием. Тянись до лёгкого натяжения, без боли."],
-    [/техник|правильно (делать|выполнять)|приседани|становая|жим лежа|подтягиван|отжиман/, "Общие правила техники: нейтральная спина, контроль веса в обе фазы движения, полная амплитуда без рывков, ровное дыхание (выдох на усилии). Если форма ломается, снизь вес. Новое упражнение лучше разучить с лёгким весом, а ещё лучше попросить тренера проверить технику."],
+    [/растяж|гибкост|шпагат/, "Динамическую растяжку (махи, выпады) делайте перед тренировкой, статическую (30–60 секунд на позу) — после неё или отдельным занятием. Тянитесь до лёгкого натяжения, без боли."],
+    [/техник|правильно (делать|выполнять)|приседани|становая|жим лежа|подтягиван|отжиман/, "Общие правила техники: нейтральная спина, контроль веса в обе фазы движения, полная амплитуда без рывков, ровное дыхание (выдох на усилии). Если форма ломается, снизьте вес. Новое упражнение лучше разучить с лёгким весом, а ещё лучше попросить тренера проверить технику."],
     [/программ|как часто|сколько раз|сплит|фулбади|план трениров/, "Новичку подойдёт фулбади 3 раза в неделю через день: присед или жим ногами, жим лёжа, тяга, жим над головой, пресс. Через 2–3 месяца можно перейти на сплит «верх/низ» (4 дня в неделю). Главное — регулярность и постепенный рост нагрузки."],
     [/кардио|бег|выносл|ходьб|шаг/, "Для здоровья ориентир — 150 минут умеренного кардио в неделю (ходьба, бег трусцой, велосипед) плюс силовые. Для контроля веса помогают ежедневные шаги, 7–10 тысяч в день. Кардио лучше ставить после силовой или в отдельные дни."],
-    [/креатин|добавк|спортпит|bcaa|бцаа|предтрен/, "Креатин моногидрат — одна из самых изученных добавок: обычно 3–5 г в день, время приёма не важно. Он не обязателен и не заменяет нормальное питание. Если есть заболевания (особенно почек) или ты принимаешь лекарства, сначала спроси врача. Про другие популярные добавки — на главной, кнопка «Спортивные добавки»."],
-    [/мотивац|лень|лениво|не хочу|нет сил|бросить|срыв/, "Снизь планку: даже 10 минут тренировки лучше, чем ничего. Отмечай галочки в календаре, держи серию дней и ставь небольшие цели на неделю. Готовь форму с вечера и тренируйся в одно и то же время."],
-    [/новичок|начать|с чего начать|начинающ|первый раз/, "С чего начать:\n1) поставь цель в профиле;\n2) выбери 3 дня в неделю и добавь тренировки в календарь;\n3) освой базовые упражнения с лёгким весом;\n4) спи 7–9 часов и ешь достаточно белка;\n5) записывай вес раз в неделю.\nЕсли есть заболевания, начни с консультации врача."]
+    [/креатин|добавк|спортпит|bcaa|бцаа|предтрен/, "Креатин моногидрат — одна из самых изученных добавок: обычно 3–5 г в день, время приёма не важно. Он не обязателен и не заменяет нормальное питание. Если есть заболевания (особенно почек) или вы принимаете лекарства, сначала спросите врача. Про другие популярные добавки — на главной, кнопка «Спортивные добавки»."],
+    [/мотивац|лень|лениво|не хочу|нет сил|бросить|срыв/, "Снизьте планку: даже 10 минут тренировки лучше, чем ничего. Отмечайте галочки в календаре, держите серию дней и ставьте небольшие цели на неделю. Готовьте форму с вечера и тренируйтесь в одно и то же время."],
+    [/новичок|начать|с чего начать|начинающ|первый раз/, "С чего начать:\n1) на главной откройте «Моя цель» — приложение соберёт план;\n2) тренируйтесь 3 раза в неделю через день;\n3) освойте базовые упражнения с лёгким весом;\n4) спите 7–9 часов и ешьте достаточно белка;\n5) записывайте вес раз в неделю.\nЕсли есть заболевания, начните с консультации врача."]
   ];
-  var FALLBACK = "Не уверен, что понял. Я знаю ответы про тренировки, питание, сон, воду, разминку и твой план в приложении. Попробуй спросить иначе или выбери вопрос ниже. Я не заменяю тренера и врача.";
+  var FALLBACK = "Не уверен, что понял. Я знаю ответы про тренировки, питание, сон, воду, разминку и ваш план в приложении. Попробуйте спросить иначе или выберите вопрос ниже. Я не заменяю тренера и врача.";
 
-  function answer(q){
+  function localAnswer(q){
     var t = q.toLowerCase().replace(/ё/g, "е");
     for (var i = 0; i < RULES.length; i++) {
       if (RULES[i][0].test(t)) {
         var a = RULES[i][1];
-        return typeof a === "function" ? a() : a;
+        return { a: typeof a === "function" ? a() : a, hit: true, strict: !!RULES[i][2] };
       }
     }
-    return FALLBACK;
+    return { a: FALLBACK, hit: false, strict: false };
+  }
+  // --- Арни на ИИ: вопрос уходит в функцию fithub-ai (YandexGPT) вместе с краткими данными из приложения ---
+  var chatHist = [];
+  function aiCtx(){
+    var u = userData || {}, a = [];
+    try {
+      if (u.sex) a.push("Пол: " + (u.sex === "f" ? "женский" : "мужской"));
+      if (u.age) a.push("Возраст: " + u.age);
+      if (u.h) a.push("Рост: " + u.h + " см");
+      if (curWeight()) a.push("Вес: " + curWeight() + " кг");
+      if (goalW) a.push("Целевой вес: " + goalW + " кг");
+      a.push("Уровень: " + ({ beg: "новичок", mid: "тренируется иногда", adv: "тренируется регулярно" })[u.lvl || "beg"]);
+      a.push("Тренируется " + EQ_LABEL[u.eq || "home"] + ", " + (u.days || 3) + " раз(а) в неделю");
+      var lims = LIMITS.filter(function(l){ return (u.lim || []).indexOf(l[0]) >= 0; }).map(function(l){ return l[1].toLowerCase(); });
+      if (lims.length) a.push("Ограничения по здоровью: " + lims.join(", "));
+      if (userGoal && userGoal.text) a.push("Цель: " + String(userGoal.text).slice(0, 120));
+      var G = goals();
+      if (G) a.push("Норма в день: " + G.k + " ккал, белки " + G.p + " г, жиры " + G.f + " г, углеводы " + G.c + " г");
+      var d = dayFood();
+      a.push("Съедено сегодня: " + Math.round(d.t.k) + " ккал, белки " + r1(d.t.p) + " г, жиры " + r1(d.t.f) + " г, углеводы " + r1(d.t.c) + " г");
+      var ps = myPlans();
+      if (ps.length) a.push("План тренировок: " + ps.map(function(p){ return p.name; }).join("; ").slice(0, 160));
+      a.push("Тренировок отмечено: " + workouts.length);
+      var ks = Object.keys(lifts).filter(function(k){ return EXERCISES[k] && lifts[k].length; });
+      ks.sort(function(x, y){ return lastLift(x).d < lastLift(y).d ? 1 : -1; });
+      if (ks.length) a.push("Последние результаты: " + ks.slice(0, 5).map(function(k){ return EXERCISES[k].name + " — " + liftText(lastLift(k), EXERCISES[k].unit === "sec"); }).join("; "));
+    } catch(e){}
+    return a.join("\n").slice(0, 900);
+  }
+  function askArni(text, initData){
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function(){ try { ctrl.abort(); } catch(e){} }, 25000);
+    return fetch(AI_ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, signal: ctrl ? ctrl.signal : undefined,
+      body: JSON.stringify({ action: "chat", q: text.slice(0, 300), hist: chatHist.slice(-4), ctx: aiCtx(), initData: initData }) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ clearTimeout(timer); return { ok: r.ok, status: r.status, j: j }; }); });
+  }
+  function aiNote(j){   // строка под чатом: сколько вопросов к ИИ осталось сегодня
+    var n = $("cnote");
+    if (!j || j.premium || j.left == null || j.left > 2) { n.textContent = ""; return; }
+    n.innerHTML = (j.left > 0 ? "Вопросов к ИИ на сегодня осталось: " + (+j.left) + "." : "Вопросы к ИИ на сегодня закончились.") +
+      " С Premium — до " + (+j.daily || 50) + ' в день. <a id="cnotePrem" role="button">Подробнее</a>';
+    $("cnotePrem").onclick = function(){ haptic(); closeChat(); try { window.FitHubPremium.open("Больше вопросов к ИИ-помощнику Арни."); } catch(e){} };
   }
   function send(text){
     text = (text || "").trim();
     if (!text) return;
     addMsg(text, "me");
-    var typing = addMsg("…", "bot");
-    setTimeout(function(){
-      typing.textContent = answer(text);
-      cmsgs.scrollTop = cmsgs.scrollHeight;
-    }, 450 + Math.random() * 250);
+    var typing = addMsg("…", "bot"), loc = localAnswer(text), t0 = Date.now();
+    typing.classList.add("wait");
+    function show(t){
+      setTimeout(function(){
+        typing.classList.remove("wait");
+        typing.textContent = t;
+        cmsgs.scrollTop = cmsgs.scrollHeight;
+        chatHist.push({ q: text.slice(0, 300), a: String(t).slice(0, 500) });
+        if (chatHist.length > 6) chatHist.shift();
+      }, Math.max(0, 450 - (Date.now() - t0)));
+    }
+    var initData = "";
+    try { initData = (tg && tg.initData) || ""; } catch(e){}
+    if (loc.strict || !initData || !AI_ENDPOINT) { show(loc.a); return; }
+    askArni(text, initData).then(function(x){
+      if (x.ok && x.j && x.j.text) { show(String(x.j.text)); aiNote(x.j); track("chat_ai"); }
+      else if (x.status === 402) {
+        aiNote({ left: 0, daily: x.j && x.j.daily });
+        show(loc.hit ? loc.a : "На сегодня вопросы к ИИ закончились — завтра отвечу снова. Пока могу подсказать по готовым темам: выберите вопрос ниже.");
+      } else show(loc.a);
+    }).catch(function(){ show(loc.a); });
   }
   $("cform").onsubmit = function(e){
     e.preventDefault();
@@ -4405,7 +4753,14 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
 
   clampT();
   requestAnimationFrame(tick);
-  setTimeout(function(){ if (!chatOpen && !docked) say("Двойной тап — чат. Смахни вниз — спрячусь в меню", 5000); }, 1200);
+  setTimeout(function(){
+    if (chatOpen || docked) return;
+    if (dockPref !== null) { say("Двойной тап — чат. Смахните вниз — спрячусь в меню", 5000); return; }
+    // первое знакомство: Арни показывается и уходит в нижнее меню, чтобы не закрывать экран; вернуть — смахнуть значок вверх
+    if ($("onb").classList.contains("open")) { setDocked(true, false); mascot.classList.add("hidden"); return; }
+    say("Я Арни! Буду в меню внизу 👇", 2400);
+    setTimeout(function(){ if (!chatOpen && !dragging && !docked) dockMascot(); }, 2600);
+  }, 1200);
 
   // === НАПОМИНАНИЯ ОТ БОТА ===
   // настройки хранятся у пользователя (fithub_rem) и на сервере (функция fithub-ai → Object Storage),
@@ -4440,6 +4795,14 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     }).join("");
     remSections();
     $("remNote").textContent = rem && (r.workout.on || r.food.on || r.weight.on) ? "Напоминания включены ✓" : "";
+    remSum();
+  }
+  function remSum(){
+    var r = rem || REM_DEF, a = [];
+    if (rem && r.workout.on) a.push("тренировки");
+    if (rem && r.food.on) a.push("еда");
+    if (rem && r.weight.on) a.push("взвешивание");
+    $("remSum").textContent = a.length ? "Включены: " + a.join(", ") : "Выключены";
   }
   function remSections(){
     [["remW", "remWOn"], ["remF", "remFOn"], ["remG", "remGOn"]].forEach(function(x){ $(x[0]).classList.toggle("on", $(x[1]).checked); });
@@ -4468,7 +4831,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
       remPost({ action: "reminders", rem: next, test: any && !wasOn }).then(function(x){
         btn.disabled = false;
         if (x.ok && x.j && x.j.ok) {
-          rem = next; save("fithub_rem", rem);
+          rem = next; save("fithub_rem", rem); remSum();
           note.textContent = any ? (wasOn ? "Сохранено ✓" : "Готово ✓ Бот прислал пробное сообщение") : "Напоминания выключены";
           track(any ? "reminders_on" : "reminders_off", { w: next.workout.on ? next.workout.days.length : 0, f: next.food.on ? next.food.times.length : 0, g: next.weight.on ? 1 : 0 });
         } else if (x.j && x.j.error === "bot_blocked") {
@@ -4669,6 +5032,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
     var wantRem = $("onbRem").checked;
     track("onb_done", { rem: wantRem ? 1 : 0 });
     onbClose(true);
+    $("udCard").open = false;
     showTab("home");
     if (wantRem) {   // включаем напоминания о тренировках по дням плана (с тем же сохранением, что и в профиле)
       rem = rem || null; renderRem();
@@ -4691,7 +5055,18 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   }
 
   // === СТАРТ ===
+  (function(){   // оформление
+    function sync(){ var m = load("fithub_theme", "auto"); [].forEach.call($("themeSel").children, function(b){ b.classList.toggle("on", b.dataset.t === m); }); }
+    $("themeSel").onclick = function(e){
+      var b = e.target.closest ? e.target.closest("[data-t]") : null;
+      if (!b) return;
+      haptic(); save("fithub_theme", b.dataset.t); applyTheme(); sync();
+    };
+    sync();
+  })();
   renderWeights();   // внутри вызывает renderProfile
+  $("udCard").open = !profileReady();     // пока данные не заполнены — блок раскрыт
+  $("goalFold").open = !goalW;
   renderCal();
   track("app_open");
   $("privLink").onclick = function(e){
@@ -4720,11 +5095,12 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   function render(){
     var note = $("premNote"), btn = $("premBtn");
     if (!note || !btn) return;
-    if (!st) { note.textContent = "Больше распознаваний еды по фото"; btn.textContent = "Подробнее"; }
-    else if (st.premium) { note.textContent = "Активен до " + fmt(st.until) + " · до " + st.daily + " фото в день"; btn.textContent = "Подробнее"; }
+    if (!st) { note.textContent = "Больше фото еды и вопросов к ИИ"; btn.textContent = "Подробнее"; }
+    else if (st.premium) { note.textContent = "Активен до " + fmt(st.until) + " · до " + st.daily + " фото" + (st.chatDaily ? " и " + st.chatDaily + " вопросов к ИИ" : "") + " в день"; btn.textContent = "Подробнее"; }
     else { note.textContent = "Фото сегодня: осталось " + st.left + " из " + st.free + ". С Premium — до " + st.daily + " в день"; btn.textContent = st.price + " ⭐"; }
     if (st) {
       $("premPrice").textContent = st.price; $("premDaily").textContent = st.daily; $("premFree").textContent = st.free;
+      if (st.chatDaily) { $("premChat").textContent = st.chatDaily; $("premChatFree").textContent = st.chatFree; }
       $("premBuy").style.display = st.premium ? "none" : "";
       if (st.premium) $("premSheetNote").textContent = "Premium активен до " + fmt(st.until) + ". Продлится автоматически.";
     }
@@ -4734,7 +5110,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
   }
   function open(reason){
     if (isOpen) return; isOpen = true;
-    $("premReason").textContent = reason || "Больше возможностей для твоего прогресса.";
+    $("premReason").textContent = reason || "Больше возможностей для вашего прогресса.";
     if (!st || !st.premium) $("premSheetNote").textContent = "";
     render();
     $("premSheet").classList.add("open"); $("premBg").classList.add("open");
@@ -4755,7 +5131,7 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
         $("premSheetNote").textContent = "⭐ Premium подключён! Спасибо за поддержку FitHub.";
         notify("success");
       } else if (n < 10) setTimeout(function(){ poll(n + 1); }, 1500);
-      else $("premSheetNote").textContent = "Оплата получена. Premium включится в течение минуты — загляни сюда чуть позже.";
+      else $("premSheetNote").textContent = "Оплата получена. Premium включится в течение минуты — загляните сюда чуть позже.";
     });
   }
   function buy(){
@@ -4766,11 +5142,11 @@ select{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-o
       tg.openInvoice(r.link, function(status){
         resetBuy();
         if (status === "paid") { $("premSheetNote").textContent = "Оплата прошла, включаю Premium…"; poll(0); }
-        else if (status === "failed") { notify("error"); $("premSheetNote").textContent = "Оплата не прошла. Попробуй ещё раз."; }
+        else if (status === "failed") { notify("error"); $("premSheetNote").textContent = "Оплата не прошла. Попробуйте ещё раз."; }
       });
     }).catch(function(){
       resetBuy(); notify("error");
-      $("premSheetNote").textContent = "Не удалось открыть оплату. Попробуй чуть позже.";
+      $("premSheetNote").textContent = "Не удалось открыть оплату. Попробуйте чуть позже.";
     });
   }
   function init(){
