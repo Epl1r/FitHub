@@ -11,8 +11,11 @@ Epl1r/FitHub-server, файл CLAUDE.md. Перед утверждениями �
 - Вкладки: `tab-home`, `tab-cal`, `tab-train`, `tab-food`, `tab-profile`; нижнее меню `nav [data-tab]`.
 - Данные пользователя — в localStorage (ключи `fithub_*`, например `fithub_lifts` — веса по упражнениям,
   `fithub_theme` — тема), копия — в Telegram CloudStorage.
-- Сервер: константа `AI_ENDPOINT` (облачная функция Yandex). Действия: chat, digest_now, feedback, reminders,
-  seen, stat, а также фото еды без action.
+- Сервер: константа `AI_ENDPOINT` (облачная функция Yandex). Действия: chat, digest_now, feedback, invoice, premium,
+  ref, reminders, seen, stat, technique, а также фото еды без action.
+- Разбор техники по видео: карточка во вкладке тренировок и блок в карточке упражнения (`tqSection`); `tqRun`
+  вынимает 8 кадров (видео до 20 с), рисует позу (MediaPipe, `loadPose`), собирает коллаж и шлёт action `technique`.
+  Последние 3 разбора по упражнению — в localStorage `fithub_tech`.
 - Статистика: `track(событие)` → Яндекс Метрика (113832857) и action `stat` в функцию.
 - Карточка «Сводка для автора» (id `ownerCard`) видна только владельцу (Telegram id 5517755450).
 - Арни: чат с ИИ через action `chat`; заготовленные ответы — массив `RULES`, функция `localAnswer`.
