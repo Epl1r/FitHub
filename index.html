@@ -849,6 +849,10 @@ button{font-size:14px}
     <div><b>⭐ FitHub Premium</b><div class="note" style="margin-top:2px" id="premNote">Больше фото еды и вопросов к ИИ</div></div>
     <button class="btn" id="premBtn" type="button">Подробнее</button>
   </div>
+  <div class="card fbcard" id="refCard">
+    <div><b>🎁 Пригласите друга</b><div class="note" style="margin-top:2px" id="refNote">Друг ответит на 3 вопроса — и вы оба получите 7 дней Premium</div></div>
+    <button class="btn" id="refBtn" type="button">Пригласить</button>
+  </div>
 
   <details class="card fold" id="udCard">
     <summary><span>Мои данные<small id="udSum">Пол, возраст, рост, вес и условия тренировок</small></span></summary>
@@ -1056,6 +1060,7 @@ button{font-size:14px}
     </ul>
     <button class="btn" id="premBuy" type="button">Подключить за <span id="premPrice">150</span> ⭐ в месяц</button>
     <div class="note" id="premSheetNote" style="text-align:center"></div>
+    <button class="btn ghost" id="premRef" type="button" style="margin-top:12px">🎁 Пригласить друга — 7 дней Premium вам обоим</button>
   </div>
 </div>
 
@@ -1325,15 +1330,17 @@ button{font-size:14px}
   // счётчики для недельной сводки от бота: копятся и раз в несколько секунд уходят в функцию
   var STAT_MAP = { app_open: "open", first_open: "first_open", onb_done: "onb_done", onb_skip: "onb_skip", ret_d1: "ret_d1", ret_d7: "ret_d7",
     ret_d30: "ret_d30", photo: "photo", ai_ok: "ai_ok", ai_error: "ai_error", food_add: "food_add", workout_start: "workout_start",
-    workout_done: "workout_done", goal_apply: "goal_apply", reminders_on: "reminders_on", feedback_sent: "feedback_sent", exercise_info: "exercise_info" };
+    workout_done: "workout_done", goal_apply: "goal_apply", reminders_on: "reminders_on", feedback_sent: "feedback_sent", exercise_info: "exercise_info", chat_open: "chat_open" };
   var statQ = {}, statTimer = null;
+  var START_SRC = "";
+  try { var sp = tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param; if (sp && /^[A-Za-z0-9_-]{1,32}$/.test(sp)) START_SRC = sp; } catch(e){}
   function statFlush(){
     clearTimeout(statTimer); statTimer = null;
     if (!Object.keys(statQ).length) return;
     var initData = ""; try { initData = (tg && tg.initData) || ""; } catch(e){}
     var ev = statQ; statQ = {};
     if (!initData) return;
-    try { fetch(AI_ENDPOINT, { method: "POST", keepalive: true, headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify({ action: "stat", ev: ev, initData: initData }) }).catch(function(){}); } catch(e){}
+    try { fetch(AI_ENDPOINT, { method: "POST", keepalive: true, headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(START_SRC ? { action: "stat", ev: ev, src: START_SRC, initData: initData } : { action: "stat", ev: ev, initData: initData }) }).catch(function(){}); } catch(e){}
   }
   function statAdd(goal){
     var k = STAT_MAP[goal]; if (!k) return;
@@ -5102,7 +5109,7 @@ button{font-size:14px}
       $("premPrice").textContent = st.price; $("premDaily").textContent = st.daily; $("premFree").textContent = st.free;
       if (st.chatDaily) { $("premChat").textContent = st.chatDaily; $("premChatFree").textContent = st.chatFree; }
       $("premBuy").style.display = st.premium ? "none" : "";
-      if (st.premium) $("premSheetNote").textContent = "Premium активен до " + fmt(st.until) + ". Продлится автоматически.";
+      if (st.premium) $("premSheetNote").textContent = "Premium активен до " + fmt(st.until) + "." + (st.auto === false ? " Это бонусные дни: сами они не продлеваются, после них можно оформить подписку." : " Продлится автоматически.");
     }
   }
   function refresh(){
@@ -5149,8 +5156,27 @@ button{font-size:14px}
       $("premSheetNote").textContent = "Не удалось открыть оплату. Попробуйте чуть позже.";
     });
   }
+  var refBusy = false;
+  function refNote(r){
+    if (!r) return;
+    $("refNote").textContent = r.invited ? "Пришло друзей: " + r.invited + ". Бонус — за первых " + r.max + ", " + r.days + " дней Premium вам обоим" : "Друг ответит на 3 вопроса — и вы оба получите " + r.days + " дней Premium";
+  }
+  function invite(){
+    if (refBusy) return;
+    if (!tg || !tg.initData) { $("refNote").textContent = "Приглашать можно из приложения внутри Telegram."; return; }
+    refBusy = true;
+    call("ref").then(function(r){
+      refBusy = false; refNote(r);
+      var text = "Тренировки, питание и ИИ-помощник прямо в Telegram — попробуй FitHub. По моей ссылке нам обоим дадут " + r.days + " дней Premium 🎁";
+      var url = "https://t.me/share/url?url=" + encodeURIComponent(r.link) + "&text=" + encodeURIComponent(text);
+      try { tg.openTelegramLink(url); } catch(e){ try { window.open(url, "_blank"); } catch(e2){} }
+      try { if (typeof window.ym === "function") window.ym(113832857, "reachGoal", "ref_share"); } catch(e){}
+    }).catch(function(){ refBusy = false; notify("error"); $("refNote").textContent = "Не получилось создать ссылку. Попробуйте чуть позже."; });
+  }
   function init(){
     if (!$("premCard")) return;
+    $("refBtn").onclick = invite;
+    $("premRef").onclick = invite;
     $("premBtn").onclick = function(){ open(); };
     $("premClose").onclick = close;
     $("premBg").onclick = close;
