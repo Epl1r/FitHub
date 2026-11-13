@@ -167,6 +167,20 @@ nav button.on{color:var(--accent);font-weight:700}
 .onb-row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.onb-row3>div{min-width:0}.onb-row3 input{min-width:0}
 .onb-foot{margin-top:auto;padding-top:18px}
 .onb-err{color:#ff6b6b;font-size:14px;min-height:18px;margin-top:10px}
+.gday{border-top:1px solid var(--line);padding:10px 0 0;margin-top:10px}
+.gday>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px}
+.gday>summary::-webkit-details-marker{display:none}
+.gday>summary::after{content:"›";color:var(--hint);font-size:18px;margin-left:auto;transition:transform .2s}
+.gday[open]>summary::after{transform:rotate(90deg)}
+.gday .gd-wd{width:34px;height:34px;border-radius:10px;background:var(--grad);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center;flex:none}
+.gday .gd-n{font-weight:700;font-size:15px}.gday .gd-n small{display:block;color:var(--hint);font-weight:400;font-size:13px}
+.gday .gl{margin-left:44px}
+.gkpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.gkpi div{background:var(--card);border-radius:12px;padding:10px 6px;text-align:center}
+.gkpi b{display:block;font-size:17px}.gkpi span{color:var(--hint);font-size:12px}
+.gacts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}.gacts .btn{margin-top:0;font-size:15px;padding:13px 6px;white-space:nowrap}
+.gmore{margin-top:4px}
+.onb-sum .nx{color:var(--text);font-weight:600}
 .onb-sum{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
 .onb-sum b{display:block;font-size:16px;margin-bottom:4px}
 .onb-sum div{color:var(--hint);font-size:14px;line-height:1.5}
@@ -682,7 +696,7 @@ button{font-size:14px}
   </div>
 
   <div class="qgrid">
-    <button class="qbtn" id="qGoal"><i>🎯</i><span>Моя цель</span></button>
+    <button class="qbtn" id="qGoal"><i>🎯</i><span>Моя программа</span></button>
     <button class="qbtn" id="qCal"><i>📅</i><span>Календарь</span></button>
     <button class="qbtn" id="qSupp"><i>🥤</i><span>Спортивные добавки</span></button>
   </div>
@@ -1068,9 +1082,10 @@ button{font-size:14px}
 <div class="sheet" id="goalSheet" role="dialog" aria-modal="true" aria-labelledby="goalTitle">
   <div class="sheet-top" id="goalTop">
     <div class="sheet-grip"></div>
-    <div class="sheet-head"><span style="font-size:20px">🎯</span><b id="goalTitle">Моя цель</b><button id="goalClose" type="button" aria-label="Закрыть">✕</button></div>
+    <div class="sheet-head"><span style="font-size:20px">🎯</span><b id="goalTitle">Моя программа</b><button id="goalClose" type="button" aria-label="Закрыть">✕</button></div>
   </div>
   <div class="sheet-body">
+    <div id="goalForm" style="display:none">
     <label style="margin-top:0">Какой цели хотите достичь?</label>
     <textarea id="goalText" rows="3" maxlength="300" placeholder="Например: хочу похудеть на 5 кг к лету"></textarea>
     <div class="chips" id="goalEx" style="margin-top:10px"></div>
@@ -1078,6 +1093,7 @@ button{font-size:14px}
     <input id="goalTime" type="time" value="18:00">
     <div class="gprof" id="goalProf"></div>
     <button class="btn" id="goalGen" type="button">🤖 Подобрать план</button>
+    </div>
     <div id="goalRes"></div>
   </div>
 </div>
@@ -1091,15 +1107,19 @@ button{font-size:14px}
   </div>
 
   <div class="onb-step" data-s="1">
-    <h2>Привет! Я Арни 💪</h2>
-    <div class="lead">Отвечу на 3 вопроса — и соберу план тренировок и питания под вас. Займёт минуту.<br><b style="color:var(--text)">Какая у вас цель?</b> Можно выбрать несколько.</div>
+    <h2 id="onbH1">Привет! Я Арни 💪</h2>
+    <div class="lead" id="onbL1">Отвечу на 3 вопроса — и соберу план тренировок и питания под вас. Займёт минуту.<br><b style="color:var(--text)">Какая у вас цель?</b> Можно выбрать несколько.</div>
     <div class="onb-opts" id="onbGoal">
       <button type="button" class="onb-opt" data-g="Похудеть на 5 кг"><i>🔥</i><span>Похудеть<small>Сжечь жир и сохранить мышцы</small></span><em class="onb-chk">✓</em></button>
       <button type="button" class="onb-opt" data-g="Набрать мышечную массу"><i>💪</i><span>Набрать массу<small>Больше мышц, рельеф</small></span><em class="onb-chk">✓</em></button>
       <button type="button" class="onb-opt" data-g="Стать сильнее"><i>🏋️</i><span>Стать сильнее<small>Рост рабочих весов</small></span><em class="onb-chk">✓</em></button>
       <button type="button" class="onb-opt" data-g="Улучшить выносливость"><i>🫀</i><span>Выносливость<small>Дыхание, сердце, энергия</small></span><em class="onb-chk">✓</em></button>
+      <button type="button" class="onb-opt" data-g="Подтянуть ягодицы и ноги"><i>🍑</i><span>Ягодицы и ноги<small>Подтянуть и укрепить</small></span><em class="onb-chk">✓</em></button>
+      <button type="button" class="onb-opt" data-g="Укрепить пресс и спину"><i>🧘</i><span>Пресс и спина<small>Сильный корпус, ровная осанка</small></span><em class="onb-chk">✓</em></button>
       <button type="button" class="onb-opt" data-g="Быть в форме"><i>✨</i><span>Быть в форме<small>Тонус и здоровье</small></span><em class="onb-chk">✓</em></button>
     </div>
+    <label for="onbOwn">Или своими словами — необязательно</label>
+    <input id="onbOwn" type="text" maxlength="120" placeholder="Например: подтягиваться 10 раз к лету" autocomplete="off">
     <div class="onb-foot"><button class="btn" id="onbN1" type="button">Дальше</button></div>
   </div>
 
@@ -1128,6 +1148,7 @@ button{font-size:14px}
     <div class="chips" id="onbLim"></div>
     <label>Удобное время тренировки</label>
     <input id="onbTime" type="time" value="18:00">
+    <div class="note" id="onbRepl" style="display:none">Новая программа заменит текущую. Ваш прогресс и история тренировок сохранятся.</div>
     <div class="onb-err" id="onbErr3"></div>
     <div class="onb-foot"><button class="btn" id="onbN3" type="button">🤖 Составить мой план</button></div>
   </div>
@@ -1136,7 +1157,7 @@ button{font-size:14px}
     <h2>План готов ✅</h2>
     <div class="lead" id="onbLead"></div>
     <div id="onbSum"></div>
-    <label class="chk"><input type="checkbox" id="onbRem" checked> Бот напомнит о тренировке за 30 минут</label>
+    <label class="chk" id="onbRemL"><input type="checkbox" id="onbRem" checked> Бот напомнит о тренировке за 30 минут</label>
     <div class="onb-foot"><button class="btn" id="onbGo" type="button">Начать</button></div>
   </div>
 </div>
@@ -4317,43 +4338,50 @@ button{font-size:14px}
 
   function renderGoalResult(plan, applied){
     if (!plan) { $("goalRes").innerHTML = ""; return; }
-    var g = plan.goal, h = '<div class="gres">';
-    h += '<div class="gsec"><h4>🎯 ' + g.label + '</h4>';
-    if (plan.targetW) h += '<p>Целевой вес: <b>' + plan.targetW + ' кг</b> (сейчас ' + plan.w + ' кг)</p>';
-    if (plan.pace) h += '<p class="muted">' + plan.pace + '</p>';
+    var g = plan.goal, u = userData || {}, split = plan.split || [{ name: "Мой план", wd: null, items: plan.items }];
+    var hasLoad = split.some(function(d){ return d.items.some(function(it){ return EXERCISES[it.ex].load; }); });
+    var h = '<div class="gres" style="margin-top:0">';
+    // цель
+    h += '<div class="gsec"><h4>🎯 ' + esc(g.label) + '</h4>';
+    if (plan.targetW) h += '<p>Целевой вес <b>' + plan.targetW + ' кг</b> · сейчас ' + plan.w + ' кг</p>';
+    if (plan.pace) h += '<p class="muted">' + esc(plan.pace) + '</p>';
     plan.warns.forEach(function(x){ h += '<p class="warn">⚠️ ' + esc(x) + '</p>'; });
     h += '</div>';
-    var split = plan.split || [{ name: "Мой план", wd: null, items: plan.items }];
-    var hasLoad = split.some(function(d){ return d.items.some(function(it){ return EXERCISES[it.ex].load; }); });
-    h += '<div class="gsec"><h4>🏋️ Тренировки: ' + plan.days.length + ' ' + plural(plan.days.length, ["раз", "раза", "раз"]) + ' в неделю' + (plan.eq ? ', ' + EQ_LABEL[plan.eq] : '') + '</h4>';
-    if (plan.splitTxt) h += '<p class="muted">' + esc(plan.splitTxt) + '</p>';
-    else h += '<p class="muted">' + plan.days.map(function(d){ return WD_SHORT[d]; }).join(", ") + ' в ' + plan.time + '</p>';
+    // тренировки: дни свёрнуты, упражнения — по нажатию
+    h += '<div class="gsec"><h4>🏋️ ' + esc(splitLabel(u)) + ' · ' + plan.days.length + ' ' + plural(plan.days.length, ["раз", "раза", "раз"]) + ' в неделю</h4>' +
+      '<p class="muted">' + (plan.eq ? EQ_LABEL[plan.eq].charAt(0).toUpperCase() + EQ_LABEL[plan.eq].slice(1) + ' · ' : '') + 'в ' + esc(plan.time) + '. Нажмите на день, чтобы увидеть упражнения.</p>';
     split.forEach(function(d){
-      h += '<p style="margin-top:12px"><b>' + (d.wd != null ? WD_SHORT[d.wd] + ' · ' : '') + esc(d.name) + '</b> <span class="muted">· ' + plan.time + ' · ~' + planMinutes(d.items) + ' мин</span></p>';
-      d.items.forEach(function(it){ var E = EXERCISES[it.ex]; h += '<div class="gl tap" data-ex="' + it.ex + '" data-sets="' + it.sets + '" data-reps="' + it.reps + '"><span>' + E.ico + ' ' + E.name + '</span><b style="white-space:nowrap">' + setsText(it) + '</b></div>'; });
+      h += '<details class="gday"><summary><span class="gd-wd">' + (d.wd != null ? WD_CAP[d.wd] : '•') + '</span><span class="gd-n">' + esc(d.name) +
+        '<small>около ' + planMinutes(d.items) + ' мин · ' + d.items.length + ' ' + plural(d.items.length, ["упражнение", "упражнения", "упражнений"]) + '</small></span></summary>' +
+        d.items.map(function(it){ var E = EXERCISES[it.ex]; return '<div class="gl tap" data-ex="' + it.ex + '" data-sets="' + it.sets + '" data-reps="' + it.reps + '"><span>' + E.ico + ' ' + E.name + '</span><b style="white-space:nowrap">' + setsText(it) + '</b></div>'; }).join("") +
+        '</details>';
     });
-    h += '<p class="muted" style="margin-top:10px">Перед тренировкой 5–7 минут разминки: суставная гимнастика и 1–2 лёгких подхода первого упражнения. Отдых между подходами отсчитывает таймер.</p>';
-    if (plan.split) h += '<p class="muted">📈 Нагрузка растёт сама: каждую неделю приложение немного усложняет план, а раз в месяц даёт лёгкую неделю для восстановления. Просто делайте то, что написано в «Тренировке».' +
-      (hasLoad ? ' Когда начнётся новый цикл, приложение подскажет взять вес чуть больше.' : '') + '</p>';
-    plan.notes.forEach(function(x){ h += '<p class="muted">• ' + esc(x) + '</p>'; });
     h += '</div>';
-    var adjTxt = plan.adj < 0 ? "Это примерно на " + Math.round(-plan.adj * 100) + "% меньше вашей нормы (" + plan.tdee + " ккал) — умеренный дефицит."
-      : plan.adj > 0 ? "Это примерно на " + Math.round(plan.adj * 100) + "% больше вашей нормы (" + plan.tdee + " ккал) — для роста мышц."
-      : "Это ваша норма для поддержания веса при такой активности.";
+    // питание
+    var adjTxt = plan.adj < 0 ? "Примерно на " + Math.round(-plan.adj * 100) + "% меньше вашей нормы (" + plan.tdee + " ккал) — умеренный дефицит."
+      : plan.adj > 0 ? "Примерно на " + Math.round(plan.adj * 100) + "% больше вашей нормы (" + plan.tdee + " ккал) — для роста мышц."
+      : "Ваша норма для поддержания веса при такой активности.";
     h += '<div class="gsec"><h4>🍽️ Питание в день</h4><div class="macros">' +
       '<div class="macro"><b>' + plan.kcal + '</b><span>ккал</span></div><div class="macro"><b>' + plan.p + '</b><span>белки, г</span></div>' +
       '<div class="macro"><b>' + plan.f + '</b><span>жиры, г</span></div><div class="macro"><b>' + plan.c + '</b><span>углев., г</span></div></div>' +
       '<p class="muted" style="margin-top:8px">' + adjTxt + '</p></div>';
-    h += '<div class="gsec"><h4>📅 Календарь</h4><p>Тренировки на 4 недели вперёд и ежедневные привычки: ' +
-      plan.habits.map(function(x){ return x.text.replace(/^\S+\s/, "").toLowerCase(); }).join(", ") + '.</p></div>';
+    // действия
     if (applied) {
-      h += '<div class="gok">✅ План добавлен ' + applied.split("-").reverse().join(".") + ': дни плана во вкладке «Тренировка» (сегодняшний открывается сам), расписание в календаре и нормы в «Питании».</div>' +
-        '<div class="gnav"><button class="btn ghost" type="button" data-go="train">Тренировка</button><button class="btn ghost" type="button" data-go="cal">Календарь</button><button class="btn ghost" type="button" data-go="food">Питание</button></div>';
+      h += '<div class="gacts"><button class="btn" type="button" data-go="train">К тренировке</button><button class="btn ghost" type="button" id="goalRedo">Подобрать заново</button></div>';
     } else {
-      h += '<button class="btn" id="goalApply" type="button">✅ Добавить в календарь и питание</button>' +
-        '<p class="note" style="text-align:center">Заменит нормы КБЖУ и прошлый подобранный план. Ваши собственные задачи в календаре останутся.</p>';
+      h += '<button class="btn" id="goalApply" type="button">Начать по этой программе</button>' +
+        '<p class="note" style="text-align:center">Заменит нормы КБЖУ и прошлую программу. Ваши собственные задачи в календаре останутся.</p>';
     }
-    h += '<p class="note">План составлен по общим рекомендациям и не заменяет консультацию врача или тренера. При болезнях, травмах и беременности сначала посоветуйтесь со специалистом.</p></div>';
+    // подробности — свёрнуты
+    h += '<details class="card fold gmore" style="background:var(--bg)"><summary><span>Как устроена программа<small>Схема, рост нагрузки, разминка, привычки</small></span></summary>';
+    if (plan.splitTxt) h += '<p class="note" style="margin-top:4px">' + esc(plan.splitTxt) + '</p>';
+    if (plan.split) h += '<p class="note">📈 Нагрузка растёт сама: каждую неделю приложение немного усложняет план, а раз в месяц даёт лёгкую неделю для восстановления. Просто делайте то, что написано в «Тренировке».' +
+      (hasLoad ? ' Когда начнётся новый цикл, приложение подскажет взять вес чуть больше.' : '') + '</p>';
+    h += '<p class="note">🔥 Перед тренировкой 5–7 минут разминки: суставная гимнастика и 1–2 лёгких подхода первого упражнения. Отдых между подходами отсчитывает таймер.</p>';
+    plan.notes.forEach(function(x){ h += '<p class="note">• ' + esc(x) + '</p>'; });
+    h += '<p class="note">📅 В календаре — тренировки на 4 недели вперёд и привычки: ' + plan.habits.map(function(x){ return x.text.replace(/^\S+\s/, "").toLowerCase(); }).join(", ") + '.</p>';
+    h += '<p class="note" style="font-size:12px">План составлен по общим рекомендациям и не заменяет консультацию врача или тренера. При болезнях, травмах и беременности сначала посоветуйтесь со специалистом.</p></details>';
+    h += '</div>';
     $("goalRes").innerHTML = h;
   }
 
@@ -4434,12 +4462,14 @@ button{font-size:14px}
     if (ap && goalDraft) { haptic("medium"); track("goal_apply"); applyPlan(goalDraft); renderGoalResult(goalDraft, userGoal.applied); goalDraft = null; return; }
     var nav = e.target.closest ? e.target.closest("[data-go]") : null;
     if (nav) { closeGoal(); goTab(nav.dataset.go); return; }
+    if (e.target.closest && e.target.closest("#goalRedo")) { haptic(); closeGoal(); openOnb("plan"); return; }
     var gx = e.target.closest ? e.target.closest("[data-ex]") : null;
     if (gx) { haptic(); openEx({ ex: gx.dataset.ex, sets: +gx.dataset.sets, reps: +gx.dataset.reps }); }
   };
 
   var goalOpen = false;
   function openGoal(){
+    if (!userGoal || !myPlans().length) { if (goalOpen) closeGoal(); openOnb("plan"); return; }   // программы нет — пошаговый подбор
     if (goalOpen) return;
     goalOpen = true;
     if (chatOpen) closeChat();
@@ -5438,7 +5468,7 @@ button{font-size:14px}
   };
   // цели: можно выбрать несколько, дальше — только по кнопке
   function onbGoalSync(){
-    onb.goal = onb.goals.join(", ");
+    onb.goal = onb.goals.concat(onb.own ? [onb.own] : []).join(", ");
     [].forEach.call($("onbGoal").children, function(x){ x.classList.toggle("on", onb.goals.indexOf(x.dataset.g) >= 0); });
     $("onbN1").textContent = onb.goals.length > 1 ? "Дальше · целей: " + onb.goals.length : "Дальше";
   }
@@ -5449,8 +5479,9 @@ button{font-size:14px}
     if (i >= 0) onb.goals.splice(i, 1); else onb.goals.push(b.dataset.g);
     onbGoalSync();
   };
+  $("onbOwn").addEventListener("input", function(){ onb.own = this.value.trim(); onbGoalSync(); });
   $("onbN1").onclick = function(){
-    if (!onb.goals.length) { onb.goals = ["Быть в форме"]; onbGoalSync(); }   // без выбора — «Быть в форме»
+    if (!onb.goals.length && !onb.own) { onb.goals = ["Быть в форме"]; onbGoalSync(); }   // без выбора — «Быть в форме»
     haptic(); onbStep(2);
   };
   $("onbN2").onclick = function(){
@@ -5464,7 +5495,7 @@ button{font-size:14px}
   };
   $("onbN3").onclick = function(){
     haptic("medium");
-    userData = { sex: onb.sex, age: onb.age, h: onb.h, lvl: onb.lvl, eq: onb.eq, days: onb.days, lim: onb.lim.slice() };
+    userData = { sex: onb.sex, age: onb.age, h: onb.h, lvl: onb.lvl, eq: onb.eq, days: onb.days, lim: onb.lim.slice(), split: (userData && userData.split) || "auto" };
     save("fithub_user", userData);
     track("profile_save", { eq: userData.eq, days: userData.days, lvl: userData.lvl, onb: 1 });
     var today = localDay(new Date());
@@ -5478,9 +5509,14 @@ button{font-size:14px}
     renderWeights();
     if (plan) {
       var days = (plan.split || []).filter(function(d){ return d.wd != null; }).map(function(d){ return WD_SHORT[d.wd]; });
-      $("onbLead").textContent = "Цель: " + plan.goal.label.toLowerCase() + ". Всё уже в приложении — план на сегодня на главной.";
+      var nx = nextMyPlan(), t = new Date().getDay();
+      var nxWhen = nx && nx.wd != null ? (nx.wd === t ? "Сегодня" : nx.wd === (t + 1) % 7 ? "Завтра" : WD_IN[nx.wd].charAt(0).toUpperCase() + WD_IN[nx.wd].slice(1)) : "";
+      $("onbLead").textContent = onb.mode === "plan" ? "Программа уже во вкладке «Тренировка», нормы питания — в «Питании»." :
+        "Цель: " + plan.goal.label.toLowerCase() + ". Всё уже в приложении — план на сегодня на главной.";
       $("onbSum").innerHTML =
-        '<div class="onb-sum"><b>🏋️ Тренировки</b><div>' + esc(days.join(", ").replace(/^./, function(c){ return c.toUpperCase(); })) + ' в ' + esc(time) + '. ' + esc(plan.splitTxt || "") + '</div></div>' +
+        (nx ? '<div class="onb-sum"><b>🏋️ ' + esc(nxWhen) + ' — первая тренировка</b><div class="nx">' + esc(dayName(nx)) + ' · около ' + planMinutes(nx.items.map(function(it){ return progress(it, planWeek()); })) + ' мин</div>' +
+          '<div>Дальше по расписанию: ' + esc(days.join(", ")) + ' в ' + esc(time) + ' · ' + esc(splitLabel(userData).toLowerCase()) + '</div></div>' : '') +
+        (plan.targetW ? '<div class="onb-sum"><b>🎯 ' + esc(plan.goal.label) + '</b><div>Цель — ' + plan.targetW + ' кг (сейчас ' + plan.w + ' кг). ' + esc(plan.pace || "") + '</div></div>' : '') +
         '<div class="onb-sum"><b>🍽 Питание</b><div>' + plan.kcal + ' ккал в день: белки ' + plan.p + ' г, жиры ' + plan.f + ' г, углеводы ' + plan.c + ' г</div></div>' +
         (plan.warns && plan.warns.length ? '<div class="onb-sum"><b>⚠️ Важно</b><div>' + esc(plan.warns[0]) + '</div></div>' : '');
     } else {
@@ -5492,19 +5528,23 @@ button{font-size:14px}
   function onbClose(done){
     $("onb").classList.remove("open");
     document.body.style.overflow = "";
-    save("fithub_onb", done ? "done" : "skip");
+    if (done !== null) save("fithub_onb", done ? "done" : "skip");
     try { tg.BackButton.offClick(onbBack); tg.BackButton.hide(); } catch(e){}
   }
   function onbBack(){ if (onb.step > 1 && onb.step < 4) onbStep(onb.step - 1); }
   $("onbPrev").onclick = function(){ haptic(); onbBack(); };
-  $("onbSkip").onclick = function(){ haptic(); track("onb_skip", { step: onb.step }); onbClose(false); };
+  $("onbSkip").onclick = function(){
+    haptic();
+    if (onb.mode === "plan") { onbClose(null); return; }   // подбор заново: просто закрываем, ничего не меняя
+    track("onb_skip", { step: onb.step }); onbClose(false);
+  };
   $("onbGo").onclick = function(){
     haptic("medium");
     var wantRem = $("onbRem").checked;
-    track("onb_done", { rem: wantRem ? 1 : 0 });
+    if (onb.mode !== "plan") track("onb_done", { rem: wantRem ? 1 : 0 });
     onbClose(true);
     $("udCard").open = false;
-    showTab("home");
+    showTab(onb.mode === "plan" ? "train" : "home");
     if (wantRem) {   // включаем напоминания о тренировках по дням плана (с тем же сохранением, что и в профиле)
       rem = rem || null; renderRem();
       remDays = planWeekdays();
@@ -5513,7 +5553,29 @@ button{font-size:14px}
       $("remSave").click();
     }
   };
-  function openOnb(){
+  var ONB_L1 = $("onbL1").innerHTML;
+  function openOnb(mode){
+    onb.mode = mode || "first";
+    var pm = onb.mode === "plan", hasPlan = myPlans().length > 0;
+    if (pm) {   // подбор программы: всё, что уже известно, подставляем
+      var u = userData || {};
+      onb.sex = u.sex || onb.sex; onb.lvl = u.lvl || "beg"; onb.eq = u.eq || "home"; onb.days = u.days || 3; onb.lim = (u.lim || []).slice();
+      $("onbAge").value = u.age || ""; $("onbH").value = u.h || ""; $("onbW").value = curWeight() || "";
+      var known = [].map.call($("onbGoal").children, function(b){ return b.dataset.g; });
+      var parts = userGoal && userGoal.text ? userGoal.text.split(/\s*,\s*/).filter(Boolean) : [];
+      onb.goals = parts.filter(function(x){ return known.indexOf(x) >= 0; });
+      onb.own = parts.filter(function(x){ return known.indexOf(x) < 0; }).join(", ");
+      if (userGoal && userGoal.time) $("onbTime").value = userGoal.time;
+    }
+    $("onbOwn").value = onb.own || "";
+    $("onbH1").textContent = pm ? (hasPlan ? "Подберём программу заново" : "Подберём программу") : "Привет! Я Арни 💪";
+    $("onbL1").innerHTML = pm ? 'Три коротких шага — и тренировки с питанием готовы. Что вы уже указывали, подставлено — просто проверьте.<br><b style="color:var(--text)">Какая у вас цель?</b> Можно выбрать несколько.' : ONB_L1;
+    $("onbSkip").textContent = pm ? "Закрыть" : "Пропустить";
+    $("onbRepl").style.display = pm && hasPlan ? "" : "none";
+    $("onbN3").textContent = pm && hasPlan ? "🤖 Обновить программу" : "🤖 Составить мой план";
+    $("onbGo").textContent = pm ? "Перейти к тренировке" : "Начать";
+    $("onbRem").checked = !rem || !!(rem.workout && rem.workout.on);   // снимаем, только если напоминания о тренировках выключали сами
+    onbGoalSync();
     onbSeg("onbSex", "sex"); onbSeg("onbLvl", "lvl"); onbSeg("onbEq", "eq"); onbChips();
     onbStep(1);
     $("onb").classList.add("open");
