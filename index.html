@@ -208,6 +208,14 @@ nav button.on{color:var(--accent);font-weight:700}
 .th-week{color:var(--hint);font-size:12px;text-align:right}
 .th-name{font-size:24px;font-weight:800;margin-top:12px;line-height:1.15}
 .th-lh{font-size:12px;color:var(--hint);text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin-top:18px}
+.th-or{display:flex;align-items:center;gap:10px;margin:18px 0 10px;color:var(--hint);font-size:12px;text-transform:uppercase;letter-spacing:.6px;font-weight:700}
+.th-or::before,.th-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.th-try{width:100%;display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;color:var(--text);font-family:inherit;text-align:left;cursor:pointer}
+.th-try .ti{font-size:26px;flex:none}
+.th-try .tt{flex:1;min-width:0}
+.th-try .tt b{display:block;font-size:16px}
+.th-try .tt small{display:block;color:var(--hint);font-size:13px;margin-top:2px}
+.th-try .go{color:var(--accent);font-weight:700;font-size:14px;white-space:nowrap;flex:none}
 .th-mode{color:var(--hint);font-size:13px;line-height:1.45;margin-top:8px}
 .seg{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:3px;margin-top:10px;gap:3px}
 .seg button{flex:1;background:none;border:0;color:var(--hint);font-family:inherit;font-size:14px;padding:9px 6px;border-radius:9px;cursor:pointer;font-weight:600}
@@ -725,15 +733,18 @@ button{font-size:14px}
     <div class="note" id="thRest" style="display:none"></div>
     <div id="thAct">
       <button class="btn" id="trainStart" type="button">▶ Начать тренировку</button>
+    </div>
+    <div id="thNoPlan" style="display:none">
+      <button class="btn" id="thGoal" type="button">Подобрать программу</button>
+      <div class="th-or">или начните сразу</div>
+      <button type="button" class="th-try" id="thTry"><span class="ti">🏋️</span><span class="tt"><b>Пробная тренировка</b><small id="thTrySub"></small></span><span class="go">Начать ›</span></button>
+    </div>
+    <div id="thMode">
       <div class="seg" id="camSeg" role="radiogroup" aria-label="Режим тренировки">
         <button type="button" data-cam="1" role="radio">📷 С ИИ-тренером</button>
         <button type="button" data-cam="0" role="radio">Без камеры</button>
       </div>
       <div class="th-mode" id="camNote"></div>
-    </div>
-    <div id="thNoPlan" style="display:none">
-      <button class="btn" id="thGoal" type="button">Подобрать программу</button>
-      <button class="btn ghost" id="thTry" type="button" style="margin-top:10px">Пока попробовать тренировку на всё тело</button>
     </div>
     <div class="th-lh" id="thListH">Упражнения</div>
     <div class="sub" id="thListHint" style="display:none;font-size:13px">Нажмите на упражнение — покажу, как его правильно выполнять</div>
@@ -3058,14 +3069,16 @@ button{font-size:14px}
     var past = my && !off && p.wd != null && (p.wd + 6) % 7 < (t + 6) % 7;   // день уже прошёл на этой неделе; иначе это ближайший будущий
     var done = my && (isToday || past) && planDone(p, off);
     var tag = $("thTag");
-    tag.className = "th-tag" + (done ? " done" : !isToday && my ? " rest" : "");
-    tag.textContent = !my ? "Первая тренировка" : done ? (isToday ? "Сегодня · выполнено ✓" : WD_CAP[p.wd] + " · выполнено ✓") :
+    tag.className = "th-tag" + (done ? " done" : !isToday ? " rest" : "");
+    tag.textContent = !my ? "Программа не подобрана" : done ? (isToday ? "Сегодня · выполнено ✓" : WD_CAP[p.wd] + " · выполнено ✓") :
       isToday ? "Сегодня" : past ? WD_CAP[p.wd] + " · пропущено" : p.wd === (t + 1) % 7 ? "Завтра" : WD_IN[p.wd].charAt(0).toUpperCase() + WD_IN[p.wd].slice(1);
     $("thWeek").textContent = pw ? "Неделя " + (pw.phase + 1) + " из 4 · " + WEEK_TXT[pw.phase].replace(/^эта неделя /, "") : "";
-    $("thName").textContent = my ? dayName(p) : "Всё тело";
+    $("thName").textContent = my ? dayName(p) : "Подберём вам программу";
     var desc = "Около " + planMinutes(items) + " мин · " + items.length + " " + plural(items.length, ["упражнение", "упражнения", "упражнений"]);
     if (pw && pw.phase === 0 && pw.cycle > 0 && items.some(function(it){ return EXERCISES[it.ex].load; })) desc += ". Возьмите вес чуть больше, чем в прошлом цикле";
-    $("planDesc").textContent = desc;
+    $("planDesc").textContent = my ? desc : "Ответьте на пару вопросов о цели — подберу тренировки на неделю и нормы питания. Это займёт около минуты.";
+    $("thTrySub").textContent = "Всё тело · " + desc.charAt(0).toLowerCase() + desc.slice(1);
+    $("thListH").textContent = my ? "Упражнения" : "Что в пробной тренировке";
     var rest = $("thRest"), after = null;
     if (done && isToday) for (var k = 1; k <= 7 && !after; k++) after = myPlans().filter(function(x){ return x.wd === (t + k) % 7; })[0] || null;
     rest.style.display = restToday || after ? "" : "none";
