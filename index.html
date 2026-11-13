@@ -243,7 +243,7 @@ html.light .tile{box-shadow:0 1px 2px rgba(15,27,51,.06)}
 .ws-top button{width:40px;height:40px;border-radius:12px;border:0;background:rgba(17,27,56,.8);color:#fff;font-size:18px;cursor:pointer;flex:none}
 .ws-title{flex:1;min-width:0;color:#fff}
 .ws-title b{display:block;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ws-title span{font-size:14px;color:#c7d2ee}
+.ws-title span{display:block;font-size:14px;color:#c7d2ee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ws-prog{position:absolute;left:12px;right:12px;top:calc(62px + env(safe-area-inset-top));height:4px;border-radius:2px;background:rgba(255,255,255,.18);z-index:4;overflow:hidden}
 .ws-prog i{display:block;height:100%;width:0;background:var(--grad);transition:width .4s}
 .ws-count{position:absolute;right:12px;top:calc(76px + env(safe-area-inset-top));z-index:2;background:rgba(10,18,38,.8);border-radius:18px;padding:8px 14px;color:#fff;text-align:center;min-width:92px}
@@ -255,7 +255,7 @@ html.light .tile{box-shadow:0 1px 2px rgba(15,27,51,.06)}
 .ws-cue:empty{display:none}
 .ws-cue.warn{border-left-color:#f5b544}
 .ws-cue.good{border-left-color:#34d399}
-.ws-ph{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:150px 28px 110px;text-align:center;color:#c7d2ee;font-size:14px;line-height:1.5}
+.ws-ph{position:absolute;inset:0;background:#05080f;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:150px 28px 110px;text-align:center;color:#c7d2ee;font-size:14px;line-height:1.5}
 .ws-ph.show{display:flex}
 .ws-ph em{font-style:normal;font-size:64px}
 .ws-ph img{width:min(100%,340px);aspect-ratio:3/2;object-fit:cover;border-radius:16px;background:#0b1020;margin-bottom:6px}
@@ -272,6 +272,11 @@ html.light .tile{box-shadow:0 1px 2px rgba(15,27,51,.06)}
 .ws-panel .sr{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
 .ws-panel .sr small{display:block;color:#c7d2ee;font-size:12px;margin-top:2px}
 .ws-bar{display:grid;grid-template-columns:1fr 1.7fr 1fr;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#0a1226;border-top:1px solid var(--line)}
+.ws-bar.solo{grid-template-columns:1fr}.ws-bar.solo #wsPause,.ws-bar.solo #wsSkip{display:none}
+#wsSkip{font-size:12px;line-height:1.2;padding:8px 4px}
+.ws-count.tgt b{font-size:34px}
+.ws-panel .nx p.cam{color:#fff;background:rgba(47,140,240,.16);border-radius:10px;padding:8px 10px}
+.ws-panel .nx p.cam.warn{background:rgba(245,181,68,.16)}
 .ws-bar button{border-radius:14px;padding:13px 6px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid var(--line);background:var(--card);color:var(--text)}
 .ws-bar .main{background:var(--grad);border:0;color:#fff}
 .ws-bar button:disabled{opacity:.35}
@@ -731,6 +736,7 @@ button{font-size:14px}
       <button class="btn ghost" id="thTry" type="button" style="margin-top:10px">Пока попробовать тренировку на всё тело</button>
     </div>
     <div class="th-lh" id="thListH">Упражнения</div>
+    <div class="sub" id="thListHint" style="display:none;font-size:13px">Нажмите на упражнение — покажу, как его правильно выполнять</div>
     <div id="planList"></div>
   </div>
 
@@ -3060,9 +3066,11 @@ button{font-size:14px}
     var desc = "Около " + planMinutes(items) + " мин · " + items.length + " " + plural(items.length, ["упражнение", "упражнения", "упражнений"]);
     if (pw && pw.phase === 0 && pw.cycle > 0 && items.some(function(it){ return EXERCISES[it.ex].load; })) desc += ". Возьмите вес чуть больше, чем в прошлом цикле";
     $("planDesc").textContent = desc;
-    var rest = $("thRest");
-    rest.style.display = restToday ? "" : "none";
-    if (restToday) rest.textContent = "Сегодня по плану день отдыха — мышцы восстанавливаются. Если есть силы, можно начать следующую тренировку уже сегодня.";
+    var rest = $("thRest"), after = null;
+    if (done && isToday) for (var k = 1; k <= 7 && !after; k++) after = myPlans().filter(function(x){ return x.wd === (t + k) % 7; })[0] || null;
+    rest.style.display = restToday || after ? "" : "none";
+    if (after) { var kk = ((after.wd - t) + 7) % 7 || 7; rest.textContent = "Отлично, на сегодня всё! Следующая тренировка — " + (kk === 1 ? "завтра" : WD_IN[after.wd]) + ": " + dayName(after) + "."; }
+    else if (restToday) rest.textContent = "Сегодня по плану день отдыха — мышцы восстанавливаются. Если есть силы, можно начать следующую тренировку уже сегодня.";
     $("thAct").style.display = my ? "" : "none";
     $("thNoPlan").style.display = my ? "none" : "";
     $("trainStart").textContent = done ? "Повторить тренировку" : "▶ Начать тренировку";
@@ -3077,6 +3085,7 @@ button{font-size:14px}
         '<small>' + setsText(it) + (E.load ? ' · с весом' : '') + '</small>' +
         (L ? '<small class="last">Прошлый раз: ' + liftText(L, E.unit === "sec") + '</small>' : '') + '</div><span class="chev">›</span></div>';
     }).join("");
+    $("thListHint").style.display = trainLog.length ? "none" : "";
     // неделя плана
     var days = myPlans().filter(function(x){ return x.wd != null; }).sort(function(a, b){ return (a.wd + 6) % 7 - (b.wd + 6) % 7; });
     $("wkCard").style.display = days.length ? "" : "none";
@@ -3674,15 +3683,19 @@ button{font-size:14px}
   }
   wsV.addEventListener("loadedmetadata", function(){ if (W && wsV.videoWidth) W.ar = wsV.videoWidth / wsV.videoHeight; });
 
+  function camNote(text, warn){ if (!W) return; W.camNote = text; W.camWarn = !!warn; renderWs(); }
   function initCamAI(){
+    camNote("Включаю камеру…");
     cue("Включаю камеру…", "info", null, false);
     startCamera().then(function(){
       if (!W) return;
       if (wsV.videoWidth) W.ar = wsV.videoWidth / wsV.videoHeight;
+      camNote("Загружаю ИИ-тренера… При первом запуске это займёт несколько секунд.");
       cue("Загружаю ИИ-тренера… При первом запуске это займёт несколько секунд.", "info", null, false);
       return loadPose().then(function(pl){
         if (!W) return;
         W.pose = pl;
+        camNote("ИИ-тренер готов: будет считать повторы и подсказывать по технике.");
         cue("ИИ-тренер готов. " + EXERCISES[curIt().ex].view, "good", null, W.state !== "intro");
         cancelAnimationFrame(W.raf);
         W.raf = requestAnimationFrame(poseLoop);
@@ -3693,6 +3706,8 @@ button{font-size:14px}
       var noCam = !W.stream;
       stopCamera();
       W.useCam = false; W.pose = null;
+      W.camNote = noCam ? "Нет доступа к камере — тренируемся без неё, подходы отмечайте кнопкой. Камеру можно разрешить Telegram в настройках телефона."
+        : "ИИ-тренер не загрузился — тренируемся без анализа техники, подходы отмечайте кнопкой."; W.camWarn = true;
       renderWs();
       cue(noCam
         ? "Нет доступа к камере. Разрешите камеру для Telegram в настройках телефона или продолжайте без неё: я веду по плану, а подходы отмечайте кнопкой."
@@ -3854,17 +3869,21 @@ button{font-size:14px}
     var it = curIt(), E = EXERCISES[it.ex], sec = E.unit === "sec";
     $("wsEx").textContent = E.ico + " " + E.name;
     $("wsSet").textContent = W.state === "done" ? "Тренировка завершена" :
-      "Упражнение " + (W.i + 1) + " из " + W.items.length + " · подход " + W.set + " из " + it.sets;
+      "Подход " + W.set + " из " + it.sets + " · упражнение " + (W.i + 1) + " из " + W.items.length;
     var doneCount = W.state === "done" ? totalSets() : setsBefore(W.i) + (W.set - 1) + (W.state === "rest" || W.state === "last" ? 1 : 0);
     $("wsProg").style.width = (doneCount / totalSets() * 100).toFixed(1) + "%";
-    $("wsReps").textContent = sec ? Math.floor(W.secs) : W.reps;
-    $("wsTarget").textContent = "из " + it.reps + (sec ? " с" : " повт.");
+    var counts = sec || (W.useCam && E.cam && W.pose);   // повторы считает только камера; время — всегда
+    $("wsReps").textContent = sec ? Math.floor(W.secs) : counts ? W.reps : it.reps;
+    $("wsTarget").textContent = counts ? "из " + it.reps + (sec ? " с" : " повт.") : "повт. — цель";
+    $("wsCount").classList.toggle("tgt", !counts);
     $("wsCount").style.display = W.state === "work" ? "" : "none";
     $("wsSound").textContent = voiceOn ? "🔊" : "🔇";
     $("wsFlip").style.display = W.useCam && W.stream ? "" : "none";
     $("wsPause").textContent = W.paused ? "Дальше" : "Пауза";
     $("wsPause").disabled = W.state === "done" || W.state === "last";
     $("wsSkip").disabled = W.state === "done" || W.state === "last";
+    $("wsSkip").textContent = "Пропустить упражнение";
+    document.querySelector(".ws-bar").classList.toggle("solo", W.state === "done" || W.state === "last");
     $("wsMain").textContent = W.state === "intro" ? "Начать сейчас" : W.state === "rest" ? "Пропустить отдых" :
       W.state === "last" ? "Завершить" : W.state === "done" ? "Готово" : sec ? "Завершить подход" : "Подход выполнен";
 
@@ -3876,11 +3895,13 @@ button{font-size:14px}
       }
       ph.classList.add("show");
     } else ph.classList.remove("show");
+    wsC.style.visibility = ph.classList.contains("show") ? "hidden" : "";
 
     var p = $("wsPanel");
     if (W.state === "intro") {
       p.innerHTML = '<div class="lbl">' + (W.i === 0 ? "Приготовьтесь" : "Следующее упражнение") + '</div><div class="big" id="wsLeft">' + Math.ceil(W.left) + '</div>' +
         '<div class="nx"><b>' + E.ico + ' ' + E.name + '</b><span class="tg">' + setsText(it) + '</span>' +
+        (W.camNote && (W.i === 0 || W.camWarn) ? '<p class="cam' + (W.camWarn ? ' warn' : '') + '">' + (W.camWarn ? '⚠️ ' : '📷 ') + esc(W.camNote) + '</p>' : '') +
         (W.useCam ? '<p>📱 ' + E.view + '</p>' : '') + '<p>💡 ' + E.tips + '</p>' +
         (lastLift(it.ex) ? '<p>📈 В прошлый раз: ' + liftText(lastLift(it.ex), sec) + '. ' + liftHint(it) + '</p>' : '') + '</div>';
       p.classList.add("show");
@@ -3897,6 +3918,9 @@ button{font-size:14px}
       p.innerHTML = W.summary;
       p.classList.add("show");
     } else p.classList.remove("show");
+    var panelOn = p.classList.contains("show");
+    $("wsCue").style.visibility = panelOn ? "hidden" : "";   // под полупрозрачной карточкой подсказка только мешает
+    ph.style.visibility = panelOn ? "hidden" : "";
   }
 
   function finishWorkout(early){
