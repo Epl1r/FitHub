@@ -140,6 +140,7 @@ nav button.on{color:var(--accent);font-weight:700}
 .tt small{display:block;color:var(--hint);font-size:12px}
 .task .x{background:none;border:0;color:var(--hint);font-size:18px;cursor:pointer;padding:0}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 10px}
+.tq-hl{animation:tqhl .8s ease-in-out 2}@keyframes tqhl{50%{box-shadow:0 0 0 4px rgba(90,160,255,.55)}}
 .chip{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 14px;min-height:36px;font-size:14px;cursor:pointer;font-family:inherit}
 .taskrow{display:grid;grid-template-columns:116px 1fr;gap:10px}
 .chk{display:flex;align-items:center;gap:10px;color:var(--text);font-size:14px;margin:12px 0 0}
@@ -691,7 +692,9 @@ button{font-size:14px}
 
   <div class="card">
     <div class="ai-h"><span class="ai-ico">📹</span><div><b>Разбор техники по видео</b><div class="sub">ИИ найдёт ошибки и подскажет, как исправить</div></div></div>
-    <div class="note">Нажмите на упражнение в плане ниже и выберите «Разобрать моё видео». Само видео остаётся на телефоне — для разбора отправляются только 8 кадров.</div>
+    <div class="note">Снимите 1–3 повторения сбоку — ИИ покажет, что получается и что поправить. Само видео остаётся на телефоне, для разбора отправляются только 8 кадров.</div>
+    <button class="btn" id="tqCardBtn" type="button" style="margin-top:12px">Выбрать упражнение</button>
+    <div id="tqCardList" style="display:none;margin-top:12px"><div class="sub" style="margin-bottom:8px">Упражнения из вашего плана:</div><div class="chips" id="tqCardChips"></div></div>
   </div>
 
   <div class="card">
@@ -3057,6 +3060,29 @@ button{font-size:14px}
     haptic(); openEx(currentItems()[+r.dataset.i]);
   };
   $("planList").onkeydown = function(e){ if (e.key === "Enter") $("planList").onclick(e); };
+  // карточка «Разбор техники по видео» во вкладке тренировок: выбор упражнения из плана → его карточка сразу на кнопке разбора
+  $("tqCardBtn").onclick = function(){
+    haptic();
+    var box = $("tqCardList");
+    if (box.style.display !== "none") { box.style.display = "none"; this.textContent = "Выбрать упражнение"; return; }
+    var seen = {};
+    $("tqCardChips").innerHTML = currentItems().map(function(it, i){
+      if (seen[it.ex]) return ""; seen[it.ex] = 1;
+      var E = EXERCISES[it.ex];
+      return '<button type="button" class="chip" data-i="' + i + '">' + E.ico + " " + esc(E.name) + '</button>';
+    }).join("");
+    box.style.display = ""; this.textContent = "Скрыть список";
+  };
+  $("tqCardChips").onclick = function(e){
+    var c = e.target.closest ? e.target.closest("[data-i]") : null;
+    if (!c) return;
+    haptic(); openEx(currentItems()[+c.dataset.i]);
+    var btn = $("tqBtn"), body = $("exBody");
+    if (btn && body) {
+      body.scrollTop += btn.getBoundingClientRect().top - body.getBoundingClientRect().top - 90;
+      btn.classList.add("tq-hl"); setTimeout(function(){ btn.classList.remove("tq-hl"); }, 1600);
+    }
+  };
   (function(){
     var top = $("exTop"), sh = $("exSheet"), startY = 0, dy = 0, id = null;
     top.addEventListener("pointerdown", function(e){
