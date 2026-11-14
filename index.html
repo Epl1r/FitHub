@@ -201,6 +201,18 @@ nav button.on{color:var(--accent);font-weight:700}
 .stats3 .stat{padding:12px 8px;text-align:center}
 .stats3 .stat b{font-size:18px}
 .qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.qgrid.q2{grid-template-columns:1fr 1fr}
+.hlink{display:block;width:100%;background:none;border:0;color:var(--accent);font-family:inherit;font-size:15px;font-weight:600;padding:8px 0 0;min-height:46px;text-align:center;cursor:pointer}
+#hHero .btn{margin-top:16px}
+.hbar{height:10px;border-radius:99px;background:var(--bg);border:1px solid var(--line);overflow:hidden;margin-top:12px}
+.hbar i{display:block;height:100%;width:0;background:var(--grad);border-radius:99px;transition:width .5s}
+.hbar.over i{background:#f59e0b}
+.hmac{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.hmac div{background:var(--bg);border-radius:12px;padding:8px 6px;text-align:center;font-size:12px;color:var(--hint)}
+.hmac b{display:block;font-size:15px;color:var(--text)}
+.hacts{display:grid;grid-template-columns:1.4fr 1fr;gap:10px;margin-top:14px}
+.hacts .btn{margin:0;padding:13px 8px}
+.htip{display:flex;gap:10px;align-items:flex-start;color:var(--hint);font-size:14px;line-height:1.5;padding:4px 6px 16px}
 .qgrid .qbtn{padding:14px 6px;font-size:14px;text-align:center;line-height:1.25}
 .qbtn{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:var(--radius);padding:16px 12px;font-size:14px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:inherit}
 .qbtn i{font-style:normal;font-size:24px}
@@ -680,25 +692,28 @@ button{font-size:14px}
 <section class="tab on" id="tab-home">
   <h2 id="homeDate"></h2>
 
-  <div class="card ringcard">
-    <div class="ring">
-      <svg viewBox="0 0 100 100"><circle class="rb" cx="50" cy="50" r="42"/><circle class="rf" id="homeFill" cx="50" cy="50" r="42"/></svg>
-      <b id="homePct">—</b>
-    </div>
-    <div>
-      <div class="sub">План на сегодня</div>
-      <div class="note" id="homeTxt" style="margin-top:4px"></div>
-    </div>
+  <div class="card thero" id="hHero">
+    <div class="th-top"><span class="th-tag" id="hhTag">Сегодня</span><span class="th-week" id="hhWhen"></span></div>
+    <div class="th-name" id="hhName"></div>
+    <div class="sub" id="hhNote"></div>
+    <button class="btn" id="hhGo" type="button"></button>
+    <button class="hlink" id="hhMore" type="button"></button>
   </div>
 
-  <div class="card fbcard" id="nextCard" style="display:none">
-    <div><b id="nextTitle"></b><div class="note" id="nextNote" style="margin-top:2px"></div></div>
-    <button class="btn" id="nextBtn" type="button">Открыть</button>
+  <div class="card" id="hFood">
+    <div class="pctrow"><b>Питание сегодня</b><span class="sub" id="hfKcal"></span></div>
+    <div class="hbar" id="hfBarW"><i id="hfBar"></i></div>
+    <div class="hmac" id="hfMac"></div>
+    <div class="hacts">
+      <button class="btn" id="hfPhoto" type="button">📷 Еда по фото</button>
+      <button class="btn ghost" id="hfOpen" type="button">Дневник</button>
+    </div>
   </div>
 
   <div class="card">
-    <div class="sub" style="margin-bottom:4px">Ближайшие задачи</div>
+    <div class="pctrow"><b>Задачи на сегодня</b><span class="sub" id="homePct"></span></div>
     <div id="homeTasks"></div>
+    <button class="hlink" id="qCal" type="button">Календарь и распорядок ›</button>
   </div>
 
   <div class="stats3">
@@ -707,16 +722,12 @@ button{font-size:14px}
     <div class="stat"><b id="hWeight">—</b><span>Вес</span></div>
   </div>
 
-  <div class="qgrid">
+  <div class="qgrid q2">
     <button class="qbtn" id="qGoal"><i>🎯</i><span>Моя программа</span></button>
-    <button class="qbtn" id="qCal"><i>📅</i><span>Календарь</span></button>
     <button class="qbtn" id="qSupp"><i>🥤</i><span>Спортивные добавки</span></button>
   </div>
 
-  <div class="card">
-    <div class="sub">Совет дня</div>
-    <div id="tip" style="margin-top:6px;line-height:1.5;font-size:16px"></div>
-  </div>
+  <div class="htip"><span>💡</span><div id="tip"></div></div>
 </section>
 
 <!-- КАЛЕНДАРЬ -->
@@ -1862,16 +1873,7 @@ button{font-size:14px}
     $("homeDate").textContent = dstr.charAt(0).toUpperCase() + dstr.slice(1);
 
     var st = dayStats(today);
-    if (!st.total) {
-      setRing("homeFill", 0);
-      $("homePct").textContent = "—";
-      $("homeTxt").textContent = "На сегодня задач нет. Составьте распорядок в календаре.";
-    } else {
-      var p = Math.round(st.done / st.total * 100);
-      setRing("homeFill", p);
-      $("homePct").textContent = st.done + "/" + st.total;
-      $("homeTxt").textContent = st.done === st.total ? "Все задачи выполнены, отличная работа!" : "Выполнено " + p + "%. Осталось задач: " + (st.total - st.done) + ".";
-    }
+    $("homePct").textContent = st.total ? st.done + " из " + st.total : "";
 
     var d = done[today] || {};
     var left = tasksFor(today).filter(function(t){ return !d[t.id]; }).slice(0, 4);
@@ -1881,10 +1883,11 @@ button{font-size:14px}
           '<div class="tt">' + (t.time ? '<span class="tm">' + esc(t.time) + '</span>' : '') + esc(t.text) + '</div></div>';
       }).join("");
     } else {
-      $("homeTasks").innerHTML = '<div class="empty">' + (st.total ? "Всё выполнено 🎉" : "Задач на сегодня пока нет") + '</div>';
+      $("homeTasks").innerHTML = '<div class="empty">' + (st.total ? "Все задачи выполнены 🎉" : "Задач на сегодня нет — добавьте их в календаре") + '</div>';
     }
 
     renderNext();
+    renderHomeFood();
     $("hStreak").textContent = visitStreak() + " 🔥";
     $("hWork").textContent = workouts.length;
     $("hWeight").textContent = entries.length ? entries[entries.length - 1].w + " кг" : "—";
@@ -1893,52 +1896,83 @@ button{font-size:14px}
     $("tip").textContent = TIPS[doy % TIPS.length];
   }
 
-  // карточка «следующая тренировка»: сегодня, завтра или в какой день недели
+  // главная карточка «Сегодня»: тренировка дня, день отдыха или подбор программы — одно главное действие
   var WD_IN = ["в воскресенье", "в понедельник", "во вторник", "в среду", "в четверг", "в пятницу", "в субботу"];
-  var nextAct = null;
+  var hhAct = null, hhPlan = null;
   function renderNext(){
-    var card = $("nextCard");
-    if (typeof myPlans !== "function" || typeof WD_SHORT === "undefined" || !WD_SHORT) { card.style.display = "none"; return; }
-    var plans = myPlans().filter(function(p){ return p.wd != null; });
-    card.style.display = "";
-    if (!plans.length && myPlans().length) {   // план без дней недели
-      $("nextTitle").textContent = "Ваш план тренировок";
-      $("nextNote").textContent = "Откройте, когда будете готовы заниматься";
-      $("nextBtn").textContent = "Открыть"; nextAct = "train";
+    if (typeof myPlans !== "function" || typeof WD_SHORT === "undefined" || !WD_SHORT) { $("hHero").style.display = "none"; return; }
+    $("hHero").style.display = "";
+    var tag = $("hhTag"), all = myPlans(), plans = all.filter(function(p){ return p.wd != null; });
+    var setTag = function(txt, cls){ tag.textContent = txt; tag.className = "th-tag" + (cls ? " " + cls : ""); };
+    var go = $("hhGo"), more = $("hhMore");
+    var mins = function(p){ return planMinutes(p.items.map(function(it){ return progress(it, planWeek()); })); };
+    var info = function(p){ var n = p.items.length; return n + " " + plural(n, ["упражнение", "упражнения", "упражнений"]) + " · около " + mins(p) + " мин"; };
+    var time = userGoal && userGoal.time ? userGoal.time : "";
+    hhPlan = null;
+    if (!all.length) {
+      setTag("Начало");
+      $("hhWhen").textContent = "";
+      $("hhName").textContent = "Программа под вашу цель";
+      $("hhNote").textContent = "3 коротких вопроса — и я соберу тренировки и питание под вас";
+      go.textContent = "Подобрать программу"; go.className = "btn"; hhAct = "goal";
+      more.textContent = "Или пробная тренировка без подбора ›"; more.style.display = "";
       return;
     }
-    if (!plans.length) {
-      $("nextTitle").textContent = "План тренировок не подобран";
-      $("nextNote").textContent = "Расскажите о цели — соберу тренировки и питание под вас";
-      $("nextBtn").textContent = "Подобрать"; nextAct = "goal";
-      return;
-    }
-    var today = localDay(new Date()), doneToday = workouts.indexOf(today) >= 0, t = new Date().getDay(), nx = null, todayPlan = null;
+    var today = localDay(new Date()), doneToday = workouts.indexOf(today) >= 0, t = new Date().getDay(), nx = null;
+    if (!plans.length) nx = { p: nextMyPlan(), k: 0, noWd: true };   // старый план без дней недели — просто следующая тренировка
     for (var k = 0; k < 8 && !nx; k++) {
       var p = plans.filter(function(x){ return x.wd === (t + k) % 7; })[0];
       if (!p) continue;
-      if (k === 0) { todayPlan = p; if (doneToday) continue; }
+      if (k === 0 && doneToday) continue;
       nx = { p: p, k: k };
     }
-    var nm = function(p){ return p.name.split(" · ").slice(1).join(" · ") || p.name; };
+    if (!nx || !nx.p) { $("hHero").style.display = "none"; return; }
     var when = function(x){ return x.k === 1 ? "завтра" : x.k === 7 ? "через неделю" : WD_IN[(t + x.k) % 7]; };
-    var time = userGoal && userGoal.time ? " в " + userGoal.time : "";
-    if (nx && nx.k === 0) {
-      var mins = planMinutes(nx.p.items.map(function(it){ return progress(it, planWeek()); }));
-      $("nextTitle").textContent = "Сегодня тренировка" + time;
-      $("nextNote").textContent = nm(nx.p) + " · около " + mins + " мин";
-      $("nextBtn").textContent = "Начать"; nextAct = nx.p.id;
+    hhPlan = nx.p.id;
+    more.style.display = "";
+    if (nx.k === 0 && !doneToday) {
+      setTag(nx.noWd ? "Следующая тренировка" : "Тренировка сегодня");
+      $("hhWhen").textContent = time && !nx.noWd ? "в " + time : "";
+      $("hhName").textContent = dayName(nx.p);
+      $("hhNote").textContent = info(nx.p) + " · " + (camMode ? "с ИИ-тренером" : "без камеры");
+      go.textContent = "▶ Начать тренировку"; go.className = "btn"; hhAct = "start";
+      more.textContent = "Упражнения и режим ›";
     } else {
-      $("nextTitle").textContent = doneToday ? "Тренировка выполнена ✓" : "Сегодня день отдыха";
-      $("nextNote").textContent = nx ? "Следующая — " + when(nx) + time + ": " + nm(nx.p) : "Мышцы растут во время отдыха";
-      $("nextBtn").textContent = "План"; nextAct = nx ? nx.p.id : "train";
+      setTag(doneToday ? "Выполнено ✓" : "День отдыха", doneToday ? "done" : "rest");
+      $("hhWhen").textContent = "";
+      $("hhName").textContent = doneToday ? "Тренировка на сегодня сделана" : "Сегодня отдыхаем";
+      $("hhNote").textContent = "Следующая — " + when(nx) + (time ? " в " + time : "") + ": " + dayName(nx.p) + " · около " + mins(nx.p) + " мин";
+      go.textContent = "Посмотреть план недели"; go.className = "btn ghost"; hhAct = "train";
+      more.style.display = "none";
     }
   }
-  $("nextBtn").onclick = function(){
-    if (nextAct === "goal") { haptic(); openGoal(); return; }
-    if (nextAct && nextAct !== "train") { planSel = nextAct; save("fithub_plan_sel", planSel); renderPlan(); }
+  $("hhGo").onclick = function(){
+    if (hhAct === "goal") { haptic(); openGoal(); return; }
+    if (hhPlan) { planSel = hhPlan; save("fithub_plan_sel", planSel); renderPlan(); }
+    if (hhAct === "start") { haptic("medium"); startWorkout(camMode); return; }
     goTab("train");
   };
+  $("hhMore").onclick = function(){
+    if (hhPlan) { planSel = hhPlan; save("fithub_plan_sel", planSel); renderPlan(); }
+    goTab("train");
+  };
+
+  // карточка «Питание сегодня»: калории из нормы и БЖУ, фото еды в один шаг
+  function renderHomeFood(){
+    if (typeof food === "undefined" || !food || typeof dayFood !== "function") { $("hFood").style.display = "none"; return; }
+    $("hFood").style.display = "";
+    var d = dayFood(), t = d.t, G = goals();
+    $("hfKcal").textContent = G ? Math.round(t.k) + " из " + G.k + " ккал" : Math.round(t.k) + " ккал";
+    $("hfBarW").style.display = G ? "" : "none";
+    $("hfBarW").classList.toggle("over", !!G && t.k > G.k + 30);
+    $("hfBar").style.width = G ? Math.min(100, t.k / G.k * 100).toFixed(1) + "%" : "0";
+    $("hfMac").innerHTML = [["Белки", "p"], ["Жиры", "f"], ["Углеводы", "c"]].map(function(m){
+      return '<div><b>' + Math.round(t[m[1]]) + (G ? '<small style="color:var(--hint);font-weight:600">/' + G[m[1]] + '</small>' : '') + '</b>' + m[0] + (G ? '' : ', г') + '</div>';
+    }).join("");
+    $("hfOpen").textContent = d.list.length ? "Дневник · " + d.list.length : "Дневник";
+  }
+  $("hfPhoto").onclick = function(){ goTab("food"); try { $("camIn").click(); } catch(e){} };
+  $("hfOpen").onclick = function(){ goTab("food"); try { $("balCard").scrollIntoView({ block: "start" }); } catch(e){} };
 
   function goTab(name){ haptic(); showTab(name); }
   $("homeTasks").onclick = function(e){
@@ -2281,6 +2315,7 @@ button{font-size:14px}
   };
 
   function renderFood(){
+    renderHomeFood();
     var d = dayFood(), t = d.t;
     renderMacros(d);
     fillMacroInputs();
@@ -4874,6 +4909,7 @@ button{font-size:14px}
     }, 1500);
   }
   function onTabShown(name){
+    if (name === "home") renderHome();
     if (name === "profile" && arrivalPending) { arrivalPending = false; playArrival(); }
   }
   $("flameBtn").onclick = function(){
