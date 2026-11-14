@@ -481,6 +481,9 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 .sitem .sn{min-width:0}
 .sitem .sn small{display:block;margin-top:2px;white-space:normal}
 .mgoal{margin-top:12px}
+.bcman{margin-top:10px}
+.bcman summary{cursor:pointer;color:var(--accent);font-size:14px;font-weight:600;padding:8px 0}
+#aiMeal,#frMeal{margin:12px 0 0}
 .mgoal summary{cursor:pointer;color:var(--accent);font-size:14px;font-weight:600;padding:8px 0}
 .mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 
@@ -796,12 +799,78 @@ button{font-size:14px}
 <section class="tab" id="tab-food">
   <h2>Питание</h2>
 
-  <div class="card">
+  <div class="card addcard">
+    <b>Добавить еду</b>
+    <div class="note" id="photoNote" style="margin-top:6px">Сфотографируйте штрихкод на упаковке: крупно, ровно и при хорошем свете. Для продуктов без упаковки используйте поиск ниже.</div>
+    <div class="photo-btns">
+      <label class="pbtn"><i>📷</i>Сфотографировать<input type="file" accept="image/*" capture="environment" id="camIn"></label>
+      <label class="pbtn ghost"><i>🖼️</i>Из галереи<input type="file" accept="image/*" id="galIn"></label>
+    </div>
+    <img class="fprev" id="fprev" alt="Фото продукта">
+    <div class="fstatus" id="fstatus"></div>
+    <details class="bcman">
+      <summary>Ввести штрихкод вручную</summary>
+      <div class="inrow" style="margin-top:8px">
+        <div><input id="bcIn" type="text" inputmode="numeric" maxlength="14" placeholder="Цифры под штрихкодом" autocomplete="off" aria-label="Штрихкод"></div>
+        <button class="btn" id="bcBtn">Найти</button>
+      </div>
+    </details>
+  </div>
+
+  <div class="card" id="aiCard" style="display:none">
+    <div class="dish-h">
+      <img id="aiImg" alt="Фото еды">
+      <div style="flex:1;min-width:0"><b>🤖 Распознано по фото</b><div class="sub" id="aiNote"></div></div>
+      <button class="xbtn" id="aiClose" type="button" aria-label="Закрыть">✕</button>
+    </div>
+    <div id="aiList"></div>
+    <input id="aiSearch" type="search" placeholder="Добавить продукт, если ИИ что-то пропустил…" autocomplete="off" style="margin-top:10px">
+    <div id="aiRes"></div>
+    <div class="macros" id="aiTot"></div>
+    <div class="mealsel" id="aiMeal" role="group" aria-label="Приём пищи"></div>
+    <button class="btn" id="aiAdd" type="button">Добавить в дневник</button>
+    <div class="note" style="margin-top:8px">ИИ оценивает состав и вес по фото примерно. Проверьте граммы и при необходимости поправьте — КБЖУ пересчитается.</div>
+  </div>
+
+  <div class="card" id="fres" style="display:none">
+    <div class="fname" id="frName"></div>
+    <div class="sub" id="frSrc"></div>
+    <div class="macros">
+      <div class="macro"><b id="frK">0</b><span>ккал</span></div>
+      <div class="macro"><b id="frP">0</b><span>белки, г</span></div>
+      <div class="macro"><b id="frF">0</b><span>жиры, г</span></div>
+      <div class="macro"><b id="frC">0</b><span>углев., г</span></div>
+    </div>
+    <div class="note" id="frPer" style="margin-top:8px"></div>
+    <div class="mealsel" id="frMeal" role="group" aria-label="Приём пищи"></div>
+    <div class="inrow" style="margin-top:4px">
+      <div><label>Порция, г</label><input id="frG" type="number" inputmode="decimal" value="100"></div>
+      <button class="btn" id="frAdd">В дневник</button>
+    </div>
+  </div>
+
+  <div class="card" id="balCard">
     <b>Баланс КБЖУ за сегодня</b>
     <button class="insight" id="insight" type="button"></button>
     <div id="mxList"></div>
-    <div class="inrow" style="margin-top:6px">
-      <div><label>Норма в день, ккал</label><input id="fGoal" type="number" inputmode="numeric" placeholder="ккал"></div>
+  </div>
+
+  <div class="card" id="diaryCard">
+    <div class="pctrow"><b>Дневник за сегодня</b><span class="sub" id="dCount"></span></div>
+    <div id="diary"></div>
+  </div>
+
+  <div class="card">
+    <b>Поиск продукта</b>
+    <input id="fSearch" type="search" placeholder="Например, гречка" autocomplete="off" style="margin-top:10px">
+    <div class="sub" id="fListHead" style="margin-top:10px">Популярное</div>
+    <div id="fList"></div>
+  </div>
+
+  <div class="card" id="normCard">
+    <b>Норма на день</b>
+    <div class="inrow" style="margin-top:10px">
+      <div><label>Калории, ккал</label><input id="fGoal" type="number" inputmode="numeric" placeholder="ккал"></div>
       <button class="btn" id="fGoalBtn">Сохранить</button>
     </div>
     <details class="mgoal">
@@ -817,65 +886,6 @@ button{font-size:14px}
         <button class="btn" id="gSave" type="button">Сохранить</button>
       </div>
     </details>
-  </div>
-
-  <div class="card" id="diaryCard">
-    <div class="pctrow"><b>Дневник за сегодня</b><span class="sub" id="dCount"></span></div>
-    <div id="diary"></div>
-    <label>Новую еду записывать как</label>
-    <div class="mealsel" id="mealSel"></div>
-  </div>
-
-  <div class="card">
-    <b>КБЖУ по фото</b>
-    <div class="note" id="photoNote" style="margin-top:6px">Сфотографируйте штрихкод на упаковке: крупно, ровно и при хорошем свете. Для продуктов без упаковки используйте поиск ниже.</div>
-    <div class="photo-btns">
-      <label class="pbtn"><i>📷</i>Сфотографировать<input type="file" accept="image/*" capture="environment" id="camIn"></label>
-      <label class="pbtn ghost"><i>🖼️</i>Из галереи<input type="file" accept="image/*" id="galIn"></label>
-    </div>
-    <img class="fprev" id="fprev" alt="Фото продукта">
-    <div class="fstatus" id="fstatus"></div>
-    <div class="inrow" style="margin-top:4px">
-      <div><label>Или введите штрихкод</label><input id="bcIn" type="text" inputmode="numeric" maxlength="14" placeholder="Цифры под штрихкодом" autocomplete="off"></div>
-      <button class="btn" id="bcBtn">Найти</button>
-    </div>
-  </div>
-
-  <div class="card" id="aiCard" style="display:none">
-    <div class="dish-h">
-      <img id="aiImg" alt="Фото еды">
-      <div style="flex:1;min-width:0"><b>🤖 Распознано по фото</b><div class="sub" id="aiNote"></div></div>
-      <button class="xbtn" id="aiClose" type="button" aria-label="Закрыть">✕</button>
-    </div>
-    <div id="aiList"></div>
-    <input id="aiSearch" type="search" placeholder="Добавить продукт, если ИИ что-то пропустил…" autocomplete="off" style="margin-top:10px">
-    <div id="aiRes"></div>
-    <div class="macros" id="aiTot"></div>
-    <div class="note" style="margin-top:8px">ИИ оценивает состав и вес по фото примерно. Проверьте граммы и при необходимости поправьте — КБЖУ пересчитается.</div>
-    <button class="btn" id="aiAdd" type="button">Добавить в дневник</button>
-  </div>
-
-  <div class="card" id="fres" style="display:none">
-    <div class="fname" id="frName"></div>
-    <div class="sub" id="frSrc"></div>
-    <div class="macros">
-      <div class="macro"><b id="frK">0</b><span>ккал</span></div>
-      <div class="macro"><b id="frP">0</b><span>белки, г</span></div>
-      <div class="macro"><b id="frF">0</b><span>жиры, г</span></div>
-      <div class="macro"><b id="frC">0</b><span>углев., г</span></div>
-    </div>
-    <div class="note" id="frPer" style="margin-top:8px"></div>
-    <div class="inrow" style="margin-top:4px">
-      <div><label>Порция, г</label><input id="frG" type="number" inputmode="decimal" value="100"></div>
-      <button class="btn" id="frAdd">В дневник</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <b>Поиск продукта</b>
-    <input id="fSearch" type="search" placeholder="Например, гречка" autocomplete="off" style="margin-top:10px">
-    <div class="sub" id="fListHead" style="margin-top:10px">Популярное</div>
-    <div id="fList"></div>
   </div>
 
   <p class="note">КБЖУ по штрихкоду берётся из открытой базы Open Food Facts, во встроенном списке указаны средние значения. Цифры приблизительные: сверяйтесь с этикеткой.</p>
@@ -1055,11 +1065,11 @@ button{font-size:14px}
 
 <nav>
   <button class="on" data-tab="home"><i>🏠</i>Главная</button>
-  <button data-tab="train"><i>🏋️</i>Тренировка</button>
+  <button data-tab="food"><i>🥗</i>Питание</button>
   <div class="navm" id="navMascot" role="button" tabindex="-1" aria-label="Арни. Смахните вверх, чтобы вернуть на экран, нажмите, чтобы открыть чат">
     <span class="navm-ico" id="navMascotIco"></span><span class="navm-lbl">Арни</span>
   </div>
-  <button data-tab="food"><i>🥗</i>Питание</button>
+  <button data-tab="train"><i>🏋️</i>Тренировка</button>
   <button data-tab="profile"><i>👤</i>Профиль</button>
 </nav>
 
@@ -1976,6 +1986,25 @@ button{font-size:14px}
   var MEALS = [["b", "Завтрак"], ["l", "Обед"], ["d", "Ужин"], ["s", "Перекус"]];
   function mealNow(){ var h = new Date().getHours(); return h >= 5 && h < 11 ? "b" : h >= 11 && h < 16 ? "l" : h >= 16 && h < 22 ? "d" : "s"; }
   var mealSel = mealNow();
+  var MEAL_TO = { b: "в завтрак", l: "в обед", d: "в ужин", s: "в перекус" };
+  // выбор приёма пищи — прямо в карточке найденного продукта; при каждом открытии — по времени суток
+  function mealChips(id){
+    $(id).innerHTML = MEALS.map(function(M){
+      return '<button type="button" class="chip' + (M[0] === mealSel ? " on" : "") + '" data-m="' + M[0] + '" aria-pressed="' + (M[0] === mealSel) + '">' + M[1] + '</button>';
+    }).join("");
+  }
+  function mealLabels(){
+    if ($("frAdd")) $("frAdd").textContent = "Добавить " + MEAL_TO[mealSel];
+    if ($("aiCard").style.display !== "none") renderAITotals();
+  }
+  function mealReset(id){ mealSel = mealNow(); mealChips(id); mealLabels(); }
+  ["aiMeal", "frMeal"].forEach(function(id){
+    $(id).onclick = function(e){
+      var b = e.target.closest ? e.target.closest("[data-m]") : null;
+      if (!b) return;
+      haptic(); mealSel = b.dataset.m; mealChips(id); mealLabels();
+    };
+  });
   var SPIN = '<span class="spin"></span>';
 
   function r1(x){ return Math.round(x * 10) / 10; }
@@ -2004,6 +2033,7 @@ button{font-size:14px}
     $("frName").textContent = item.name;
     $("frSrc").textContent = item.src;
     $("frG").value = item.g || 100;
+    mealReset("frMeal");
     calcRes();
     try { $("fres").scrollIntoView({ behavior: "smooth", block: "center" }); } catch(e){}
   }
@@ -2026,7 +2056,7 @@ button{font-size:14px}
     save("fithub_food", food);
     track("food_add", { source: /штрихкод/.test(cur.src || "") ? "barcode" : "search" });
     notify("success");
-    $("fres").style.display = "none";
+    $("fres").style.display = "none"; $("fprev").style.display = "none";
     cur = null;
     fstatus("");
     renderFood();
@@ -2103,7 +2133,7 @@ button{font-size:14px}
     // подсказка сверху
     var ins = $("insight");
     if (!G) {
-      ins.innerHTML = '<span class="sw" style="background:var(--hint)"></span><span>Задайте норму калорий ниже, и шкалы покажут, чего не хватает.</span>';
+      ins.innerHTML = '<span class="sw" style="background:var(--hint)"></span><span>Задайте норму калорий внизу вкладки, и шкалы покажут, чего не хватает.</span>';
       ins.dataset.k = "";
     } else if (!d.list.length) {
       ins.innerHTML = '<span class="sw" style="background:var(--hint)"></span><span>Добавьте первый приём пищи, и здесь появится, чего не хватает до нормы.</span>';
@@ -2213,7 +2243,7 @@ button{font-size:14px}
   };
   $("insight").onclick = function(){
     var k = this.dataset.k;
-    if (!k) { if (!kcalGoal) $("fGoal").focus(); return; }
+    if (!k) { if (!kcalGoal) { try { $("normCard").scrollIntoView({ behavior: "smooth", block: "center" }); } catch(e){} $("fGoal").focus(); } return; }
     haptic();
     if (openMx !== k) toggleMx(k);
     var row = $("mxList").querySelector('.mxd2[data-for="' + k + '"]');
@@ -2256,11 +2286,8 @@ button{font-size:14px}
     fillMacroInputs();
     if (kcalGoal && document.activeElement !== $("fGoal")) $("fGoal").value = kcalGoal;
     $("dCount").textContent = d.list.length ? Math.round(t.k) + " ккал" : "";
-    $("mealSel").innerHTML = MEALS.map(function(M){
-      return '<button type="button" class="chip' + (M[0] === mealSel ? " on" : "") + '" data-m="' + M[0] + '">' + M[1] + '</button>';
-    }).join("");
     if (!d.list.length) {
-      $("diary").innerHTML = '<div class="empty">Пока пусто. Сфотографируйте еду или найдите продукт в поиске ниже.</div>';
+      $("diary").innerHTML = '<div class="empty">Пока пусто. Сфотографируйте еду кнопкой выше или найдите продукт в поиске ниже.</div>';
       return;
     }
     var row = function(m){
@@ -2275,12 +2302,6 @@ button{font-size:14px}
       return '<div class="mgrp"><span>' + M[1] + '</span><span>' + Math.round(k) + ' ккал</span></div>' + items.map(row).join("");
     }).join("");
   }
-  $("mealSel").onclick = function(e){
-    var b = e.target.closest ? e.target.closest("[data-m]") : null;
-    if (!b) return;
-    haptic(); mealSel = b.dataset.m;
-    [].forEach.call($("mealSel").children, function(x){ x.classList.toggle("on", x === b); });
-  };
   $("diary").onclick = function(e){
     var b = e.target.closest ? e.target.closest("button[data-id]") : null;
     if (!b) return;
@@ -2406,7 +2427,7 @@ button{font-size:14px}
 
   // --- ИИ-распознавание еды по фото ---
   var aiItems = [], aiThumb = null, aiBusy = false;
-  if (AI_ENDPOINT) $("photoNote").textContent = "Сфотографируйте блюдо, продукт или напиток — ИИ определит состав, примерный вес и КБЖУ. Для упаковки можно снять штрихкод: так точнее.";
+  if (AI_ENDPOINT) $("photoNote").textContent = "Сфотографируйте блюдо — ИИ определит состав, вес и КБЖУ. Упаковку точнее снимать по штрихкоду.";
   function thumbOf(img){ try { return toCanvas(img, 96).toDataURL("image/jpeg", 0.6); } catch(e){ return null; } }
   // Индикатор ожидания ИИ: этапы с галочками, полоса прогресса и секундомер
   var AIP_STEPS = [[0, "Отправляю фото"], [1.5, "ИИ рассматривает блюдо"], [5, "Определяю продукты и вес"], [11, "Считаю калории и БЖУ"], [20, "Почти готово…"]];
@@ -2492,6 +2513,8 @@ button{font-size:14px}
     $("aiSearch").value = ""; $("aiRes").innerHTML = "";
     $("fres").style.display = "none";
     $("aiCard").style.display = "block";
+    $("fprev").style.display = "none";   // фото уже есть в шапке карточки
+    mealSel = mealNow(); mealChips("aiMeal");
     renderAI();
     try { $("aiCard").scrollIntoView({ behavior: "smooth", block: "start" }); } catch(e){}
   }
@@ -2507,7 +2530,7 @@ button{font-size:14px}
     var has = aiItems.some(function(d){ return d.g > 0; });
     $("aiAdd").disabled = !has;
     $("aiAdd").style.opacity = has ? "" : ".5";
-    $("aiAdd").textContent = has ? "Добавить в дневник · " + Math.round(t.g) + " г" : "Добавьте хотя бы один продукт";
+    $("aiAdd").textContent = has ? "Добавить " + MEAL_TO[mealSel] + " · " + Math.round(t.k) + " ккал" : "Добавьте хотя бы один продукт";
     aiItems.forEach(function(d, j){
       var el = $("aiList").querySelector('[data-k="' + j + '"]');
       if (el) el.textContent = Math.round(d.k100 * d.g / 100) + " ккал · Б " + r1(d.p100 * d.g / 100) + " · Ж " + r1(d.f100 * d.g / 100) + " · У " + r1(d.c100 * d.g / 100);
@@ -2551,7 +2574,7 @@ button{font-size:14px}
     $("aiSearch").value = ""; $("aiRes").innerHTML = "";
     renderAI();
   };
-  $("aiClose").onclick = function(){ haptic(); $("aiCard").style.display = "none"; aiItems = []; };
+  $("aiClose").onclick = function(){ haptic(); $("aiCard").style.display = "none"; $("fprev").style.display = "none"; aiItems = []; };
   $("aiAdd").onclick = function(){
     var items = aiItems.filter(function(d){ return d.g > 0; });
     if (!items.length) { notify("error"); return; }
@@ -2565,7 +2588,7 @@ button{font-size:14px}
     save("fithub_food", food);
     track("food_add", { source: "ai", items: items.length });
     notify("success");
-    $("aiCard").style.display = "none"; aiItems = []; aiThumb = null;
+    $("aiCard").style.display = "none"; $("fprev").style.display = "none"; aiItems = []; aiThumb = null;
     fstatus("");
     renderFood();
     try { $("diary").scrollIntoView({ behavior: "smooth", block: "center" }); } catch(e){}
