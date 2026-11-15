@@ -717,6 +717,9 @@ button{font-size:14px}
 .vitem .vd{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13px;color:var(--hint)}
 .vitem .vd .chip{min-height:32px;padding:5px 12px;font-size:13px}
 .vitem .vd .chip.on{background:var(--grad);color:#fff;border-color:transparent}
+.vitem .vpl{width:100%;margin-top:8px;padding:9px 10px;font-size:15px}
+.tplace{display:block;font-size:13px;color:var(--accent);margin-top:3px;cursor:pointer;word-break:break-word}
+.task.done .tplace{color:var(--hint)}
 .vitem .vwhen{font-size:13px;color:var(--accent);font-weight:700;margin-top:6px}
 .vlink{display:block;width:100%;background:none;border:0;color:var(--hint);font-family:inherit;font-size:14px;padding:12px 0 2px;cursor:pointer}
 .vmsg{margin-top:10px;font-size:14px;line-height:1.45;border-radius:12px;padding:10px 12px;background:var(--bg)}
@@ -793,7 +796,7 @@ button{font-size:14px}
   <div class="card vcard" id="vCard">
     <div id="vIdle">
       <button class="vbtn" id="vBtn" type="button"><span class="vmic">🎙</span><span class="vt"><b>Надиктовать планы</b><small>Скажите, что и когда — я сам разложу по дням и времени</small></span></button>
-      <div class="vex">Например: «Завтра в 7 вечера тренировка ног, в пятницу купить протеин, каждый день пить 2 литра воды»</div>
+      <div class="vex">Например: «Завтра в 7 вечера тренировка ног в зале на Ленина 5, в пятницу купить протеин, каждый день пить 2 литра воды»</div>
     </div>
     <div id="vRecBox" hidden>
       <div class="vrec"><span class="vdot"></span><b id="vTimer">0:00</b><span class="vlv" id="vLevel"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><small>до 0:25</small></div>
@@ -835,6 +838,7 @@ button{font-size:14px}
       <input id="tTime" type="time" aria-label="Время">
       <input id="tText" type="text" maxlength="80" placeholder="Например, Тренировка">
     </div>
+    <input id="tPlace" type="text" maxlength="100" placeholder="📍 Место или адрес — если нужно" style="margin-top:10px" aria-label="Место или адрес">
     <label class="chk"><input type="checkbox" id="tDaily"> Повторять каждый день</label>
     <button class="btn" id="taskAdd">Добавить в распорядок</button>
   </div>
@@ -1637,11 +1641,19 @@ button{font-size:14px}
 
   // === ЗАДАЧИ ДНЯ ===
   function tasksFor(key){
-    var list = routine.map(function(r){ return { id:r.id, text:r.text, time:r.time, daily:true }; });
-    (dayTasks[key] || []).forEach(function(t){ list.push({ id:t.id, text:t.text, time:t.time, daily:false }); });
+    var list = routine.map(function(r){ return { id:r.id, text:r.text, time:r.time, place:r.place || "", daily:true }; });
+    (dayTasks[key] || []).forEach(function(t){ list.push({ id:t.id, text:t.text, time:t.time, place:t.place || "", daily:false }); });
     list.sort(function(a,b){ var x = a.time || "99:99", y = b.time || "99:99"; return x < y ? -1 : x > y ? 1 : 0; });
     return list;
   }
+  // место задачи → Яндекс Карты (в Telegram — через openLink)
+  function openMap(q){
+    var u = "https://yandex.ru/maps/?text=" + encodeURIComponent(q);
+    haptic();
+    try { if (tg && tg.openLink) { tg.openLink(u); return; } } catch(e){}
+    window.open(u, "_blank");
+  }
+  function placeHtml(p){ return p ? '<span class="tplace" data-map="' + esc(p) + '">📍 ' + esc(p) + '</span>' : ''; }
   function dayStats(key){
     var list = tasksFor(key), d = done[key] || {}, n = 0;
     list.forEach(function(t){ if (d[t.id]) n++; });
@@ -1862,7 +1874,7 @@ button{font-size:14px}
     $("dayList").innerHTML = list.map(function(t){
       return '<div class="task' + (d[t.id] ? " done" : "") + '">' +
         '<button class="ck" data-act="toggle" data-id="' + t.id + '" aria-label="Отметить">✓</button>' +
-        '<div class="tt">' + (t.time ? '<span class="tm">' + esc(t.time) + '</span>' : '') + esc(t.text) + (t.daily ? '<small>каждый день</small>' : '') + '</div>' +
+        '<div class="tt">' + (t.time ? '<span class="tm">' + esc(t.time) + '</span>' : '') + esc(t.text) + placeHtml(t.place) + (t.daily ? '<small>каждый день</small>' : '') + '</div>' +
         '<button class="x" data-act="del" data-id="' + t.id + '" data-daily="' + (t.daily ? 1 : 0) + '" aria-label="Удалить">✕</button>' +
         '</div>';
     }).join("");
@@ -1883,6 +1895,8 @@ button{font-size:14px}
   };
 
   $("dayList").onclick = function(e){
+    var mp = e.target.closest ? e.target.closest("[data-map]") : null;
+    if (mp) { openMap(mp.dataset.map); return; }
     var b = e.target.closest ? e.target.closest("button[data-act]") : null;
     if (!b) return;
     var id = b.dataset.id;
@@ -1924,6 +1938,8 @@ button{font-size:14px}
     var time = $("tTime").value;
     if (!text) { notify("error"); alert("Введите название задачи"); return; }
     var item = { id: uid(), text: text, time: time || "" };
+    var place = $("tPlace").value.replace(/\s+/g, " ").trim().slice(0, 100);
+    if (place) item.place = place;
     if ($("tDaily").checked) {
       routine.push(item);
       save("fithub_routine", routine);
@@ -1931,7 +1947,7 @@ button{font-size:14px}
       (dayTasks[sel] = dayTasks[sel] || []).push(item);
       save("fithub_daytasks", dayTasks);
     }
-    $("tText").value = ""; $("tTime").value = ""; $("tDaily").checked = false;
+    $("tText").value = ""; $("tTime").value = ""; $("tPlace").value = ""; $("tDaily").checked = false;
     notify("success");
     refreshAll();
   };
@@ -2028,7 +2044,7 @@ button{font-size:14px}
         track("voice_error", { stage: "server", err: j.error || j._st });
         return;
       }
-      vItems = (j.tasks || []).map(function(t){ return { text: t.text, date: t.date, time: t.time || "", daily: !!t.daily }; });
+      vItems = (j.tasks || []).map(function(t){ return { text: t.text, date: t.date, time: t.time || "", place: t.place || "", daily: !!t.daily }; });
       $("vSaid").innerHTML = "Вы сказали: <b>«" + esc(j.text) + "»</b>";
       vRender(); vShow("vRes");
       try { $("vCard").scrollIntoView({ behavior: "smooth", block: "start" }); } catch(e){}
@@ -2054,6 +2070,7 @@ button{font-size:14px}
         '<div class="vwhen">' + esc(vWhen(t)) + '</div>' +
         '<div class="vm">' + (t.daily ? '<span></span>' : '<input type="date" data-f="date" value="' + esc(t.date) + '" min="' + localDay(new Date()) + '" aria-label="Дата">') +
         '<input type="time" data-f="time" value="' + esc(t.time) + '" aria-label="Время"></div>' +
+        '<input class="vpl" data-f="place" maxlength="100" value="' + esc(t.place || "") + '" placeholder="📍 Место или адрес — если нужно" aria-label="Место или адрес">' +
         '<div class="vd"><button type="button" class="chip' + (t.daily ? " on" : "") + '" data-a="daily">Каждый день</button></div>' +
         '</div>';
     }).join("") || '<div class="empty">Задач не осталось — надиктуйте ещё раз.</div>';
@@ -2084,6 +2101,8 @@ button{font-size:14px}
       var text = String(t.text || "").trim().slice(0, 80);
       if (!text) return;
       var item = { id: uid(), text: text, time: /^\d{2}:\d{2}$/.test(t.time) ? t.time : "" };
+      var place = String(t.place || "").replace(/\s+/g, " ").trim().slice(0, 100);
+      if (place) item.place = place;
       if (t.daily) routine.push(item);
       else {
         var d = /^\d{4}-\d{2}-\d{2}$/.test(t.date) && t.date >= today ? t.date : today;
@@ -2157,7 +2176,7 @@ button{font-size:14px}
         return '<button type="button" class="trow' + (d[t.id] ? " done" : "") + (isLate ? " late" : "") + (isNext ? " next" : "") +
           '" data-id="' + t.id + '" aria-pressed="' + !!d[t.id] + '">' +
           '<span class="ti">' + esc(sp[0]) + '</span>' +
-          '<span class="tx"><b>' + esc(sp[1] || t.text) + '</b>' + (meta.length ? '<small>' + esc(meta.join(" · ")) + '</small>' : '') + '</span>' +
+          '<span class="tx"><b>' + esc(sp[1] || t.text) + '</b>' + (meta.length ? '<small>' + esc(meta.join(" · ")) + '</small>' : '') + placeHtml(t.place) + '</span>' +
           '<span class="tc">✓</span></button>';
       }).join("");
     }
@@ -2178,6 +2197,8 @@ button{font-size:14px}
   $("homeTasks").onclick = function(e){
     var g = e.target.closest ? e.target.closest("[data-go]") : null;
     if (g) { goTab(g.dataset.go); return; }
+    var mp = e.target.closest ? e.target.closest("[data-map]") : null;
+    if (mp) { openMap(mp.dataset.map); return; }
     var b = e.target.closest ? e.target.closest(".trow[data-id]") : null;
     if (!b) return;
     var today = localDay(new Date()), id = b.dataset.id;
@@ -5406,7 +5427,7 @@ button{font-size:14px}
     if (!list.length) return "На сегодня задач нет. Добавьте их в календаре: на главной кнопка «Календарь».";
     var left = list.filter(function(t){ return !d[t.id]; });
     var s = "Выполнено " + (list.length - left.length) + " из " + list.length + ".";
-    if (left.length) s += "\nОсталось:\n" + left.slice(0, 6).map(function(t){ return "• " + (t.time ? t.time + " " : "") + t.text; }).join("\n");
+    if (left.length) s += "\nОсталось:\n" + left.slice(0, 6).map(function(t){ return "• " + (t.time ? t.time + " " : "") + t.text + (t.place ? " (📍 " + t.place + ")" : ""); }).join("\n");
     else s += " Всё сделано, отлично!";
     return s;
   }
