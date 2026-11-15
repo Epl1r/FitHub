@@ -202,16 +202,18 @@ nav button.on{color:var(--accent);font-weight:700}
 .stats3 .stat b{font-size:18px}
 .qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
 .qgrid.q2{grid-template-columns:1fr 1fr}
-.hlink{display:block;width:100%;background:none;border:0;color:var(--accent);font-family:inherit;font-size:15px;font-weight:600;padding:8px 0 0;min-height:46px;text-align:center;cursor:pointer}
-#hHero .btn{margin-top:16px}
-.hbar{height:10px;border-radius:99px;background:var(--bg);border:1px solid var(--line);overflow:hidden;margin-top:12px}
-.hbar i{display:block;height:100%;width:0;background:var(--grad);border-radius:99px;transition:width .5s}
-.hbar.over i{background:#f59e0b}
-.hmac{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.hmac div{background:var(--bg);border-radius:12px;padding:8px 6px;text-align:center;font-size:12px;color:var(--hint)}
-.hmac b{display:block;font-size:15px;color:var(--text)}
-.hacts{display:grid;grid-template-columns:1.4fr 1fr;gap:10px;margin-top:14px}
-.hacts .btn{margin:0;padding:13px 8px}
+.dp-head{display:flex;align-items:center;gap:16px}
+.dp-ring{width:72px;height:72px}
+.dp-ht{flex:1;min-width:0}
+.dp-ht b{font-size:20px}
+.dp-ht .sub{margin-top:4px;line-height:1.4}
+.dp-b{font-style:normal;font-size:12px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#fff;background:var(--grad);border-radius:999px;padding:3px 8px;margin-left:8px;vertical-align:2px;white-space:nowrap}
+#homeTasks .task.next{background:linear-gradient(90deg,rgba(47,140,240,.10),transparent);margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:12px}
+#homeTasks{margin-top:6px}
+#homeTasks .task.late .tm{color:#f59e0b}
+.dp-add{display:grid;grid-template-columns:92px 1fr 44px;gap:8px;margin-top:12px}
+.dp-add input{min-width:0;padding:11px 10px;font-size:16px}
+.dp-add button{border:0;border-radius:12px;background:var(--grad);color:#fff;font-size:24px;font-weight:700;cursor:pointer;line-height:1}
 .htip{display:flex;gap:10px;align-items:flex-start;color:var(--hint);font-size:14px;line-height:1.5;padding:4px 6px 16px}
 .qgrid .qbtn{padding:14px 6px;font-size:14px;text-align:center;line-height:1.25}
 .qbtn{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:var(--radius);padding:16px 12px;font-size:14px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:inherit}
@@ -692,38 +694,33 @@ button{font-size:14px}
 <section class="tab on" id="tab-home">
   <h2 id="homeDate"></h2>
 
-  <div class="card thero" id="hHero">
-    <div class="th-top"><span class="th-tag" id="hhTag">Сегодня</span><span class="th-week" id="hhWhen"></span></div>
-    <div class="th-name" id="hhName"></div>
-    <div class="sub" id="hhNote"></div>
-    <button class="btn" id="hhGo" type="button"></button>
-    <button class="hlink" id="hhMore" type="button"></button>
-  </div>
-
-  <div class="card" id="hFood">
-    <div class="pctrow"><b>Питание сегодня</b><span class="sub" id="hfKcal"></span></div>
-    <div class="hbar" id="hfBarW"><i id="hfBar"></i></div>
-    <div class="hmac" id="hfMac"></div>
-    <div class="hacts">
-      <button class="btn" id="hfPhoto" type="button">📷 Еда по фото</button>
-      <button class="btn ghost" id="hfOpen" type="button">Дневник</button>
+  <div class="card dplan" id="dayCard">
+    <div class="dp-head">
+      <div class="ring dp-ring">
+        <svg viewBox="0 0 100 100"><circle class="rb" cx="50" cy="50" r="42"/><circle class="rf" id="homeFill" cx="50" cy="50" r="42"/></svg>
+        <b id="homePct">0%</b>
+      </div>
+      <div class="dp-ht">
+        <b>План на сегодня</b>
+        <div class="sub" id="homeTxt"></div>
+      </div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="pctrow"><b>Задачи на сегодня</b><span class="sub" id="homePct"></span></div>
     <div id="homeTasks"></div>
-    <button class="hlink" id="qCal" type="button">Календарь и распорядок ›</button>
+    <div class="dp-add">
+      <input id="hqTime" type="time" aria-label="Время">
+      <input id="hqText" type="text" maxlength="80" placeholder="Новая задача" enterkeyhint="done">
+      <button id="hqAdd" type="button" aria-label="Добавить">+</button>
+    </div>
   </div>
 
   <div class="stats3">
     <div class="stat"><b id="hStreak">0</b><span>Серия дней</span></div>
-    <div class="stat"><b id="hWork">0</b><span>Тренировок</span></div>
+    <div class="stat"><b id="hWeek">0</b><span>За неделю</span></div>
     <div class="stat"><b id="hWeight">—</b><span>Вес</span></div>
   </div>
 
   <div class="qgrid q2">
-    <button class="qbtn" id="qGoal"><i>🎯</i><span>Моя программа</span></button>
+    <button class="qbtn" id="qCal"><i>📅</i><span>Календарь и распорядок</span></button>
     <button class="qbtn" id="qSupp"><i>🥤</i><span>Спортивные добавки</span></button>
   </div>
 
@@ -1872,107 +1869,36 @@ button{font-size:14px}
     var dstr = now2.toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long" });
     $("homeDate").textContent = dstr.charAt(0).toUpperCase() + dstr.slice(1);
 
-    var st = dayStats(today);
-    $("homePct").textContent = st.total ? st.done + " из " + st.total : "";
+    var st = dayStats(today), list = tasksFor(today), d = done[today] || {};
+    var hm = ("0" + now2.getHours()).slice(-2) + ":" + ("0" + now2.getMinutes()).slice(-2);
+    var pct = st.total ? Math.round(st.done / st.total * 100) : 0;
+    setRing("homeFill", pct);
+    $("homePct").textContent = pct + "%";
+    var open = list.filter(function(t){ return !d[t.id]; });
+    var late = open.filter(function(t){ return t.time && t.time < hm; });
+    var next = open.filter(function(t){ return t.time && t.time >= hm; })[0] || (late.length ? null : open[0]) || null;
+    $("homeTxt").textContent = !st.total ? "Пока пусто. Добавьте задачу ниже или составьте распорядок в календаре." :
+      !open.length ? "Всё выполнено — отличный день! 🎉" :
+      "Осталось " + open.length + " из " + st.total + (late.length ? " · " + late.length + " " + plural(late.length, ["пропущена", "пропущены", "пропущено"]) + " по времени" : "");
+    $("homeTasks").innerHTML = list.map(function(t){
+      var isLate = !d[t.id] && t.time && t.time < hm, isNext = next && t.id === next.id;
+      return '<div class="task' + (d[t.id] ? " done" : "") + (isLate ? " late" : "") + (isNext ? " next" : "") + '">' +
+        '<button class="ck" data-act="toggle" data-id="' + t.id + '" aria-label="Выполнено">✓</button>' +
+        '<div class="tt">' + (t.time ? '<span class="tm">' + esc(t.time) + '</span>' : '') + esc(t.text) +
+        (isNext ? '<em class="dp-b">далее</em>' : '') + '</div></div>';
+    }).join("");
 
-    var d = done[today] || {};
-    var left = tasksFor(today).filter(function(t){ return !d[t.id]; }).slice(0, 4);
-    if (left.length) {
-      $("homeTasks").innerHTML = left.map(function(t){
-        return '<div class="task"><button class="ck" data-act="toggle" data-id="' + t.id + '" aria-label="Выполнено">✓</button>' +
-          '<div class="tt">' + (t.time ? '<span class="tm">' + esc(t.time) + '</span>' : '') + esc(t.text) + '</div></div>';
-      }).join("");
-    } else {
-      $("homeTasks").innerHTML = '<div class="empty">' + (st.total ? "Все задачи выполнены 🎉" : "Задач на сегодня нет — добавьте их в календаре") + '</div>';
-    }
-
-    renderNext();
-    renderHomeFood();
     $("hStreak").textContent = visitStreak() + " 🔥";
-    $("hWork").textContent = workouts.length;
+    var wk = 0;
+    for (var i = 0; i < 7; i++) { var dd = done[localDay(new Date(now2.getFullYear(), now2.getMonth(), now2.getDate() - i))]; if (dd) wk += Object.keys(dd).length; }
+    $("hWeek").textContent = wk + " ✓";
     $("hWeight").textContent = entries.length ? entries[entries.length - 1].w + " кг" : "—";
 
     var doy = Math.floor((now2 - new Date(now2.getFullYear(), 0, 0)) / 86400000);
     $("tip").textContent = TIPS[doy % TIPS.length];
   }
 
-  // главная карточка «Сегодня»: тренировка дня, день отдыха или подбор программы — одно главное действие
   var WD_IN = ["в воскресенье", "в понедельник", "во вторник", "в среду", "в четверг", "в пятницу", "в субботу"];
-  var hhAct = null, hhPlan = null;
-  function renderNext(){
-    if (typeof myPlans !== "function" || typeof WD_SHORT === "undefined" || !WD_SHORT) { $("hHero").style.display = "none"; return; }
-    $("hHero").style.display = "";
-    var tag = $("hhTag"), all = myPlans(), plans = all.filter(function(p){ return p.wd != null; });
-    var setTag = function(txt, cls){ tag.textContent = txt; tag.className = "th-tag" + (cls ? " " + cls : ""); };
-    var go = $("hhGo"), more = $("hhMore");
-    var mins = function(p){ return planMinutes(p.items.map(function(it){ return progress(it, planWeek()); })); };
-    var info = function(p){ var n = p.items.length; return n + " " + plural(n, ["упражнение", "упражнения", "упражнений"]) + " · около " + mins(p) + " мин"; };
-    var time = userGoal && userGoal.time ? userGoal.time : "";
-    hhPlan = null;
-    if (!all.length) {
-      setTag("Начало");
-      $("hhWhen").textContent = "";
-      $("hhName").textContent = "Программа под вашу цель";
-      $("hhNote").textContent = "3 коротких вопроса — и я соберу тренировки и питание под вас";
-      go.textContent = "Подобрать программу"; go.className = "btn"; hhAct = "goal";
-      more.textContent = "Или пробная тренировка без подбора ›"; more.style.display = "";
-      return;
-    }
-    var today = localDay(new Date()), doneToday = workouts.indexOf(today) >= 0, t = new Date().getDay(), nx = null;
-    if (!plans.length) nx = { p: nextMyPlan(), k: 0, noWd: true };   // старый план без дней недели — просто следующая тренировка
-    for (var k = 0; k < 8 && !nx; k++) {
-      var p = plans.filter(function(x){ return x.wd === (t + k) % 7; })[0];
-      if (!p) continue;
-      if (k === 0 && doneToday) continue;
-      nx = { p: p, k: k };
-    }
-    if (!nx || !nx.p) { $("hHero").style.display = "none"; return; }
-    var when = function(x){ return x.k === 1 ? "завтра" : x.k === 7 ? "через неделю" : WD_IN[(t + x.k) % 7]; };
-    hhPlan = nx.p.id;
-    more.style.display = "";
-    if (nx.k === 0 && !doneToday) {
-      setTag(nx.noWd ? "Следующая тренировка" : "Тренировка сегодня");
-      $("hhWhen").textContent = time && !nx.noWd ? "в " + time : "";
-      $("hhName").textContent = dayName(nx.p);
-      $("hhNote").textContent = info(nx.p) + " · " + (camMode ? "с ИИ-тренером" : "без камеры");
-      go.textContent = "▶ Начать тренировку"; go.className = "btn"; hhAct = "start";
-      more.textContent = "Упражнения и режим ›";
-    } else {
-      setTag(doneToday ? "Выполнено ✓" : "День отдыха", doneToday ? "done" : "rest");
-      $("hhWhen").textContent = "";
-      $("hhName").textContent = doneToday ? "Тренировка на сегодня сделана" : "Сегодня отдыхаем";
-      $("hhNote").textContent = "Следующая — " + when(nx) + (time ? " в " + time : "") + ": " + dayName(nx.p) + " · около " + mins(nx.p) + " мин";
-      go.textContent = "Посмотреть план недели"; go.className = "btn ghost"; hhAct = "train";
-      more.style.display = "none";
-    }
-  }
-  $("hhGo").onclick = function(){
-    if (hhAct === "goal") { haptic(); openGoal(); return; }
-    if (hhPlan) { planSel = hhPlan; save("fithub_plan_sel", planSel); renderPlan(); }
-    if (hhAct === "start") { haptic("medium"); startWorkout(camMode); return; }
-    goTab("train");
-  };
-  $("hhMore").onclick = function(){
-    if (hhPlan) { planSel = hhPlan; save("fithub_plan_sel", planSel); renderPlan(); }
-    goTab("train");
-  };
-
-  // карточка «Питание сегодня»: калории из нормы и БЖУ, фото еды в один шаг
-  function renderHomeFood(){
-    if (typeof food === "undefined" || !food || typeof dayFood !== "function") { $("hFood").style.display = "none"; return; }
-    $("hFood").style.display = "";
-    var d = dayFood(), t = d.t, G = goals();
-    $("hfKcal").textContent = G ? Math.round(t.k) + " из " + G.k + " ккал" : Math.round(t.k) + " ккал";
-    $("hfBarW").style.display = G ? "" : "none";
-    $("hfBarW").classList.toggle("over", !!G && t.k > G.k + 30);
-    $("hfBar").style.width = G ? Math.min(100, t.k / G.k * 100).toFixed(1) + "%" : "0";
-    $("hfMac").innerHTML = [["Белки", "p"], ["Жиры", "f"], ["Углеводы", "c"]].map(function(m){
-      return '<div><b>' + Math.round(t[m[1]]) + (G ? '<small style="color:var(--hint);font-weight:600">/' + G[m[1]] + '</small>' : '') + '</b>' + m[0] + (G ? '' : ', г') + '</div>';
-    }).join("");
-    $("hfOpen").textContent = d.list.length ? "Дневник · " + d.list.length : "Дневник";
-  }
-  $("hfPhoto").onclick = function(){ goTab("food"); try { $("camIn").click(); } catch(e){} };
-  $("hfOpen").onclick = function(){ goTab("food"); try { $("balCard").scrollIntoView({ block: "start" }); } catch(e){} };
 
   function goTab(name){ haptic(); showTab(name); }
   $("homeTasks").onclick = function(e){
@@ -1986,6 +1912,19 @@ button{font-size:14px}
     refreshAll();
   };
   $("qCal").onclick = function(){ goTab("cal"); };
+  // быстрое добавление задачи на сегодня (повторяющиеся — в календаре)
+  function homeQuickAdd(){
+    var text = $("hqText").value.trim();
+    if (!text) { $("hqText").focus(); return; }
+    var key = localDay(new Date());
+    (dayTasks[key] = dayTasks[key] || []).push({ id: uid(), text: text, time: $("hqTime").value || "" });
+    save("fithub_daytasks", dayTasks);
+    $("hqText").value = ""; $("hqTime").value = "";
+    notify("success");
+    refreshAll();
+  }
+  $("hqAdd").onclick = homeQuickAdd;
+  $("hqText").onkeydown = function(e){ if (e.key === "Enter") { e.preventDefault(); homeQuickAdd(); $("hqText").blur(); } };
   $("qSupp").onclick = function(){ haptic(); openSupp(); };
 
   // === ПИТАНИЕ ===
@@ -2315,7 +2254,6 @@ button{font-size:14px}
   };
 
   function renderFood(){
-    renderHomeFood();
     var d = dayFood(), t = d.t;
     renderMacros(d);
     fillMacroInputs();
@@ -4593,7 +4531,7 @@ button{font-size:14px}
     document.body.style.overflow = "";
     try { tg.BackButton.offClick(closeGoal); tg.BackButton.hide(); } catch(e){}
   }
-  $("qGoal").onclick = function(){ haptic(); openGoal(); };
+
   $("goalClose").onclick = function(){ haptic(); closeGoal(); };
   $("goalBg").onclick = closeGoal;
   document.addEventListener("keydown", function(e){ if (e.key === "Escape" && goalOpen) closeGoal(); });
