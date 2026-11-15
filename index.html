@@ -150,6 +150,10 @@ nav button.on{color:var(--accent);font-weight:700}
 .tq-hl{animation:tqhl .8s ease-in-out 2}@keyframes tqhl{50%{box-shadow:0 0 0 4px rgba(90,160,255,.55)}}
 .chip{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 14px;min-height:36px;font-size:14px;cursor:pointer;font-family:inherit}
 .taskrow{display:grid;grid-template-columns:116px 1fr;gap:10px}
+.trange{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.trange label{margin:0;font-size:13px;color:var(--hint)}
+.trange label small{font-size:12px;opacity:.8}
+.trange input{margin-top:4px;width:100%;min-width:0}
 .chk{display:flex;align-items:center;gap:10px;color:var(--text);font-size:14px;margin:12px 0 0}
 .chk input{width:20px;height:20px;accent-color:var(--accent);padding:0}
 .remsec{border-top:1px solid var(--line);margin-top:12px;padding-top:2px}
@@ -712,8 +716,10 @@ button{font-size:14px}
 .vitem .vh{display:flex;align-items:center;gap:8px}
 .vitem .vh input{flex:1;min-width:0;padding:9px 10px;font-size:16px;font-weight:600}
 .vitem .vx{width:36px;height:36px;border:0;background:none;color:var(--hint);font-size:18px;cursor:pointer;flex:none}
-.vitem .vm{display:grid;grid-template-columns:1fr 112px;gap:8px;margin-top:8px}
-.vitem .vm input{min-width:0;padding:9px 8px;font-size:15px}
+.vitem .vdt{width:100%;margin-top:8px;padding:9px 10px;font-size:15px}
+.vitem .vm{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.vitem .vm label{margin:0;font-size:12px;color:var(--hint)}
+.vitem .vm input{width:100%;min-width:0;padding:9px 8px;font-size:15px;margin-top:3px}
 .vitem .vd{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13px;color:var(--hint)}
 .vitem .vd .chip{min-height:32px;padding:5px 12px;font-size:13px}
 .vitem .vd .chip.on{background:var(--grad);color:#fff;border-color:transparent}
@@ -834,9 +840,10 @@ button{font-size:14px}
 
     <label>Новая задача</label>
     <div class="chips" id="quick"></div>
-    <div class="taskrow">
-      <input id="tTime" type="time" aria-label="Время">
-      <input id="tText" type="text" maxlength="80" placeholder="Например, Тренировка">
+    <input id="tText" type="text" maxlength="80" placeholder="Что сделать? Например, Тренировка" aria-label="Задача">
+    <div class="trange">
+      <label>Начало<input id="tTime" type="time" aria-label="Время начала"></label>
+      <label>Конец <small>если нужно</small><input id="tEnd" type="time" aria-label="Время окончания"></label>
     </div>
     <input id="tPlace" type="text" maxlength="100" placeholder="📍 Место или адрес — если нужно" style="margin-top:10px" aria-label="Место или адрес">
     <label class="chk"><input type="checkbox" id="tDaily"> Повторять каждый день</label>
@@ -1641,8 +1648,8 @@ button{font-size:14px}
 
   // === ЗАДАЧИ ДНЯ ===
   function tasksFor(key){
-    var list = routine.map(function(r){ return { id:r.id, text:r.text, time:r.time, place:r.place || "", daily:true }; });
-    (dayTasks[key] || []).forEach(function(t){ list.push({ id:t.id, text:t.text, time:t.time, place:t.place || "", daily:false }); });
+    var list = routine.map(function(r){ return { id:r.id, text:r.text, time:r.time, end:r.end || "", place:r.place || "", daily:true }; });
+    (dayTasks[key] || []).forEach(function(t){ list.push({ id:t.id, text:t.text, time:t.time, end:t.end || "", place:t.place || "", daily:false }); });
     list.sort(function(a,b){ var x = a.time || "99:99", y = b.time || "99:99"; return x < y ? -1 : x > y ? 1 : 0; });
     return list;
   }
@@ -1653,6 +1660,8 @@ button{font-size:14px}
     try { if (tg && tg.openLink) { tg.openLink(u); return; } } catch(e){}
     window.open(u, "_blank");
   }
+  // «18:00» или «18:00–20:00»
+  function tRange(t){ return t.time ? t.time + (t.end && t.end > t.time ? "–" + t.end : "") : ""; }
   function placeHtml(p){ return p ? '<span class="tplace" data-map="' + esc(p) + '">📍 ' + esc(p) + '</span>' : ''; }
   function dayStats(key){
     var list = tasksFor(key), d = done[key] || {}, n = 0;
@@ -1874,7 +1883,7 @@ button{font-size:14px}
     $("dayList").innerHTML = list.map(function(t){
       return '<div class="task' + (d[t.id] ? " done" : "") + '">' +
         '<button class="ck" data-act="toggle" data-id="' + t.id + '" aria-label="Отметить">✓</button>' +
-        '<div class="tt">' + (t.time ? '<span class="tm">' + esc(t.time) + '</span>' : '') + esc(t.text) + placeHtml(t.place) + (t.daily ? '<small>каждый день</small>' : '') + '</div>' +
+        '<div class="tt">' + (t.time ? '<span class="tm">' + esc(tRange(t)) + '</span>' : '') + esc(t.text) + placeHtml(t.place) + (t.daily ? '<small>каждый день</small>' : '') + '</div>' +
         '<button class="x" data-act="del" data-id="' + t.id + '" data-daily="' + (t.daily ? 1 : 0) + '" aria-label="Удалить">✕</button>' +
         '</div>';
     }).join("");
@@ -1937,7 +1946,11 @@ button{font-size:14px}
     var text = $("tText").value.trim();
     var time = $("tTime").value;
     if (!text) { notify("error"); alert("Введите название задачи"); return; }
+    var end = $("tEnd").value;
+    if (end && !time) { notify("error"); alert("Укажите время начала — конец без начала не сохранить"); return; }
+    if (end && end <= time) { notify("error"); alert("Конец должен быть позже начала"); return; }
     var item = { id: uid(), text: text, time: time || "" };
+    if (end) item.end = end;
     var place = $("tPlace").value.replace(/\s+/g, " ").trim().slice(0, 100);
     if (place) item.place = place;
     if ($("tDaily").checked) {
@@ -1947,7 +1960,7 @@ button{font-size:14px}
       (dayTasks[sel] = dayTasks[sel] || []).push(item);
       save("fithub_daytasks", dayTasks);
     }
-    $("tText").value = ""; $("tTime").value = ""; $("tPlace").value = ""; $("tDaily").checked = false;
+    $("tText").value = ""; $("tTime").value = ""; $("tEnd").value = ""; $("tPlace").value = ""; $("tDaily").checked = false;
     notify("success");
     refreshAll();
   };
@@ -2044,7 +2057,7 @@ button{font-size:14px}
         track("voice_error", { stage: "server", err: j.error || j._st });
         return;
       }
-      vItems = (j.tasks || []).map(function(t){ return { text: t.text, date: t.date, time: t.time || "", place: t.place || "", daily: !!t.daily }; });
+      vItems = (j.tasks || []).map(function(t){ return { text: t.text, date: t.date, time: t.time || "", end: t.end || "", place: t.place || "", daily: !!t.daily }; });
       $("vSaid").innerHTML = "Вы сказали: <b>«" + esc(j.text) + "»</b>";
       vRender(); vShow("vRes");
       try { $("vCard").scrollIntoView({ behavior: "smooth", block: "start" }); } catch(e){}
@@ -2057,19 +2070,20 @@ button{font-size:14px}
     });
   }
   function vWhen(t){
-    if (t.daily) return "Каждый день" + (t.time ? " · " + t.time : "");
+    if (t.daily) return "Каждый день" + (t.time ? " · " + tRange(t) : "");
     var today = localDay(new Date()), p = t.date.split("-"), d = new Date(+p[0], +p[1] - 1, +p[2]);
     var tm = new Date(); tm.setDate(tm.getDate() + 1);
     var w = t.date === today ? "Сегодня" : t.date === localDay(tm) ? "Завтра" : WD_S[d.getDay()].charAt(0).toUpperCase() + WD_S[d.getDay()].slice(1);
-    return w + ", " + d.getDate() + " " + MON_G[d.getMonth()] + (t.time ? " · " + t.time : "");
+    return w + ", " + d.getDate() + " " + MON_G[d.getMonth()] + (t.time ? " · " + tRange(t) : "");
   }
   function vRender(){
     $("vList").innerHTML = vItems.map(function(t, i){
       return '<div class="vitem" data-i="' + i + '">' +
         '<div class="vh"><input data-f="text" maxlength="80" value="' + esc(t.text) + '" aria-label="Задача"><button class="vx" data-a="del" type="button" aria-label="Убрать">✕</button></div>' +
         '<div class="vwhen">' + esc(vWhen(t)) + '</div>' +
-        '<div class="vm">' + (t.daily ? '<span></span>' : '<input type="date" data-f="date" value="' + esc(t.date) + '" min="' + localDay(new Date()) + '" aria-label="Дата">') +
-        '<input type="time" data-f="time" value="' + esc(t.time) + '" aria-label="Время"></div>' +
+        (t.daily ? '' : '<input class="vdt" type="date" data-f="date" value="' + esc(t.date) + '" min="' + localDay(new Date()) + '" aria-label="Дата">') +
+        '<div class="vm"><label>Начало<input type="time" data-f="time" value="' + esc(t.time) + '" aria-label="Время начала"></label>' +
+        '<label>Конец<input type="time" data-f="end" value="' + esc(t.end || "") + '" aria-label="Время окончания"></label></div>' +
         '<input class="vpl" data-f="place" maxlength="100" value="' + esc(t.place || "") + '" placeholder="📍 Место или адрес — если нужно" aria-label="Место или адрес">' +
         '<div class="vd"><button type="button" class="chip' + (t.daily ? " on" : "") + '" data-a="daily">Каждый день</button></div>' +
         '</div>';
@@ -2101,6 +2115,7 @@ button{font-size:14px}
       var text = String(t.text || "").trim().slice(0, 80);
       if (!text) return;
       var item = { id: uid(), text: text, time: /^\d{2}:\d{2}$/.test(t.time) ? t.time : "" };
+      if (item.time && /^\d{2}:\d{2}$/.test(t.end || "") && t.end > item.time) item.end = t.end;
       var place = String(t.place || "").replace(/\s+/g, " ").trim().slice(0, 100);
       if (place) item.place = place;
       if (t.daily) routine.push(item);
@@ -2150,8 +2165,10 @@ button{font-size:14px}
     $("homePct").textContent = pct + "%";
     $("homeRing").classList.toggle("full", !!st.total && st.done === st.total);
     var open = list.filter(function(t){ return !d[t.id]; });
-    var late = open.filter(function(t){ return t.time && t.time < hm; });
-    var next = open.filter(function(t){ return t.time && t.time >= hm; })[0] || (late.length ? null : open[0]) || null;
+    var isNowT = function(t){ return t.time && t.end && t.time <= hm && hm < t.end; };
+    var isLateT = function(t){ return t.time && (t.end && t.end > t.time ? t.end <= hm : t.time < hm); };
+    var late = open.filter(isLateT);
+    var next = open.filter(isNowT)[0] || open.filter(function(t){ return t.time && t.time >= hm; })[0] || (late.length ? null : open[0]) || null;
     var left = open.length + " " + plural(open.length, ["задача", "задачи", "задач"]);
     $("homeTxt").innerHTML = !st.total ? "Распорядок пока пуст" :
       !open.length ? "Всё выполнено — отличный день! 🎉" :
@@ -2168,10 +2185,10 @@ button{font-size:14px}
         '<button class="btn ghost" type="button" data-go="cal">Открыть календарь</button></div>';
     } else {
       $("homeTasks").innerHTML = list.map(function(t){
-        var isLate = !d[t.id] && t.time && t.time < hm, isNext = next && t.id === next.id, sp = split(t.text);
+        var isLate = !d[t.id] && isLateT(t), isNext = next && t.id === next.id, isNow = !d[t.id] && isNowT(t), sp = split(t.text);
         var meta = [];
-        if (t.time) meta.push(t.time);
-        if (isNext) meta.push("далее"); else if (isLate) meta.push("время прошло"); else if (d[t.id]) meta.push("выполнено");
+        if (t.time) meta.push(tRange(t));
+        if (isNow) meta.push("идёт сейчас"); else if (isNext) meta.push("далее"); else if (isLate) meta.push("время прошло"); else if (d[t.id]) meta.push("выполнено");
         else if (t.daily) meta.push("каждый день");
         return '<button type="button" class="trow' + (d[t.id] ? " done" : "") + (isLate ? " late" : "") + (isNext ? " next" : "") +
           '" data-id="' + t.id + '" aria-pressed="' + !!d[t.id] + '">' +
@@ -5427,7 +5444,7 @@ button{font-size:14px}
     if (!list.length) return "На сегодня задач нет. Добавьте их в календаре: на главной кнопка «Календарь».";
     var left = list.filter(function(t){ return !d[t.id]; });
     var s = "Выполнено " + (list.length - left.length) + " из " + list.length + ".";
-    if (left.length) s += "\nОсталось:\n" + left.slice(0, 6).map(function(t){ return "• " + (t.time ? t.time + " " : "") + t.text + (t.place ? " (📍 " + t.place + ")" : ""); }).join("\n");
+    if (left.length) s += "\nОсталось:\n" + left.slice(0, 6).map(function(t){ return "• " + (t.time ? tRange(t) + " " : "") + t.text + (t.place ? " (📍 " + t.place + ")" : ""); }).join("\n");
     else s += " Всё сделано, отлично!";
     return s;
   }
