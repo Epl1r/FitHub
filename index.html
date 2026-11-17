@@ -150,6 +150,9 @@ nav button.on{color:var(--accent);font-weight:700}
 .tq-hl{animation:tqhl .8s ease-in-out 2}@keyframes tqhl{50%{box-shadow:0 0 0 4px rgba(90,160,255,.55)}}
 .chip{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 14px;min-height:36px;font-size:14px;cursor:pointer;font-family:inherit}
 .taskrow{display:grid;grid-template-columns:116px 1fr;gap:10px}
+#tRepBox[hidden]{display:none}
+#tWds,.vitem .vwds{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+#tWds .chip,.vitem .vwds .chip{min-width:0;padding:8px 0;text-align:center;justify-content:center;margin:0}
 .trange{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .trange label{margin:0;font-size:13px;color:var(--hint)}
 .trange label small{font-size:12px;opacity:.8}
@@ -753,6 +756,16 @@ button{font-size:14px}
 .vitem .vpl{width:100%;margin-top:8px;padding:9px 10px;font-size:15px}
 .tplace{display:block;font-size:13px;color:var(--accent);margin-top:3px;cursor:pointer;word-break:break-word}
 .task.done .tplace{color:var(--hint)}
+.vrm{display:flex;align-items:center;gap:10px;margin:8px 0 0;padding:10px 12px;border-radius:14px;border:1px solid rgba(245,158,11,.45);background:rgba(245,158,11,.08);color:var(--text);cursor:pointer}
+.vrm.off{opacity:.5}
+.vrm input{width:20px;height:20px;flex:none;margin:0;accent-color:#f59e0b}
+.vrm .vri{font-size:18px;flex:none}
+.vrm b{display:block;font-size:15px}.vrm small{display:block;font-size:13px;color:var(--hint);margin-top:2px}
+.vitem .vrep{margin-top:8px}
+.vitem .vrep button{font-size:13px;padding:8px 4px}
+.vitem .vwds{margin-top:8px}
+.vitem .vun{display:block;margin:8px 0 0;font-size:12px;color:var(--hint)}
+.vitem .vun input{display:block;width:100%;margin-top:3px;padding:9px 10px;font-size:15px}
 .vitem .vwhen{font-size:13px;color:var(--accent);font-weight:700;margin-top:6px}
 .vlink{display:block;width:100%;background:none;border:0;color:var(--hint);font-family:inherit;font-size:14px;padding:12px 0 2px;cursor:pointer}
 .vmsg{margin-top:10px;font-size:14px;line-height:1.45;border-radius:12px;padding:10px 12px;background:var(--bg)}
@@ -833,8 +846,8 @@ button{font-size:14px}
   <h2>Календарь</h2>
   <div class="card vcard" id="vCard">
     <div id="vIdle">
-      <button class="vbtn" id="vBtn" type="button"><span class="vmic">🎙</span><span class="vt"><b>Надиктовать планы</b><small>Скажите, что и когда — я сам разложу по дням и времени</small></span></button>
-      <div class="vex">Например: «Завтра в 7 вечера тренировка ног в зале на Ленина 5, в пятницу купить протеин, каждый день пить 2 литра воды»</div>
+      <button class="vbtn" id="vBtn" type="button"><span class="vmic">🎙</span><span class="vt"><b>Надиктовать планы</b><small>Скажите, что добавить, убрать или перенести — я сам разложу по дням</small></span></button>
+      <div class="vex">Например: «Волейбол в 19:00 каждый вторник и четверг», «Завтра в 7 вечера тренировка ног в зале на Ленина 5», «Убери воду из плана»</div>
     </div>
     <div id="vRecBox" hidden>
       <div class="vrec"><span class="vdot"></span><b id="vTimer">0:00</b><span class="vlv" id="vLevel"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><small>до 0:25</small></div>
@@ -878,7 +891,17 @@ button{font-size:14px}
       <label>Конец <small>если нужно</small><input id="tEnd" type="time" aria-label="Время окончания"></label>
     </div>
     <input id="tPlace" type="text" maxlength="100" placeholder="📍 Место или адрес — если нужно" style="margin-top:10px" aria-label="Место или адрес">
-    <label class="chk"><input type="checkbox" id="tDaily"> Повторять каждый день</label>
+    <label>Повтор</label>
+    <div class="seg" id="tRep" role="radiogroup" aria-label="Повтор">
+      <button type="button" data-r="once" role="radio" class="on">Один раз</button>
+      <button type="button" data-r="daily" role="radio">Каждый день</button>
+      <button type="button" data-r="weekly" role="radio">По дням</button>
+    </div>
+    <div id="tRepBox" hidden>
+      <div class="chips wdrow" id="tWds" style="margin-top:10px"></div>
+      <label style="margin-top:8px">Повторять до</label>
+      <input id="tUntil" type="date" aria-label="Повторять до">
+    </div>
     <button class="btn" id="taskAdd">Добавить в распорядок</button>
   </div>
 </section>
@@ -1691,8 +1714,21 @@ button{font-size:14px}
   });
 
   // === ЗАДАЧИ ДНЯ ===
+  // повторяющиеся задачи (routine): каждый день или по дням недели (wds), с/до (from/until), пропуски отдельных дней (skip)
+  var WD_ORDER = [1, 2, 3, 4, 5, 6, 0];
+  var WD_LOW = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
+  var MON_GEN = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+  function dateText(key){ var p = key.split("-"); return +p[2] + " " + MON_GEN[+p[1] - 1]; }
+  function repLabel(r){
+    var w = r.wds && r.wds.length ? "по " + WD_ORDER.filter(function(d){ return r.wds.indexOf(d) >= 0; }).map(function(d){ return WD_LOW[d]; }).join(", ") : "каждый день";
+    return w + (r.until ? " до " + dateText(r.until) : "");
+  }
+  function repOn(r, key){
+    var p = key.split("-"), wd = new Date(+p[0], +p[1] - 1, +p[2]).getDay();
+    return (!r.wds || !r.wds.length || r.wds.indexOf(wd) >= 0) && (!r.from || key >= r.from) && (!r.until || key <= r.until) && !(r.skip && r.skip.indexOf(key) >= 0);
+  }
   function tasksFor(key){
-    var list = routine.map(function(r){ return { id:r.id, text:r.text, time:r.time, end:r.end || "", place:r.place || "", daily:true }; });
+    var list = routine.filter(function(r){ return repOn(r, key); }).map(function(r){ return { id:r.id, text:r.text, time:r.time, end:r.end || "", place:r.place || "", daily:true, rep: repLabel(r) }; });
     (dayTasks[key] || []).forEach(function(t){ list.push({ id:t.id, text:t.text, time:t.time, end:t.end || "", place:t.place || "", daily:false }); });
     list.sort(function(a,b){ var x = a.time || "99:99", y = b.time || "99:99"; return x < y ? -1 : x > y ? 1 : 0; });
     return list;
@@ -1927,7 +1963,7 @@ button{font-size:14px}
     $("dayList").innerHTML = list.map(function(t){
       return '<div class="task' + (d[t.id] ? " done" : "") + '">' +
         '<button class="ck" data-act="toggle" data-id="' + t.id + '" aria-label="Отметить">✓</button>' +
-        '<div class="tt">' + (t.time ? '<span class="tm">' + esc(tRange(t)) + '</span>' : '') + esc(t.text) + placeHtml(t.place) + (t.daily ? '<small>каждый день</small>' : '') + '</div>' +
+        '<div class="tt">' + (t.time ? '<span class="tm">' + esc(tRange(t)) + '</span>' : '') + esc(t.text) + placeHtml(t.place) + (t.daily ? '<small>' + esc(t.rep || "каждый день") + '</small>' : '') + '</div>' +
         '<button class="x" data-act="del" data-id="' + t.id + '" data-daily="' + (t.daily ? 1 : 0) + '" aria-label="Удалить">✕</button>' +
         '</div>';
     }).join("");
@@ -1960,10 +1996,17 @@ button{font-size:14px}
       save("fithub_done", done);
       refreshAll();
     } else if (b.dataset.act === "del") {
-      var daily = b.dataset.daily === "1";
-      if (daily && !confirm("Удалить задачу из распорядка на все дни?")) return;
+      var daily = b.dataset.daily === "1", onlyDay = false;
+      if (daily && !confirm("Удалить повторяющуюся задачу на все дни?")) {
+        if (!confirm("Убрать её только в этот день?")) return;
+        onlyDay = true;
+      }
       haptic();
-      if (daily) {
+      if (onlyDay) {
+        routine.forEach(function(r){ if (r.id === id) { r.skip = (r.skip || []).filter(function(k){ return k >= localDay(new Date()); }); if (r.skip.indexOf(sel) < 0) r.skip.push(sel); } });
+        save("fithub_routine", routine);
+        if (done[sel]) delete done[sel][id];
+      } else if (daily) {
         routine = routine.filter(function(r){ return r.id !== id; });
         save("fithub_routine", routine);
         Object.keys(done).forEach(function(k){ if (done[k]) delete done[k][id]; });
@@ -1986,6 +2029,28 @@ button{font-size:14px}
     $("quick").appendChild(c);
   });
 
+  // повтор в форме: один раз / каждый день / по дням недели (по умолчанию — день выбранной даты, на полгода)
+  var tRep = "once", tWds = [];
+  function tRepSet(r){
+    tRep = r;
+    [].forEach.call($("tRep").children, function(b){ b.classList.toggle("on", b.dataset.r === r); b.setAttribute("aria-checked", b.dataset.r === r); });
+    $("tRepBox").hidden = r !== "weekly";
+    if (r === "weekly") {
+      if (!tWds.length) { var p = sel.split("-"); tWds = [new Date(+p[0], +p[1] - 1, +p[2]).getDay()]; }
+      if (!$("tUntil").value) { var d = new Date(); d.setDate(d.getDate() + 182); $("tUntil").value = localDay(d); }
+      tWdsRender();
+    } else { tWds = []; $("tUntil").value = ""; }
+  }
+  function tWdsRender(){
+    $("tWds").innerHTML = WD_ORDER.map(function(d){ return '<button type="button" class="chip' + (tWds.indexOf(d) >= 0 ? " on" : "") + '" data-w="' + d + '">' + WD_LOW[d].charAt(0).toUpperCase() + WD_LOW[d].slice(1) + '</button>'; }).join("");
+  }
+  $("tRep").onclick = function(e){ var b = e.target.closest ? e.target.closest("[data-r]") : null; if (!b) return; haptic(); tRepSet(b.dataset.r); };
+  $("tWds").onclick = function(e){
+    var b = e.target.closest ? e.target.closest("[data-w]") : null; if (!b) return;
+    haptic(); var d = +b.dataset.w, i = tWds.indexOf(d);
+    if (i >= 0) tWds.splice(i, 1); else tWds.push(d);
+    tWdsRender();
+  };
   $("taskAdd").onclick = function(){
     var text = $("tText").value.trim();
     var time = $("tTime").value;
@@ -1997,14 +2062,20 @@ button{font-size:14px}
     if (end) item.end = end;
     var place = $("tPlace").value.replace(/\s+/g, " ").trim().slice(0, 100);
     if (place) item.place = place;
-    if ($("tDaily").checked) {
+    if (tRep === "weekly") {
+      if (!tWds.length) { notify("error"); alert("Выберите дни недели"); return; }
+      item.wds = tWds.slice(); item.from = sel < localDay(new Date()) ? localDay(new Date()) : sel;
+      var un = $("tUntil").value; if (un && un >= item.from) item.until = un;
+      routine.push(item);
+      save("fithub_routine", routine);
+    } else if (tRep === "daily") {
       routine.push(item);
       save("fithub_routine", routine);
     } else {
       (dayTasks[sel] = dayTasks[sel] || []).push(item);
       save("fithub_daytasks", dayTasks);
     }
-    $("tText").value = ""; $("tTime").value = ""; $("tEnd").value = ""; $("tPlace").value = ""; $("tDaily").checked = false;
+    $("tText").value = ""; $("tTime").value = ""; $("tEnd").value = ""; $("tPlace").value = ""; tRepSet("once");
     notify("success");
     refreshAll();
   };
@@ -2087,7 +2158,7 @@ button{font-size:14px}
     try { initData = (tg && tg.initData) || ""; } catch(e){}
     var ctrl = window.AbortController ? new AbortController() : null, to = setTimeout(function(){ if (ctrl) ctrl.abort(); }, 40000);
     fetch(AI_ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, signal: ctrl ? ctrl.signal : undefined,
-      body: JSON.stringify({ action: "voice", audio: b64, today: localDay(now), now: ("0" + now.getHours()).slice(-2) + ":" + ("0" + now.getMinutes()).slice(-2), initData: initData }) })
+      body: JSON.stringify({ action: "voice", audio: b64, today: localDay(now), now: ("0" + now.getHours()).slice(-2) + ":" + ("0" + now.getMinutes()).slice(-2), existing: vExisting(), initData: initData }) })
     .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ j._st = r.status; return j; }); })
     .then(function(j){
       clearTimeout(to);
@@ -2101,7 +2172,11 @@ button{font-size:14px}
         track("voice_error", { stage: "server", err: j.error || j._st });
         return;
       }
-      vItems = (j.tasks || []).map(function(t){ return { text: t.text, date: t.date, time: t.time || "", end: t.end || "", place: t.place || "", daily: !!t.daily }; });
+      vItems = (j.tasks || []).map(function(t){
+        var r = t.repeat === "weekly" && t.days && t.days.length ? "weekly" : (t.repeat === "daily" || t.daily) ? "daily" : "once";
+        return { text: t.text, date: t.date, time: t.time || "", end: t.end || "", place: t.place || "", repeat: r, days: r === "weekly" ? t.days.slice() : [], until: t.until || "" };
+      });
+      vRemoves = (j.remove || []).map(function(x){ var f = vFind(x.id); return f ? { id: x.id, date: x.date || "", on: true, f: f } : null; }).filter(Boolean);
       $("vSaid").innerHTML = "Вы сказали: <b>«" + esc(j.text) + "»</b>";
       vRender(); vShow("vRes");
       try { $("vCard").scrollIntoView({ behavior: "smooth", block: "start" }); } catch(e){}
@@ -2113,28 +2188,64 @@ button{font-size:14px}
       track("voice_error", { stage: "net" });
     });
   }
+  // текущие задачи для сервера — чтобы понимать «убери воду», «перенеси тренировку»
+  var vRemoves = [];
+  function vExisting(){
+    var out = [], today = localDay(new Date()), lim = new Date(); lim.setDate(lim.getDate() + 60);
+    var last = localDay(lim);
+    routine.forEach(function(r){ if (!r.until || r.until >= today) out.push({ id: r.id, text: r.text, time: r.time || "", when: repLabel(r) }); });
+    Object.keys(dayTasks).filter(function(k){ return k >= today && k <= last; }).sort().forEach(function(k){
+      (dayTasks[k] || []).forEach(function(t){ out.push({ id: t.id, text: t.text, time: t.time || "", when: k }); });
+    });
+    return out.slice(0, 80);
+  }
+  function vFind(id){
+    for (var i = 0; i < routine.length; i++) if (routine[i].id === id) return { r: routine[i] };
+    var ks = Object.keys(dayTasks);
+    for (var k = 0; k < ks.length; k++) { var l = dayTasks[ks[k]] || []; for (var j = 0; j < l.length; j++) if (l[j].id === id) return { t: l[j], key: ks[k] }; }
+    return null;
+  }
   function vWhen(t){
-    if (t.daily) return "Каждый день" + (t.time ? " · " + tRange(t) : "");
+    var tt = t.time ? " · " + tRange(t) : "";
+    if (t.repeat === "daily") return "Каждый день" + tt + (t.until ? " · до " + dateText(t.until) : "");
+    if (t.repeat === "weekly") { var l = repLabel({ wds: t.days, until: t.until }); return l.charAt(0).toUpperCase() + l.slice(1) + tt; }
     var today = localDay(new Date()), p = t.date.split("-"), d = new Date(+p[0], +p[1] - 1, +p[2]);
     var tm = new Date(); tm.setDate(tm.getDate() + 1);
     var w = t.date === today ? "Сегодня" : t.date === localDay(tm) ? "Завтра" : WD_S[d.getDay()].charAt(0).toUpperCase() + WD_S[d.getDay()].slice(1);
-    return w + ", " + d.getDate() + " " + MON_G[d.getMonth()] + (t.time ? " · " + tRange(t) : "");
+    return w + ", " + d.getDate() + " " + MON_G[d.getMonth()] + tt;
+  }
+  function vCount(){
+    var a = vItems.filter(function(t){ return t.text.trim() && (t.repeat !== "weekly" || t.days.length); }).length, r = vRemoves.filter(function(x){ return x.on; }).length;
+    return { a: a, r: r };
+  }
+  function vSaveLabel(){
+    var c = vCount();
+    $("vSave").textContent = c.a && c.r ? "Сохранить: +" + c.a + ", −" + c.r : c.r ? "Убрать " + c.r + " " + plural(c.r, ["задачу", "задачи", "задач"]) :
+      c.a ? "Добавить " + c.a + " " + plural(c.a, ["задачу", "задачи", "задач"]) : "Добавить";
+    $("vSave").disabled = !c.a && !c.r;
   }
   function vRender(){
-    $("vList").innerHTML = vItems.map(function(t, i){
+    var rm = vRemoves.map(function(x, i){
+      var name = x.f.r ? x.f.r.text : x.f.t.text, how = x.f.r ? (x.date ? "только " + dateText(x.date) : "насовсем · " + repLabel(x.f.r)) : dateText(x.f.key) + (x.f.t.time ? " · " + x.f.t.time : "");
+      return '<label class="vrm' + (x.on ? "" : " off") + '"><input type="checkbox" data-rm="' + i + '"' + (x.on ? " checked" : "") + '><span class="vri">🗑</span><span><b>Убрать: ' + esc(name) + '</b><small>' + esc(how) + '</small></span></label>';
+    }).join("");
+    var add = vItems.map(function(t, i){
+      var wk = t.repeat === "weekly";
       return '<div class="vitem" data-i="' + i + '">' +
         '<div class="vh"><input data-f="text" maxlength="80" value="' + esc(t.text) + '" aria-label="Задача"><button class="vx" data-a="del" type="button" aria-label="Убрать">✕</button></div>' +
         '<div class="vwhen">' + esc(vWhen(t)) + '</div>' +
-        (t.daily ? '' : '<input class="vdt" type="date" data-f="date" value="' + esc(t.date) + '" min="' + localDay(new Date()) + '" aria-label="Дата">') +
+        '<div class="seg vrep">' + [["once", "Один раз"], ["daily", "Каждый день"], ["weekly", "По дням"]].map(function(o){
+          return '<button type="button" data-a="rep" data-r="' + o[0] + '" class="' + (t.repeat === o[0] ? "on" : "") + '">' + o[1] + '</button>'; }).join("") + '</div>' +
+        (wk ? '<div class="chips wdrow vwds">' + WD_ORDER.map(function(d){ return '<button type="button" class="chip' + (t.days.indexOf(d) >= 0 ? " on" : "") + '" data-a="wd" data-w="' + d + '">' + WD_LOW[d].charAt(0).toUpperCase() + WD_LOW[d].slice(1) + '</button>'; }).join("") + '</div>' : '') +
+        (t.repeat === "once" ? '<input class="vdt" type="date" data-f="date" value="' + esc(t.date) + '" min="' + localDay(new Date()) + '" aria-label="Дата">' :
+          wk ? '<label class="vun">Повторять до<input type="date" data-f="until" value="' + esc(t.until) + '" min="' + localDay(new Date()) + '" aria-label="Повторять до"></label>' : '') +
         '<div class="vm"><label>Начало<input type="time" data-f="time" value="' + esc(t.time) + '" aria-label="Время начала"></label>' +
         '<label>Конец<input type="time" data-f="end" value="' + esc(t.end || "") + '" aria-label="Время окончания"></label></div>' +
         '<input class="vpl" data-f="place" maxlength="100" value="' + esc(t.place || "") + '" placeholder="📍 Место или адрес — если нужно" aria-label="Место или адрес">' +
-        '<div class="vd"><button type="button" class="chip' + (t.daily ? " on" : "") + '" data-a="daily">Каждый день</button></div>' +
         '</div>';
-    }).join("") || '<div class="empty">Задач не осталось — надиктуйте ещё раз.</div>';
-    var n = vItems.filter(function(t){ return t.text.trim(); }).length;
-    $("vSave").textContent = n ? "Добавить " + n + " " + plural(n, ["задачу", "задачи", "задач"]) : "Добавить";
-    $("vSave").disabled = !n;
+    }).join("");
+    $("vList").innerHTML = rm + add || '<div class="empty">Изменений нет — надиктуйте ещё раз.</div>';
+    vSaveLabel();
   }
   $("vList").oninput = function(e){
     var el = e.target, box = el.closest ? el.closest("[data-i]") : null;
@@ -2142,49 +2253,81 @@ button{font-size:14px}
     var t = vItems[+box.dataset.i];
     t[el.dataset.f] = el.value;
     if (el.dataset.f !== "text") box.querySelector(".vwhen").textContent = vWhen(t);
-    else { var n = vItems.filter(function(x){ return x.text.trim(); }).length; $("vSave").textContent = n ? "Добавить " + n + " " + plural(n, ["задачу", "задачи", "задач"]) : "Добавить"; $("vSave").disabled = !n; }
+    vSaveLabel();
+  };
+  $("vList").onchange = function(e){
+    var el = e.target;
+    if (el.dataset && el.dataset.rm != null) { vRemoves[+el.dataset.rm].on = el.checked; el.closest(".vrm").classList.toggle("off", !el.checked); haptic(); vSaveLabel(); }
   };
   $("vList").onclick = function(e){
     var b = e.target.closest ? e.target.closest("[data-a]") : null;
     if (!b) return;
-    var i = +b.closest("[data-i]").dataset.i;
+    var t = vItems[+b.closest("[data-i]").dataset.i];
     haptic();
-    if (b.dataset.a === "del") vItems.splice(i, 1);
-    else if (b.dataset.a === "daily") { vItems[i].daily = !vItems[i].daily; if (!vItems[i].date) vItems[i].date = localDay(new Date()); }
+    if (b.dataset.a === "del") vItems.splice(vItems.indexOf(t), 1);
+    else if (b.dataset.a === "rep") {
+      t.repeat = b.dataset.r;
+      if (t.repeat === "weekly") {
+        if (!t.days.length) { var p = (t.date || localDay(new Date())).split("-"); t.days = [new Date(+p[0], +p[1] - 1, +p[2]).getDay()]; }
+        if (!t.until) { var d = new Date(); d.setDate(d.getDate() + 182); t.until = localDay(d); }
+      }
+      if (!t.date) t.date = localDay(new Date());
+    }
+    else if (b.dataset.a === "wd") { var w = +b.dataset.w, i = t.days.indexOf(w); if (i >= 0) t.days.splice(i, 1); else t.days.push(w); }
     vRender();
   };
   $("vSave").onclick = function(){
-    var today = localDay(new Date()), first = null, n = 0;
+    var today = localDay(new Date()), first = null, n = 0, m = 0;
+    // сначала убираем: повторяющуюся — насовсем или только в один день, разовую — совсем
+    vRemoves.forEach(function(x){
+      if (!x.on) return;
+      var f = vFind(x.id); if (!f) return;
+      if (f.r) {
+        if (x.date) { f.r.skip = (f.r.skip || []).filter(function(k){ return k >= today; }); if (f.r.skip.indexOf(x.date) < 0) f.r.skip.push(x.date); if (done[x.date]) delete done[x.date][x.id]; }
+        else { routine = routine.filter(function(r){ return r.id !== x.id; }); Object.keys(done).forEach(function(k){ if (done[k]) delete done[k][x.id]; }); }
+      } else {
+        dayTasks[f.key] = (dayTasks[f.key] || []).filter(function(t){ return t.id !== x.id; });
+        if (!dayTasks[f.key].length) delete dayTasks[f.key];
+        if (done[f.key]) delete done[f.key][x.id];
+      }
+      m++;
+    });
     vItems.forEach(function(t){
       var text = String(t.text || "").trim().slice(0, 80);
-      if (!text) return;
+      if (!text || (t.repeat === "weekly" && !t.days.length)) return;
       var item = { id: uid(), text: text, time: /^\d{2}:\d{2}$/.test(t.time) ? t.time : "" };
       if (item.time && /^\d{2}:\d{2}$/.test(t.end || "") && t.end > item.time) item.end = t.end;
       var place = String(t.place || "").replace(/\s+/g, " ").trim().slice(0, 100);
       if (place) item.place = place;
-      if (t.daily) routine.push(item);
+      var d = /^\d{4}-\d{2}-\d{2}$/.test(t.date) && t.date >= today ? t.date : today;
+      var un = /^\d{4}-\d{2}-\d{2}$/.test(t.until || "") && t.until >= d ? t.until : "";
+      if (t.repeat === "weekly") {
+        item.wds = t.days.slice().sort(); item.from = d; if (un) item.until = un;
+        routine.push(item);
+        // первый день повтора, начиная с d — его и покажем в календаре
+        for (var k = 0; k < 7; k++) { var dd = new Date(+d.slice(0, 4), +d.slice(5, 7) - 1, +d.slice(8, 10) + k), key = localDay(dd); if (item.wds.indexOf(dd.getDay()) >= 0) { if (!first || key < first) first = key; break; } }
+      } else if (t.repeat === "daily") { if (un) item.until = un; routine.push(item); }
       else {
-        var d = /^\d{4}-\d{2}-\d{2}$/.test(t.date) && t.date >= today ? t.date : today;
         (dayTasks[d] = dayTasks[d] || []).push(item);
         if (!first || d < first) first = d;
       }
       n++;
     });
-    if (!n) return;
-    save("fithub_routine", routine); save("fithub_daytasks", dayTasks);
+    if (!n && !m) return;
+    save("fithub_routine", routine); save("fithub_daytasks", dayTasks); save("fithub_done", done);
     sel = first || today;
     var p = sel.split("-"); viewY = +p[0]; viewM = +p[1] - 1;
     notify("success");
-    track("voice_add", { n: n });
-    vItems = []; vShow("vIdle");
-    vMsg("Добавлено: " + n + " " + plural(n, ["задача", "задачи", "задач"]) + ". Открыт день: " + vWhen({ date: sel, time: "" }).toLowerCase() + ".", "ok");
+    track("voice_add", { n: n, rm: m });
+    vItems = []; vRemoves = []; vShow("vIdle");
+    vMsg((n ? "Добавлено: " + n + " " + plural(n, ["задача", "задачи", "задач"]) : "") + (n && m ? ", у" : m ? "У" : "") + (m ? "брано: " + m : "") + ". Открыт день: " + vWhen({ date: sel, time: "", repeat: "once" }).toLowerCase() + ".", "ok");
     refreshAll();
   };
   $("vBtn").onclick = vStart;
   $("vStop").onclick = vFinish;
   $("vCancel").onclick = function(){ haptic(); vCancel(); };
-  $("vAgain").onclick = function(){ vItems = []; vShow("vIdle"); vStart(); };
-  $("vDrop").onclick = function(){ haptic(); vItems = []; vShow("vIdle"); vMsg(""); };
+  $("vAgain").onclick = function(){ vItems = []; vRemoves = []; vShow("vIdle"); vStart(); };
+  $("vDrop").onclick = function(){ haptic(); vItems = []; vRemoves = []; vShow("vIdle"); vMsg(""); };
 
   // === ГЛАВНАЯ ===
   // «Первые шаги»: чек-лист новичка (первые 14 дней), ведёт к главным функциям — по одному нажатию на каждую
@@ -2281,7 +2424,7 @@ button{font-size:14px}
         var meta = [];
         if (t.time) meta.push(tRange(t));
         if (isNow) meta.push("идёт сейчас"); else if (isNext) meta.push("далее"); else if (isLate) meta.push("время прошло"); else if (d[t.id]) meta.push("выполнено");
-        else if (t.daily) meta.push("каждый день");
+        else if (t.daily) meta.push(t.rep || "каждый день");
         return '<button type="button" class="trow' + (d[t.id] ? " done" : "") + (isLate ? " late" : "") + (isNext ? " next" : "") +
           '" data-id="' + t.id + '" aria-pressed="' + !!d[t.id] + '">' +
           '<span class="ti">' + esc(sp[0]) + '</span>' +
