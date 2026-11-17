@@ -177,6 +177,9 @@ nav button.on{color:var(--accent);font-weight:700}
 .onb-seg button.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--card))}
 .onb-row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.onb-row3>div{min-width:0}.onb-row3 input{min-width:0}
 .onb-foot{margin-top:auto;padding-top:18px}
+.onb-try .note{text-align:center;margin:8px 0 2px;line-height:1.4}
+.onb-foot .btn.lnk{background:none;box-shadow:none;color:var(--hint);font-weight:600;margin-top:4px}
+.th-intro{display:block;width:100%;background:none;border:0;color:var(--accent);font-family:inherit;font-size:14px;font-weight:600;padding:12px 0 0;min-height:40px;cursor:pointer;text-align:center}
 .onb-err{color:#ff6b6b;font-size:14px;min-height:18px;margin-top:10px}
 .gday{border-top:1px solid var(--line);padding:10px 0 0;margin-top:10px}
 .gday>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px}
@@ -861,6 +864,7 @@ button{font-size:14px}
     <div class="note" id="thRest" style="display:none"></div>
     <div id="thAct">
       <button class="btn" id="trainStart" type="button">▶ Начать тренировку</button>
+      <button class="th-intro" id="thIntro" type="button" style="display:none"></button>
     </div>
     <div id="thNoPlan" style="display:none">
       <button class="btn" id="thGoal" type="button">Подобрать программу</button>
@@ -1281,7 +1285,13 @@ button{font-size:14px}
     <div class="lead" id="onbLead"></div>
     <div id="onbSum"></div>
     <label class="chk" id="onbRemL"><input type="checkbox" id="onbRem" checked> Бот напомнит о тренировке за 30 минут</label>
-    <div class="onb-foot"><button class="btn" id="onbGo" type="button">Начать</button></div>
+    <div class="onb-foot">
+      <div class="onb-try" id="onbTryBox" style="display:none">
+        <button class="btn" id="onbTry" type="button"></button>
+        <div class="note" id="onbTryNote"></div>
+      </div>
+      <button class="btn" id="onbGo" type="button">Начать</button>
+    </div>
   </div>
 </div>
 
@@ -3384,6 +3394,11 @@ button{font-size:14px}
     return EXERCISES[it.ex].unit === "sec" ? it.reps + " " + plural(it.reps, ["секунде", "секунды", "секунд"]).replace("секунде", "секунду")
       : it.reps + " " + plural(it.reps, ["повторению", "повторения", "повторений"]).replace("повторению", "повторение");
   }
+  // вводная (первая) тренировка: первые 4 упражнения дня, не больше 2 подходов — около 10 минут
+  function introItems(items){
+    return items.slice(0, 4).map(function(it){ return { ex: it.ex, sets: Math.min(it.sets, 2), reps: it.reps, rest: Math.min(it.rest, 60) }; });
+  }
+  function neverTrained(){ return !workouts.length; }
   function planMinutes(items){
     var s = 0;
     items.forEach(function(it, i){
@@ -3436,6 +3451,9 @@ button{font-size:14px}
     var rest = $("thRest"), after = null;
     if (done && isToday) for (var k = 1; k <= 7 && !after; k++) after = myPlans().filter(function(x){ return x.wd === (t + k) % 7; })[0] || null;
     rest.style.display = restToday || after ? "" : "none";
+    var intro = my && !done && neverTrained();   // ни одной тренировки ещё не было — предлагаем вводную
+    $("thIntro").style.display = intro ? "" : "none";
+    if (intro) $("thIntro").textContent = "Впервые? Начните с вводной — около " + planMinutes(introItems(items)) + " мин ›";
     if (after) { var kk = ((after.wd - t) + 7) % 7 || 7; rest.textContent = "Отлично, на сегодня всё! Следующая тренировка — " + (kk === 1 ? "завтра" : WD_IN[after.wd]) + ": " + dayName(after) + "."; }
     else if (restToday) rest.textContent = "Сегодня по плану день отдыха — мышцы восстанавливаются. Если есть силы, можно начать следующую тренировку уже сегодня.";
     $("thAct").style.display = my ? "" : "none";
@@ -4374,10 +4392,11 @@ button{font-size:14px}
     } catch(e){}
   }
 
-  function startWorkout(useCam){
+  function startWorkout(useCam, intro){
     if (W) return;
-    track("workout_start", { cam: !!useCam });
-    W = { items: currentItems(), plan: planById(planSel).name, i: 0, set: 1, reps: 0, secs: 0, state: "intro", useCam: useCam,
+    track("workout_start", { cam: !!useCam, intro: intro ? 1 : 0 });
+    var its = intro ? introItems(currentItems()) : currentItems();
+    W = { items: its, plan: planById(planSel).name + (intro ? " · вводная" : ""), intro: !!intro, i: 0, set: 1, reps: 0, secs: 0, state: "intro", useCam: useCam,
       t0: Date.now(), stats: {}, log: {}, setsDone: 0, setsByItem: {}, paused: false, cueAt: {}, since: {}, facing: "user",
       ar: 4 / 3, lastPoseAt: 0, pose: null, stream: null, r: newR() };
     if (chatOpen) closeChat();
@@ -4409,6 +4428,7 @@ button{font-size:14px}
   }
 
   $("trainStart").onclick = function(){ haptic("medium"); startWorkout(camMode); };
+  $("thIntro").onclick = function(){ haptic("medium"); startWorkout(camMode, true); };
   $("wsExit").onclick = function(){ haptic(); onWsBack(); };
   $("wsMain").onclick = function(){
     if (!W) return;
@@ -5872,6 +5892,17 @@ button{font-size:14px}
       $("onbLead").textContent = "Данные сохранены. План можно подобрать на главной в разделе «Моя цель».";
       $("onbSum").innerHTML = "";
     }
+    // первая тренировка прямо отсюда: вводная, около 10 минут
+    var nx1 = plan ? nextMyPlan() : null, canTry = !!(nx1 && neverTrained());
+    $("onbTryBox").style.display = canTry ? "" : "none";
+    $("onbGo").className = canTry ? "btn lnk" : "btn";
+    $("onbGo").textContent = canTry ? "Позже — открыть приложение" : (onb.mode === "plan" ? "Перейти к тренировке" : "Начать");
+    if (canTry) {
+      var its1 = introItems(nx1.items.map(function(it){ return progress(it, planWeek()); }));
+      $("onbTry").textContent = "▶ Первая тренировка · " + planMinutes(its1) + " мин";
+      $("onbTryNote").textContent = "Вводная: " + its1.length + " " + plural(its1.length, ["упражнение", "упражнения", "упражнений"]) + " по 2 подхода, чтобы познакомиться с техникой. " +
+        (camMode ? "Камера будет считать повторы." : "Без камеры.");
+    }
     onbStep(4);
   };
   function onbClose(done){
@@ -5887,13 +5918,13 @@ button{font-size:14px}
     if (onb.mode === "plan") { onbClose(null); return; }   // подбор заново: просто закрываем, ничего не меняя
     track("onb_skip", { step: onb.step }); onbClose(false);
   };
-  $("onbGo").onclick = function(){
+  function onbFinish(startNow){
     haptic("medium");
     var wantRem = $("onbRem").checked;
-    if (onb.mode !== "plan") track("onb_done", { rem: wantRem ? 1 : 0 });
+    if (onb.mode !== "plan") track("onb_done", { rem: wantRem ? 1 : 0, start: startNow ? 1 : 0 });
     onbClose(true);
     $("udCard").open = false;
-    showTab(onb.mode === "plan" ? "train" : "home");
+    showTab(startNow || onb.mode === "plan" ? "train" : "home");
     if (wantRem) {   // включаем напоминания о тренировках по дням плана (с тем же сохранением, что и в профиле)
       rem = rem || null; renderRem();
       remDays = planWeekdays();
@@ -5901,7 +5932,14 @@ button{font-size:14px}
       remSections();
       $("remSave").click();
     }
-  };
+    if (startNow) {
+      var nx = nextMyPlan();
+      if (nx) { planSel = nx.id; save("fithub_plan_sel", planSel); renderPlan(); }
+      startWorkout(camMode, true);
+    }
+  }
+  $("onbGo").onclick = function(){ onbFinish(false); };
+  $("onbTry").onclick = function(){ onbFinish(true); };
   var ONB_L1 = $("onbL1").innerHTML;
   function openOnb(mode){
     onb.mode = mode || "first";
