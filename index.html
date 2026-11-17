@@ -188,6 +188,11 @@ nav button.on{color:var(--accent);font-weight:700}
 .onb-when .chip{flex:none;text-align:center;line-height:1.2}
 .onb-when .chip small{display:block;font-size:12px;opacity:.75}
 .onb-foot .btn.lnk{background:none;box-shadow:none;color:var(--hint);font-weight:600;margin-top:4px}
+.th-intro.th-move{color:var(--hint)}
+.th-movebox{margin-top:8px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px}
+.th-movebox[hidden]{display:none}
+.th-movebox .chips{margin-top:8px}
+.th-movebox .chip small{display:block;font-size:11px;opacity:.75}
 .th-intro{display:block;width:100%;background:none;border:0;color:var(--accent);font-family:inherit;font-size:14px;font-weight:600;padding:12px 0 0;min-height:40px;cursor:pointer;text-align:center}
 .onb-err{color:#ff6b6b;font-size:14px;min-height:18px;margin-top:10px}
 .gday{border-top:1px solid var(--line);padding:10px 0 0;margin-top:10px}
@@ -322,6 +327,7 @@ nav button.on{color:var(--accent);font-weight:700}
 .seg button.on{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.25)}
 html.light .seg button.on{box-shadow:0 1px 3px rgba(15,27,51,.15)}
 .wk{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:8px;margin-top:10px}
+.wkd.moved b{color:var(--accent)}
 .wkd{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:9px 4px 8px;text-align:center;cursor:pointer;font-family:inherit;color:var(--text);min-width:0}
 .wkd b{display:block;font-size:14px}
 .wkd small{display:block;font-size:11px;color:var(--hint);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -918,6 +924,12 @@ button{font-size:14px}
     <div id="thAct">
       <button class="btn" id="trainStart" type="button">▶ Начать тренировку</button>
       <button class="th-intro" id="thIntro" type="button" style="display:none"></button>
+      <button class="th-intro th-move" id="thMove" type="button" style="display:none">📅 Перенести на другой день</button>
+      <div class="th-movebox" id="thMoveBox" hidden>
+        <div class="note" id="thMoveNote"></div>
+        <div class="chips" id="thMoveDays"></div>
+        <button class="th-intro" id="thMoveBack" type="button" style="display:none">↩ Вернуть по расписанию</button>
+      </div>
     </div>
     <div id="thNoPlan" style="display:none">
       <button class="btn" id="thGoal" type="button">Подобрать программу</button>
@@ -3524,11 +3536,15 @@ button{font-size:14px}
   }
   var WD_SHORT = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
   var myPlan = load("fithub_my_plan", null);   // план, подобранный по цели: несколько тренировочных дней (сплит)
-  function myPlans(){
+  // переносы тренировок на одну неделю: { "<понедельник недели>": { "my0": <новый день недели> } } — план не меняется
+  var moves = load("fithub_moves", {});
+  function weekKey(off){ return localDay(weekDate(1, off || 0)); }
+  function myPlans(off){
     if (!myPlan) return [];
+    var mv = moves[weekKey(off)] || {};
     if (myPlan.split && myPlan.split.length) return myPlan.split.map(function(d, i){
-      var wd = WD_SHORT[d.wd];
-      return { id: "my" + i, name: wd.charAt(0).toUpperCase() + wd.slice(1) + " · " + d.name, items: d.items, my: true, wd: d.wd };
+      var wd = WD_SHORT[d.wd], id = "my" + i, m = mv[id];
+      return { id: id, name: wd.charAt(0).toUpperCase() + wd.slice(1) + " · " + d.name, items: d.items, my: true, wd: m != null ? m : d.wd, wd0: d.wd, moved: m != null && m !== d.wd };
     });
     if (myPlan.items && myPlan.items.length) return [{ id: "my", name: "Мой план", items: myPlan.items }];
     return [];
@@ -3678,8 +3694,12 @@ button{font-size:14px}
     var done = my && (isToday || past) && planDone(p, off);
     var tag = $("thTag");
     tag.className = "th-tag" + (done ? " done" : !isToday ? " rest" : "");
-    tag.textContent = !my ? "Программа не подобрана" : done ? (isToday ? "Сегодня · выполнено ✓" : WD_CAP[p.wd] + " · выполнено ✓") :
-      isToday ? "Сегодня" : past ? WD_CAP[p.wd] + " · пропущено" : p.wd === (t + 1) % 7 ? "Завтра" : WD_IN[p.wd].charAt(0).toUpperCase() + WD_IN[p.wd].slice(1);
+    tag.textContent = (!my ? "Программа не подобрана" : done ? (isToday ? "Сегодня · выполнено ✓" : WD_CAP[p.wd] + " · выполнено ✓") :
+      isToday ? "Сегодня" : past ? WD_CAP[p.wd] + " · пропущено" : p.wd === (t + 1) % 7 ? "Завтра" : WD_IN[p.wd].charAt(0).toUpperCase() + WD_IN[p.wd].slice(1)) + (my && p.moved && !off ? " · перенесено" : "");
+    // перенос: только дни этой недели, которые ещё не прошли и не выполнены
+    var canMove = my && !off && p.wd != null && !done;
+    $("thMove").style.display = canMove ? "" : "none";
+    if (!canMove) $("thMoveBox").hidden = true;
     $("thWeek").textContent = pw ? "Неделя " + (pw.phase + 1) + " из 4 · " + WEEK_TXT[pw.phase].replace(/^эта неделя /, "") : "";
     $("thName").textContent = my ? dayName(p) : "Подберём вам программу";
     var desc = "Около " + planMinutes(items) + " мин · " + items.length + " " + plural(items.length, ["упражнение", "упражнения", "упражнений"]);
@@ -3711,7 +3731,7 @@ button{font-size:14px}
     }).join("");
     $("thListHint").style.display = trainLog.length ? "none" : "";
     // неделя плана
-    var days = myPlans().filter(function(x){ return x.wd != null; }).sort(function(a, b){ return (a.wd + 6) % 7 - (b.wd + 6) % 7; });
+    var days = myPlans(off).filter(function(x){ return x.wd != null; }).sort(function(a, b){ return (a.wd + 6) % 7 - (b.wd + 6) % 7; });
     $("wkCard").style.display = days.length ? "" : "none";
     if (days.length) {
       var nDone = days.filter(function(d){ return planDone(d, off); }).length, nThis = off ? days.filter(function(d){ return planDone(d, 0); }).length : nDone;
@@ -3719,7 +3739,7 @@ button{font-size:14px}
       $("wkDays").style.setProperty("--n", Math.min(days.length, 6));
       $("wkDays").innerHTML = days.map(function(d){
         var dn = planDone(d, off);
-        return '<button type="button" class="wkd' + (dn ? " done" : "") + (d.wd === t ? " today" : "") + (d.id === p.id ? " sel" : "") + '" data-p="' + d.id + '"><b>' + WD_CAP[d.wd] + '</b><small>' + esc(dayName(d)) + '</small><i>' + (dn ? "✓" : "") + '</i></button>';
+        return '<button type="button" class="wkd' + (dn ? " done" : "") + (d.wd === t ? " today" : "") + (d.id === p.id ? " sel" : "") + (d.moved ? " moved" : "") + '" data-p="' + d.id + '"><b>' + WD_CAP[d.wd] + (d.moved ? " ↷" : "") + '</b><small>' + esc(dayName(d)) + '</small><i>' + (dn ? "✓" : "") + '</i></button>';
       }).join("");
       $("wkNote").textContent = off ? (nThis >= days.length ? "Все тренировки этой недели выполнены — отличная работа! 🔥 " : "На этой неделе выполнено " + nThis + " из " + days.length + ". ") + "Нажмите на день, чтобы посмотреть тренировку." :
         nDone >= days.length ? "Все тренировки недели выполнены — отличная работа! 🔥" :
@@ -3728,6 +3748,49 @@ button{font-size:14px}
     var u = typeof userData !== "undefined" ? userData : null;
     $("progSub").textContent = my && u ? splitLabel(u) + " · " + (u.days || 3) + " " + plural(u.days || 3, ["раз", "раза", "раз"]) + " в неделю" : "Подберите под свою цель";
   }
+  // перенос выбранной тренировки на другой день этой недели (с сегодняшнего по воскресенье); занятый день — меняются местами
+  function moveRender(){
+    var p = planById(planSel); if (!p || !p.my) return;
+    var t = new Date().getDay(), out = [], plans = myPlans();
+    for (var k = 0; k < 7; k++) {
+      var wd = (t + k) % 7;
+      if ((wd + 6) % 7 < (t + 6) % 7) continue;          // дальше воскресенья этой недели не уходим
+      if (k > 0 && wd === 1) break;
+      if (wd === p.wd) continue;
+      var other = plans.filter(function(x){ return x.wd === wd; })[0];
+      var d = weekDate(wd, 0);
+      out.push('<button type="button" class="chip" data-w="' + wd + '">' + (k === 0 ? "Сегодня" : k === 1 ? "Завтра" : WD_CAP[wd] + ", " + d.getDate()) +
+        '<small>' + (other ? "поменяться с «" + esc(dayName(other)) + "»" : "свободно") + '</small></button>');
+    }
+    $("thMoveNote").textContent = out.length ? "«" + dayName(p) + "» только на этой неделе — дальше по обычному расписанию." : "На этой неделе свободных дней не осталось.";
+    $("thMoveDays").innerHTML = out.join("");
+    $("thMoveBack").style.display = p.moved ? "" : "none";
+  }
+  function moveTask(name, from, to){   // задача «🏋️ Тренировка: …» в календаре переезжает вместе с тренировкой
+    var kf = localDay(weekDate(from, 0)), kt = localDay(weekDate(to, 0)), l = dayTasks[kf] || [], i = -1;
+    for (var j = 0; j < l.length; j++) if (l[j].gen && l[j].text === "🏋️ Тренировка: " + name) { i = j; break; }
+    if (i < 0) return;
+    var it = l.splice(i, 1)[0]; if (!l.length) delete dayTasks[kf];
+    (dayTasks[kt] = dayTasks[kt] || []).push(it);
+  }
+  function moveTo(wd){
+    var p = planById(planSel), wk = weekKey(0), mv = moves[wk] = moves[wk] || {}, plans = myPlans();
+    var other = plans.filter(function(x){ return x.wd === wd && x.id !== p.id; })[0], from = p.wd;
+    var base = function(x){ return myPlan.split[+x.id.slice(2)]; };
+    moveTask(base(p).name, from, wd);
+    if (other) { moveTask(base(other).name, wd, from); mv[other.id] = from; }
+    mv[p.id] = wd;
+    Object.keys(mv).forEach(function(id){ var b = myPlan.split[+id.slice(2)]; if (b && mv[id] === b.wd) delete mv[id]; });   // вернулись на свой день — переноса нет
+    Object.keys(moves).forEach(function(k){ if (k < weekKey(-7)) delete moves[k]; });   // старые недели не храним
+    save("fithub_moves", moves); save("fithub_daytasks", dayTasks);
+    track("workout_move", { swap: other ? 1 : 0 });
+    notify("success");
+    $("thMoveBox").hidden = true;
+    rebuildPlans(); renderPlan(); refreshAll();
+  }
+  $("thMove").onclick = function(){ haptic(); var b = $("thMoveBox"); b.hidden = !b.hidden; if (!b.hidden) moveRender(); };
+  $("thMoveDays").onclick = function(e){ var b = e.target.closest ? e.target.closest("[data-w]") : null; if (b) moveTo(+b.dataset.w); };
+  $("thMoveBack").onclick = function(){ var p = planById(planSel); moveTo(myPlan.split[+p.id.slice(2)].wd); };
   $("wkDays").onclick = function(e){
     var b = e.target.closest ? e.target.closest("[data-p]") : null;
     if (!b) return;
