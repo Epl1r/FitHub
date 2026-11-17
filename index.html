@@ -153,6 +153,7 @@ nav button.on{color:var(--accent);font-weight:700}
 #tRepBox[hidden]{display:none}
 #tWds,.vitem .vwds{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
 #tWds .chip,.vitem .vwds .chip{min-width:0;padding:8px 0;text-align:center;justify-content:center;margin:0}
+.psec{font-size:13px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--hint);margin:18px 4px 8px}
 .trange{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .trange label{margin:0;font-size:13px;color:var(--hint)}
 .trange label small{font-size:12px;opacity:.8}
@@ -1068,25 +1069,7 @@ button{font-size:14px}
     </div>
   </div>
 
-  <div class="card">
-    <div class="pctrow"><span class="sub">Серия дней подряд</span><span class="sub" id="fBest"></span></div>
-    <div class="fire">
-      <button class="flame-btn" id="flameBtn" type="button" aria-label="Огонёк серии, нажмите">
-        <svg class="flame" viewBox="0 0 64 80" aria-hidden="true">
-          <path class="fo" id="flO" fill="url(#fl1)" d="M32 2C36 16 52 26 52 46C52 64 43 76 32 76C21 76 12 64 12 48C12 38 17 31 22 26C22 34 25 39 29 41C27 28 30 14 32 2Z"/>
-          <path class="fi" fill="url(#flIn)" d="M32 34C35 42 42 47 42 57C42 67 37 72 32 72C27 72 22 67 22 59C22 53 25 49 28 46C28 51 30 54 32 55C31 48 31 41 32 34Z"/>
-        </svg>
-        <span class="plus1" id="plus1">+1</span>
-      </button>
-      <div style="min-width:0">
-        <div class="fcount"><span id="fCount">1</span><small id="fUnit">день</small></div>
-        <div class="note" id="fState" style="margin-top:6px"></div>
-      </div>
-    </div>
-    <div class="fweek" id="fWeek"></div>
-    <div class="ftip" id="fTip"></div>
-  </div>
-
+  <div class="psec">Прогресс</div>
   <div class="card">
     <div class="ringcard">
       <div class="ring">
@@ -1120,26 +1103,38 @@ button{font-size:14px}
     </details>
   </div>
 
-  <div class="card">
-    <div class="sub">Тренировки за 14 дней</div>
+  <details class="card fold" id="fireFold">
+    <summary><span>🔥 Серия дней<small id="fireSum"></small></span></summary>
+    <div class="pctrow" style="margin-top:10px"><span class="sub">Лучшая серия</span><span class="sub" id="fBest"></span></div>
+    <div class="fire">
+      <button class="flame-btn" id="flameBtn" type="button" aria-label="Огонёк серии, нажмите">
+        <svg class="flame" viewBox="0 0 64 80" aria-hidden="true">
+          <path class="fo" id="flO" fill="url(#fl1)" d="M32 2C36 16 52 26 52 46C52 64 43 76 32 76C21 76 12 64 12 48C12 38 17 31 22 26C22 34 25 39 29 41C27 28 30 14 32 2Z"/>
+          <path class="fi" fill="url(#flIn)" d="M32 34C35 42 42 47 42 57C42 67 37 72 32 72C27 72 22 67 22 59C22 53 25 49 28 46C28 51 30 54 32 55C31 48 31 41 32 34Z"/>
+        </svg>
+        <span class="plus1" id="plus1">+1</span>
+      </button>
+      <div style="min-width:0">
+        <div class="fcount"><span id="fCount">1</span><small id="fUnit">день</small></div>
+        <div class="note" id="fState" style="margin-top:6px"></div>
+      </div>
+    </div>
+    <div class="fweek" id="fWeek"></div>
+    <div class="ftip" id="fTip"></div>
+  </details>
+
+  <details class="card fold" id="workFold">
+    <summary><span>🏋️ Тренировки за 14 дней<small id="workSum"></small></span></summary>
     <div class="dots" id="dots"></div>
     <button class="btn" id="workBtn">Отметить тренировку сегодня</button>
-  </div>
+  </details>
 
   <details class="card fold" id="achFold">
-    <summary><span>Достижения<small id="achSum"></small></span></summary>
+    <summary><span>🏆 Достижения<small id="achSum"></small></span></summary>
     <div class="ach" id="ach"></div>
   </details>
 
-  <div class="card fbcard premcard" id="premCard">
-    <div><b>⭐ FitHub Premium</b><div class="note" style="margin-top:2px" id="premNote">Больше фото еды и вопросов к ИИ</div></div>
-    <button class="btn" id="premBtn" type="button">Подробнее</button>
-  </div>
-  <div class="card fbcard" id="refCard">
-    <div><b>🎁 Пригласите друга</b><div class="note" style="margin-top:2px" id="refNote">Друг ответит на 3 вопроса — и вы оба получите 7 дней Premium</div></div>
-    <button class="btn" id="refBtn" type="button">Пригласить</button>
-  </div>
-
+  <div class="psec">Настройки</div>
   <details class="card fold" id="udCard">
     <summary><span>Мои данные<small id="udSum">Пол, возраст, рост, вес и условия тренировок</small></span></summary>
     <div class="imp">Важно: указывайте данные честно и точно — по ним подбирается план тренировок и питания под вашу цель. Данные сохраняются в вашем облаке Telegram и восстановятся на новом телефоне.</div>
@@ -1203,9 +1198,19 @@ button{font-size:14px}
     <div class="note" id="remNote" style="text-align:center"></div>
   </details>
 
-  <div class="card">
-    <b>Оформление</b>
+  <details class="card fold" id="themeFold">
+    <summary><span>🎨 Оформление<small id="themeSum"></small></span></summary>
     <div class="mealsel" id="themeSel"><button type="button" class="chip" data-t="auto">Как в Telegram</button><button type="button" class="chip" data-t="light">Светлое</button><button type="button" class="chip" data-t="dark">Тёмное</button></div>
+  </details>
+
+  <div class="psec">FitHub</div>
+  <div class="card fbcard premcard" id="premCard">
+    <div><b>⭐ FitHub Premium</b><div class="note" style="margin-top:2px" id="premNote">Больше фото еды и вопросов к ИИ</div></div>
+    <button class="btn" id="premBtn" type="button">Подробнее</button>
+  </div>
+  <div class="card fbcard" id="refCard">
+    <div><b>🎁 Пригласите друга</b><div class="note" style="margin-top:2px" id="refNote">Друг ответит на 3 вопроса — и вы оба получите 7 дней Premium</div></div>
+    <button class="btn" id="refBtn" type="button">Пригласить</button>
   </div>
 
   <div class="card fbcard">
@@ -1637,6 +1642,10 @@ button{font-size:14px}
   // === АНАЛИТИКА (Яндекс Метрика) ===
   // Номер счётчика в metrika.yandex.ru («FitHub мини-приложение»). 0 — отключить аналитику.
   var METRIKA_ID = 113832857;
+  // владелец (автор) не попадает ни в Метрику, ни в статистику сводки — чтобы цифры были про настоящих пользователей
+  var IS_OWNER = false;
+  try { IS_OWNER = !!(tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id === 5517755450); } catch(e){}
+  if (IS_OWNER) METRIKA_ID = 0;
   var ymQueue = [];
   // счётчики для недельной сводки от бота: копятся и раз в несколько секунд уходят в функцию
   var STAT_MAP = { app_open: "open", first_open: "first_open", onb_done: "onb_done", onb_skip: "onb_skip", ret_d1: "ret_d1", ret_d7: "ret_d7",
@@ -1654,7 +1663,7 @@ button{font-size:14px}
     try { fetch(AI_ENDPOINT, { method: "POST", keepalive: true, headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(START_SRC ? { action: "stat", ev: ev, src: START_SRC, initData: initData } : { action: "stat", ev: ev, initData: initData }) }).catch(function(){}); } catch(e){}
   }
   function statAdd(goal){
-    var k = STAT_MAP[goal]; if (!k) return;
+    var k = STAT_MAP[goal]; if (!k || IS_OWNER) return;
     statQ[k] = (statQ[k] || 0) + 1;
     if (!statTimer) statTimer = setTimeout(statFlush, 4000);
   }
@@ -1827,6 +1836,8 @@ button{font-size:14px}
     $("dots").innerHTML = html;
     $("workBtn").textContent = set[todayKey] ? "Сегодня засчитано ✓ (отменить)" : "Отметить тренировку сегодня";
     $("workBtn").className = "btn" + (set[todayKey] ? " ghost" : "");
+    var w14 = 0; for (var j = 0; j < 14; j++) { var dj = new Date(); dj.setDate(dj.getDate() - j); if (set[localDay(dj)]) w14++; }
+    $("workSum").textContent = w14 ? w14 + " за 2 недели" + (set[todayKey] ? " · сегодня ✓" : "") : "Пока ни одной";
 
     // достижения
     var moved = has ? Math.abs(last - first) : 0;
@@ -2174,7 +2185,9 @@ button{font-size:14px}
       }
       vItems = (j.tasks || []).map(function(t){
         var r = t.repeat === "weekly" && t.days && t.days.length ? "weekly" : (t.repeat === "daily" || t.daily) ? "daily" : "once";
-        return { text: t.text, date: t.date, time: t.time || "", end: t.end || "", place: t.place || "", repeat: r, days: r === "weekly" ? t.days.slice() : [], until: t.until || "" };
+        var un = t.until || "";
+        if (r === "weekly" && !un) { var ud = new Date(); ud.setDate(ud.getDate() + 182); un = localDay(ud); }   // по дням без срока — на полгода
+        return { text: t.text, date: t.date, time: t.time || "", end: t.end || "", place: t.place || "", repeat: r, days: r === "weekly" ? t.days.slice() : [], until: un };
       });
       vRemoves = (j.remove || []).map(function(x){ var f = vFind(x.id); return f ? { id: x.id, date: x.date || "", on: true, f: f } : null; }).filter(Boolean);
       $("vSaid").innerHTML = "Вы сказали: <b>«" + esc(j.text) + "»</b>";
@@ -5339,6 +5352,7 @@ button{font-size:14px}
     btn.style.setProperty("--glow", LEVEL_GLOW[lvl]);
     btn.style.transform = "scale(" + LEVEL_SCALE[lvl] + ")";
     $("fBest").textContent = "рекорд: " + bestVisit + " " + dPl(bestVisit);
+    $("fireSum").textContent = n + " " + dPl(n) + " подряд · рекорд " + bestVisit;
 
     var set = {}; visits.forEach(function(v){ set[v] = 1; });
     var html = "";
@@ -6299,7 +6313,8 @@ button{font-size:14px}
 
   // === СТАРТ ===
   (function(){   // оформление
-    function sync(){ var m = load("fithub_theme", "auto"); [].forEach.call($("themeSel").children, function(b){ b.classList.toggle("on", b.dataset.t === m); }); }
+    function sync(){ var m = load("fithub_theme", "auto"); [].forEach.call($("themeSel").children, function(b){ b.classList.toggle("on", b.dataset.t === m); });
+      $("themeSum").textContent = { auto: "Как в Telegram", light: "Светлое", dark: "Тёмное" }[m] || "Как в Telegram"; }
     $("themeSel").onclick = function(e){
       var b = e.target.closest ? e.target.closest("[data-t]") : null;
       if (!b) return;
