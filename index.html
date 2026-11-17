@@ -2397,7 +2397,11 @@ button{font-size:14px}
       showTab("train"); renderPlan();
       startWorkout(camMode, true);
     }
-    else if (k === "photo") { showTab("food"); try { $("camIn").click(); } catch(err){} }
+    else if (k === "photo") {   // только переход во вкладку «Питание» и подсветка «Добавить еду» — снимок человек делает сам
+      showTab("food");
+      var ac = document.querySelector("#tab-food .addcard");
+      if (ac) { try { window.scrollTo(0, 0); } catch(err){} ac.classList.remove("tq-hl"); void ac.offsetWidth; ac.classList.add("tq-hl"); setTimeout(function(){ ac.classList.remove("tq-hl"); }, 1800); }
+    }
     else if (k === "arni") openChat();
     else if (k === "rem") { showTab("profile"); var rc = $("remCard"); rc.open = true; try { rc.scrollIntoView({ behavior: "smooth", block: "start" }); } catch(err){} }
   };
