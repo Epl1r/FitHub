@@ -3766,6 +3766,19 @@ button{font-size:14px}
     $("thMoveDays").innerHTML = out.join("");
     $("thMoveBack").style.display = p.moved ? "" : "none";
   }
+  // даты для бота: где тренировка появилась после переноса (add) и где её больше нет (skip)
+  function wMoves(){
+    var add = [], skip = [];
+    [0, 7].forEach(function(off){
+      var pl = myPlans(off), days = pl.map(function(x){ return x.wd; });
+      pl.forEach(function(x){
+        if (!x.moved) return;
+        add.push(localDay(weekDate(x.wd, off)));
+        if (days.indexOf(x.wd0) < 0) skip.push(localDay(weekDate(x.wd0, off)));
+      });
+    });
+    return { add: add, skip: skip };
+  }
   function moveTask(name, from, to){   // задача «🏋️ Тренировка: …» в календаре переезжает вместе с тренировкой
     var kf = localDay(weekDate(from, 0)), kt = localDay(weekDate(to, 0)), l = dayTasks[kf] || [], i = -1;
     for (var j = 0; j < l.length; j++) if (l[j].gen && l[j].text === "🏋️ Тренировка: " + name) { i = j; break; }
@@ -3787,6 +3800,7 @@ button{font-size:14px}
     notify("success");
     $("thMoveBox").hidden = true;
     rebuildPlans(); renderPlan(); refreshAll();
+    try { if (rem && rem.workout && rem.workout.on) remPost({ action: "seen" }).catch(function(){}); } catch(e){}   // бот сразу узнаёт о переносе
   }
   $("thMove").onclick = function(){ haptic(); var b = $("thMoveBox"); b.hidden = !b.hidden; if (!b.hidden) moveRender(); };
   $("thMoveDays").onclick = function(e){ var b = e.target.closest ? e.target.closest("[data-w]") : null; if (b) moveTo(+b.dataset.w); };
@@ -5951,6 +5965,7 @@ button{font-size:14px}
     payload.initData = initData;
     payload.tz = -new Date().getTimezoneOffset();
     payload.trained = workouts.length > 0;   // бот напомнит о первой тренировке, только если её ещё не было
+    try { payload.wmoves = wMoves(); } catch(e){}   // перенесённые тренировки — бот напомнит в новый день, а в старый промолчит
     return fetch(AI_ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(payload) })
       .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return { ok: r.ok, status: r.status, j: j }; }); });
   }
