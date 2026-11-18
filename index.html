@@ -4915,6 +4915,37 @@ button{font-size:14px}
 
   // === МОЯ ЦЕЛЬ: подбор плана ===
   var userGoal = load("fithub_user_goal", null);
+
+  // приёмы пищи в распорядке: время и примерные калории (25 / 35 / 10 / 30 % нормы);
+  // перекус — за 1,5 ч до тренировки, ужин — не раньше чем через 1,5 ч после её начала
+  var MEAL_GEN = /^(🍳 Завтрак|🍲 Обед|🍎 Перекус|🍽️ Ужин)/;
+  function mealHabits(kcal, trainTime){
+    var hm = function(m){ m = Math.max(0, Math.min(23 * 60 + 30, Math.round(m / 15) * 15)); return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
+    var t = /^\d{1,2}:\d{2}$/.test(trainTime || "") ? +trainTime.split(":")[0] * 60 + +trainTime.split(":")[1] : 18 * 60;
+    var lunch = 13 * 60, snack = 16 * 60 + 30, dinner = 19 * 60 + 30;
+    if (t >= 16 * 60) { snack = t - 90; dinner = Math.max(dinner, t + 90); }           // вечерняя: перекус до, ужин после
+    else if (t >= 14 * 60) { snack = Math.max(snack, t + 90); }                         // после обеда: перекус после тренировки
+    else if (t >= 11 * 60) { lunch = Math.max(lunch, t + 60); snack = Math.max(snack, lunch + 150); }   // дневная: обед после неё
+    dinner = Math.min(dinner, 21 * 60 + 30);
+    var k = function(x){ return kcal ? " · ~" + Math.round(kcal * x / 10) * 10 + " ккал" : ""; };
+    return [
+      { text: "🍳 Завтрак" + k(0.25), time: "08:00" },
+      { text: "🍲 Обед" + k(0.35), time: hm(lunch) },
+      { text: "🍎 Перекус" + k(0.10), time: hm(snack) },
+      { text: "🍽️ Ужин" + k(0.30), time: hm(dinner) }
+    ];
+  }
+  // один раз для тех, у кого план подобран раньше: убрать «шаги» и «белок» из распорядка, добавить приёмы пищи
+  try {
+    if (!load("fithub_mig_meals", false)) {
+      var hadOld = routine.some(function(r){ return r.gen && /^(🚶 .*шагов|🥩 Белок)/.test(r.text); });
+      routine = routine.filter(function(r){ return !(r.gen && /^(🚶 .*шагов|🥩 Белок)/.test(r.text)); });
+      if (hadOld && userGoal && userGoal.plan && !routine.some(function(r){ return r.gen && MEAL_GEN.test(r.text); })) {
+        mealHabits(userGoal.plan.kcal, userGoal.plan.time).forEach(function(x){ routine.push({ id: uid(), text: x.text, time: x.time, gen: true }); });
+      }
+      save("fithub_routine", routine); save("fithub_mig_meals", true);
+    }
+  } catch(e){}
   var goalDraft = null;     // подобранный, но ещё не применённый план
   var GOAL_TYPES = [
     ["lose", "Похудение", /похуд|сброс|скинуть|минус|сжечь|жир|сушк|стройн|лишн|убрать живот|живот убрать|снизить вес/],
@@ -5013,10 +5044,7 @@ button{font-size:14px}
     }
     if (!g.recognized) warns.push("Не удалось точно понять цель, поэтому составил общий план для формы и здоровья. Уточните цель, например «похудеть на 5 кг» или «накачать ягодицы».");
 
-    var habits = [{ text: "💧 Вода " + String(water).replace(".", ",") + " л", time: "" }];
-    if (g.type === "lose" || g.type === "recomp") habits.push({ text: "🚶 10 000 шагов", time: "" });
-    else if (g.type === "endurance" || g.type === "health") habits.push({ text: "🚶 8 000 шагов", time: "" });
-    habits.push({ text: "🥩 Белок " + p + " г", time: "" });
+    var habits = [{ text: "💧 Вода " + String(water).replace(".", ",") + " л", time: "" }].concat(mealHabits(kcal, time || "18:00"));
     habits.push({ text: "😴 Сон 7–9 часов", time: "23:00" });
 
     return { text: text, time: time || "18:00", goal: g, items: items, split: split, splitTxt: splitText(u), eq: eq, days: days, kcal: kcal, p: p, f: f, c: c, adj: adj, tdee: Math.round(tdee),
@@ -5080,7 +5108,8 @@ button{font-size:14px}
       (hasLoad ? ' Когда начнётся новый цикл, приложение подскажет взять вес чуть больше.' : '') + '</p>';
     h += '<p class="note">🔥 Перед тренировкой 5–7 минут разминки: суставная гимнастика и 1–2 лёгких подхода первого упражнения. Отдых между подходами отсчитывает таймер.</p>';
     plan.notes.forEach(function(x){ h += '<p class="note">• ' + esc(x) + '</p>'; });
-    h += '<p class="note">📅 В календаре — тренировки на 4 недели вперёд и привычки: ' + plan.habits.map(function(x){ return x.text.replace(/^\S+\s/, "").toLowerCase(); }).join(", ") + '.</p>';
+    var meals = plan.habits.filter(function(x){ return MEAL_GEN.test(x.text); }).map(function(x){ return x.text.replace(/^\S+\s/, "").replace(/ · .*$/, "").toLowerCase() + " " + x.time; });
+    h += '<p class="note">📅 В календаре — тренировки на 4 недели вперёд, вода, сон и приёмы пищи по времени' + (meals.length ? ': ' + meals.join(", ") : '') + '.</p>';
     h += '<p class="note" style="font-size:12px">План составлен по общим рекомендациям и не заменяет консультацию врача или тренера. При болезнях, травмах и беременности сначала посоветуйтесь со специалистом.</p></details>';
     h += '</div>';
     $("goalRes").innerHTML = h;
