@@ -343,6 +343,16 @@ html.light .seg button.on{box-shadow:0 1px 3px rgba(15,27,51,.15)}
 .tile.on{border-color:var(--accent)}
 .tpro{position:absolute;top:10px;right:10px;font-style:normal;font-size:10px;font-weight:800;color:#1b1300;background:linear-gradient(135deg,#ffd76a,#f5a524);border-radius:999px;padding:3px 7px}
 html.light .tile{box-shadow:0 1px 2px rgba(15,27,51,.06)}
+.tqbox{padding:0;overflow:hidden}
+.tqrow{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;padding:14px 16px;color:var(--text);font-family:inherit;text-align:left;cursor:pointer;min-height:44px}
+.tqi{flex:none;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--bg);border:1px solid var(--line)}
+.tqt{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.tqt b{font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tqt small{color:var(--hint);font-size:13px;line-height:1.35}
+.tqpro{font-style:normal;font-size:10px;font-weight:800;color:#1b1300;background:linear-gradient(135deg,#ffd76a,#f5a524);border-radius:999px;padding:3px 7px}
+.tqgo{flex:none;color:var(--hint);font-size:24px;line-height:1;transition:transform .2s}
+.tqrow.on .tqgo{transform:rotate(90deg)}
+.tqbox #tqCardList{padding:12px 16px 16px;border-top:1px solid var(--line)}
 .thist{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
 .thist:last-child{border-bottom:0}
 .thist small{display:block;color:var(--hint);font-size:12px;margin-top:2px}
@@ -955,22 +965,20 @@ button{font-size:14px}
     <div id="planList"></div>
   </div>
 
+  <div class="card tqbox">
+    <button type="button" class="tqrow" id="tqCardBtn" aria-expanded="false">
+      <span class="tqi" aria-hidden="true">📹</span>
+      <span class="tqt"><b>Разбор техники по видео <i class="tqpro">Premium</i></b><small>Снимите подход — ИИ покажет ошибки по кадрам</small></span>
+      <span class="tqgo" aria-hidden="true">›</span>
+    </button>
+    <div id="tqCardList" style="display:none"><div class="sub" style="margin-bottom:8px">Выберите упражнение и снимите 1–3 повторения сбоку. Видео остаётся на телефоне, для разбора отправляются только 8 кадров.</div><div class="chips" id="tqCardChips"></div></div>
+  </div>
+
   <div class="card" id="wkCard">
     <div class="th-lh" style="margin-top:0" id="wkTitle">Эта неделя</div>
     <div class="wk" id="wkDays"></div>
     <div class="sub" id="wkNote" style="margin-top:8px"></div>
   </div>
-
-  <div class="tiles">
-    <button type="button" class="tile" id="tqCardBtn"><span class="ti">📹</span><b>Разбор техники</b><small>ИИ найдёт ошибки по видео</small><i class="tpro">Premium</i></button>
-    <button type="button" class="tile" id="progBtn"><span class="ti">🗂️</span><b>Программа</b><small id="progSub">Всё тело · 3 раза в неделю</small></button>
-  </div>
-  <div class="card" id="tqCardList" style="display:none"><div class="sub" style="margin-bottom:8px">Выберите упражнение и снимите 1–3 повторения сбоку. Видео остаётся на телефоне, для разбора отправляются только 8 кадров.</div><div class="chips" id="tqCardChips"></div></div>
-
-  <details class="card fold" id="histCard">
-    <summary><span>Прошлые тренировки<small id="histSum">Пока нет</small></span></summary>
-    <div id="trainHist"></div>
-  </details>
 </section>
 
 <!-- ПИТАНИЕ -->
@@ -3760,8 +3768,6 @@ button{font-size:14px}
         nDone >= days.length ? "Все тренировки недели выполнены — отличная работа! 🔥" :
         "Выполнено " + nDone + " из " + days.length + ". Нажмите на день, чтобы посмотреть его тренировку.";
     }
-    var u = typeof userData !== "undefined" ? userData : null;
-    $("progSub").textContent = my && u ? splitLabel(u) + " · " + (u.days || 3) + " " + plural(u.days || 3, ["раз", "раза", "раз"]) + " в неделю" : "Подберите под свою цель";
   }
   // перенос выбранной тренировки на другой день этой недели (с сегодняшнего по воскресенье); занятый день — меняются местами
   function moveRender(){
@@ -3834,12 +3840,6 @@ button{font-size:14px}
   };
   $("thGoal").onclick = function(){ haptic(); openGoal(); };
   $("thTry").onclick = function(){ haptic("medium"); startWorkout(camMode); };
-  $("progBtn").onclick = function(){
-    haptic();
-    if (!myPlans().length) { openGoal(); return; }
-    showTab("profile"); $("udCard").open = true;
-    setTimeout(function(){ try { $("udSplitL").scrollIntoView({ behavior: "smooth", block: "center" }); } catch(e){} }, 80);
-  };
   // === КАРТОЧКА УПРАЖНЕНИЯ: фото и видео техники ===
   var IMG_CDN = ["https://cdn.jsdelivr.net/gh/yuhonas/free-exercise-db@main/exercises/", "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/"];
   function exImg(E, i){ return IMG_CDN[0] + E.img + "/" + i + ".jpg"; }
@@ -3932,14 +3932,14 @@ button{font-size:14px}
   $("tqCardBtn").onclick = function(){
     haptic();
     var box = $("tqCardList");
-    if (box.style.display !== "none") { box.style.display = "none"; this.classList.remove("on"); return; }
+    if (box.style.display !== "none") { box.style.display = "none"; this.classList.remove("on"); this.setAttribute("aria-expanded", "false"); return; }
     var seen = {};
     $("tqCardChips").innerHTML = currentItems().map(function(it, i){
       if (seen[it.ex]) return ""; seen[it.ex] = 1;
       var E = EXERCISES[it.ex];
       return '<button type="button" class="chip" data-i="' + i + '">' + E.ico + " " + esc(E.name) + '</button>';
     }).join("");
-    box.style.display = ""; this.classList.add("on");
+    box.style.display = ""; this.classList.add("on"); this.setAttribute("aria-expanded", "true");
     try { box.scrollIntoView({ behavior: "smooth", block: "nearest" }); } catch(e){}
   };
   $("tqCardChips").onclick = function(e){
@@ -3965,6 +3965,7 @@ button{font-size:14px}
   })();
 
   function renderTrainHist(){
+    if (!$("histSum")) return;   // истории во вкладке «Тренировка» больше нет; итоги — в профиле
     $("histSum").textContent = trainLog.length ? "Последняя — " + trainLog[trainLog.length - 1].d.split("-").reverse().slice(0, 2).join(".") + " · всего " + trainLog.length : "Пока нет";
     if (!trainLog.length) { $("trainHist").innerHTML = '<div class="empty">Здесь появятся ваши тренировки.</div>'; return; }
     $("trainHist").innerHTML = trainLog.slice(-5).reverse().map(function(t){
