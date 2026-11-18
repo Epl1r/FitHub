@@ -549,15 +549,15 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 /* шкалы КБЖУ */
 .insight{display:flex;gap:10px;align-items:flex-start;width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;margin:14px 0 2px;color:var(--text);font-size:14px;line-height:1.45;text-align:left;font-family:inherit;cursor:pointer}
 .sw{width:10px;height:10px;border-radius:3px;flex:none;margin-top:4px}
-.vgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.vgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;margin:6px -8px 0}
 .vgrid{align-items:start}
-.vs{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:none;border:0;padding:8px 2px 10px;border-radius:14px;color:var(--text);font-family:inherit;cursor:pointer;text-align:center;transition:opacity .2s,background .2s;min-width:0}
+.vs{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:none;border:0;padding:6px 0 10px;border-radius:14px;color:var(--text);font-family:inherit;cursor:pointer;text-align:center;transition:opacity .2s,background .2s;min-width:0}
 .vs.dim{opacity:.4}
 .vs.open{background:var(--bg)}
-.vs svg{width:100%;max-width:84px;display:block;margin:0 auto 6px;overflow:visible}
+.vs svg{width:calc(100% - 6px);max-width:100px;display:block;margin:0 auto 6px;overflow:visible}
 .vs b{display:block;font-size:14px}
-.vs .vv{display:block;font-size:12px;color:var(--hint);font-variant-numeric:tabular-nums;margin-top:1px}
-.vs .vn{display:block;font-size:12px;color:var(--hint);margin-top:2px;line-height:1.25}
+.vs .vv{display:block;font-size:11.5px;color:var(--hint);font-variant-numeric:tabular-nums;margin-top:1px;white-space:nowrap;letter-spacing:-.1px}
+.vs .vn{display:block;font-size:11.5px;color:var(--hint);margin-top:2px;line-height:1.25;letter-spacing:-.1px}
 .vs.low .vn{color:var(--text);font-weight:700}
 .lvl{transition:transform 1.4s cubic-bezier(.2,.8,.2,1)}
 .wv{animation:wave 3s linear infinite}
@@ -2714,7 +2714,7 @@ button{font-size:14px}
       var pct = g ? v / g * 100 : 0;
       var lvl = g ? Math.min(pct, 100) / 100 : 0;
       var y = lvl > 0 ? 96 - 92 * lvl : 104;        // уровень воды внутри круга
-      var left = g - v, status, isLow = low && low.m.k === m.k, un = m.k === "k" ? "" : " " + m.unit;   // у калорий единица уже есть строкой выше
+      var left = g - v, status, isLow = low && low.m.k === m.k, un = m.k === "k" ? "" : "\u00a0" + m.unit;   // у калорий единица уже есть строкой выше
       if (!g) status = "нет нормы";
       else if (left > m.tol) status = "ещё " + fmtV(m, left) + un;
       else if (left >= -m.tol) status = "норма ✓";
