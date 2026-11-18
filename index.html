@@ -1914,6 +1914,7 @@ button{font-size:14px}
   dIn.value = localDay(new Date());
 
   function renderWeights(){
+    if (syncWater()) { try { renderCal(); } catch(e){} }
     entries.sort(function(a,b){ return a.d < b.d ? -1 : 1; });
     var hist = $("history");
     var chartCard = $("chartCard");
@@ -2429,6 +2430,7 @@ button{font-size:14px}
   };
   $("fsX").onclick = function(){ haptic(); save("fithub_fs_hide", 1); track("first_step", { k: "hide" }); renderFirstSteps(); };
   function renderHome(){
+    syncWater();
     var TIPS = [
       "Сон 7–9 часов — половина прогресса: мышцы восстанавливаются во время отдыха.",
       "Пейте воду в течение дня, а не только на тренировке.",
@@ -4882,6 +4884,14 @@ button{font-size:14px}
     if (!age || age < 10 || age > 100) { notify("error"); alert("Укажите возраст от 10 до 100 лет"); return; }
     if (!h || h < 120 || h > 230) { notify("error"); alert("Укажите рост от 120 до 230 см"); return; }
     if (!w || w < 30 || w > 300) { notify("error"); alert("Укажите вес от 30 до 300 кг"); return; }
+    // сначала вес — пересборка плана ниже считает калории и воду уже от него
+    w = +w.toFixed(1);
+    if (curWeight() !== w) {
+      var today = localDay(new Date());
+      entries = entries.filter(function(e){ return e.d !== today; });
+      entries.push({ d: today, w: w });
+      save("fithub_weights", entries);
+    }
     var old = userData;
     userData = { sex: sex, age: Math.round(age), h: Math.round(h), lvl: $("udLvl").value, eq: $("udEq").value, days: udDraft.wds.length, wds: udDraft.wds.slice(), lim: udDraft.lim.slice(), split: udDraft.split };
     save("fithub_user", userData);
@@ -4899,13 +4909,6 @@ button{font-size:14px}
       }
     }
     rebuildPlans(); renderPlan();
-    w = +w.toFixed(1);
-    if (curWeight() !== w) {
-      var today = localDay(new Date());
-      entries = entries.filter(function(e){ return e.d !== today; });
-      entries.push({ d: today, w: w });
-      save("fithub_weights", entries);
-    }
     notify("success");
     renderWeights();
     var b = $("udSave"); b.textContent = replanned ? "Сохранено, план тренировок обновлён ✓" : "Сохранено ✓";
@@ -4946,6 +4949,17 @@ button{font-size:14px}
       save("fithub_routine", routine); save("fithub_mig_meals", true);
     }
   } catch(e){}
+  // вода в распорядке — 30 мл на кг текущего веса (1,5–4 л); следит за весом и чинит старое «Вода 0 л»
+  function waterL(w){ return w > 0 ? Math.min(4, Math.max(1.5, Math.round(w * 0.03 * 10) / 10)) : 2; }
+  function syncWater(){
+    try {
+      var t = "💧 Вода " + String(waterL(curWeight())).replace(".", ",") + " л", ch = false;
+      routine.forEach(function(r){ if (r.gen && /^💧 Вода [\d.,]+ л$/.test(r.text) && r.text !== t && (curWeight() || /^💧 Вода 0([.,]0)? л$/.test(r.text))) { r.text = t; ch = true; } });
+      if (ch) save("fithub_routine", routine);
+      return ch;
+    } catch(e){ return false; }
+  }
+  syncWater();
   var goalDraft = null;     // подобранный, но ещё не применённый план
   var GOAL_TYPES = [
     ["lose", "Похудение", /похуд|сброс|скинуть|минус|сжечь|жир|сушк|стройн|лишн|убрать живот|живот убрать|снизить вес/],
@@ -4989,7 +5003,7 @@ button{font-size:14px}
   function round5(x){ return Math.max(20, Math.round(x / 5) * 5); }
 
   function buildPlan(text, time){
-    var u = userData, w = curWeight(), g = parseGoal(text), notes = [], warns = [];
+    var u = userData, w = curWeight() || Math.round(22 * Math.pow(u.h / 100, 2)), g = parseGoal(text), notes = [], warns = [];
     var bmi = w / Math.pow(u.h / 100, 2);
     // --- тренировки: сплит под число дней, инвентарь, уровень и ограничения ---
     var lvl = u.lvl, restAdd = 0, lim = u.lim || [], eq = u.eq || "home";
@@ -5020,7 +5034,7 @@ button{font-size:14px}
     var p = Math.round(refW * ({ lose: 2, gain: 1.8, strength: 1.8, recomp: 2 }[g.type] || 1.6));
     var f = Math.round(refW * (g.type === "lose" ? 0.8 : 0.9));
     var c = Math.max(50, Math.round((kcal - p * 4 - f * 9) / 4));
-    var water = Math.round(w * 0.03 * 10) / 10;
+    var water = waterL(w);
 
     // --- целевой вес и сроки ---
     var targetW = null, pace = null;
