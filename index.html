@@ -564,6 +564,13 @@ label.pbtn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--l
 .sitem .sn{min-width:0}
 .sitem .sn small{display:block;margin-top:2px;white-space:normal}
 .mgoal{margin-top:12px}
+.fsearch{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.fsearch label{display:block;font-weight:700;font-size:15px;color:var(--text);margin:0 0 8px}
+.fsearch input{width:100%}
+.fsearch #fListHead{margin-top:10px}
+.nfold{margin-top:10px;border-top:1px solid var(--line);padding-top:4px}
+.nfold>summary{cursor:pointer;color:var(--accent);font-size:14px;font-weight:600;padding:8px 0;list-style:none}
+.nfold>summary::-webkit-details-marker{display:none}
 .bcman{margin-top:10px}
 .bcman summary{cursor:pointer;color:var(--accent);font-size:14px;font-weight:600;padding:8px 0}
 #aiMeal,#frMeal{margin:12px 0 0}
@@ -979,6 +986,12 @@ button{font-size:14px}
     </div>
     <img class="fprev" id="fprev" alt="Фото продукта">
     <div class="fstatus" id="fstatus"></div>
+    <div class="fsearch">
+      <label for="fSearch">🔍 Или найдите продукт по названию</label>
+      <input id="fSearch" type="search" placeholder="Гречка, яйцо, банан…" autocomplete="off" enterkeyhint="search">
+      <div class="sub" id="fListHead" hidden></div>
+      <div id="fList"></div>
+    </div>
     <details class="bcman">
       <summary>Ввести штрихкод вручную</summary>
       <div class="inrow" style="margin-top:8px">
@@ -1024,39 +1037,31 @@ button{font-size:14px}
     <b>Баланс КБЖУ за сегодня</b>
     <button class="insight" id="insight" type="button"></button>
     <div id="mxList"></div>
+    <details class="nfold" id="normFold">
+      <summary id="normSum">Норма на день</summary>
+      <div class="inrow" style="margin-top:10px">
+        <div><label>Калории, ккал</label><input id="fGoal" type="number" inputmode="numeric" placeholder="ккал"></div>
+        <button class="btn" id="fGoalBtn">Сохранить</button>
+      </div>
+      <details class="mgoal">
+        <summary>Цели по белкам, жирам и углеводам</summary>
+        <div class="note" style="margin-top:6px">По умолчанию считаются от нормы калорий: 25% белки, 30% жиры, 45% углеводы. Можно задать свои.</div>
+        <div class="mgrid">
+          <div><label>Белки, г</label><input id="gP" type="number" inputmode="numeric"></div>
+          <div><label>Жиры, г</label><input id="gF" type="number" inputmode="numeric"></div>
+          <div><label>Углеводы, г</label><input id="gC" type="number" inputmode="numeric"></div>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="gAuto" type="button">Как по умолчанию</button>
+          <button class="btn" id="gSave" type="button">Сохранить</button>
+        </div>
+      </details>
+    </details>
   </div>
 
   <div class="card" id="diaryCard">
     <div class="pctrow"><b>Дневник за сегодня</b><span class="sub" id="dCount"></span></div>
     <div id="diary"></div>
-  </div>
-
-  <div class="card">
-    <b>Поиск продукта</b>
-    <input id="fSearch" type="search" placeholder="Например, гречка" autocomplete="off" style="margin-top:10px">
-    <div class="sub" id="fListHead" style="margin-top:10px">Популярное</div>
-    <div id="fList"></div>
-  </div>
-
-  <div class="card" id="normCard">
-    <b>Норма на день</b>
-    <div class="inrow" style="margin-top:10px">
-      <div><label>Калории, ккал</label><input id="fGoal" type="number" inputmode="numeric" placeholder="ккал"></div>
-      <button class="btn" id="fGoalBtn">Сохранить</button>
-    </div>
-    <details class="mgoal">
-      <summary>Цели по белкам, жирам и углеводам</summary>
-      <div class="note" style="margin-top:6px">По умолчанию считаются от нормы калорий: 25% белки, 30% жиры, 45% углеводы. Можно задать свои.</div>
-      <div class="mgrid">
-        <div><label>Белки, г</label><input id="gP" type="number" inputmode="numeric"></div>
-        <div><label>Жиры, г</label><input id="gF" type="number" inputmode="numeric"></div>
-        <div><label>Углеводы, г</label><input id="gC" type="number" inputmode="numeric"></div>
-      </div>
-      <div class="row">
-        <button class="btn ghost" id="gAuto" type="button">Как по умолчанию</button>
-        <button class="btn" id="gSave" type="button">Сохранить</button>
-      </div>
-    </details>
   </div>
 
   <p class="note">КБЖУ по штрихкоду берётся из открытой базы Open Food Facts, во встроенном списке указаны средние значения. Цифры приблизительные: сверяйтесь с этикеткой.</p>
@@ -2604,13 +2609,16 @@ button{font-size:14px}
   // поиск по встроенному списку
   function renderSearch(){
     var q = norm($("fSearch").value.trim());
-    var res = q ? foodSearch(q) : FOODS.slice(0, 8);
-    $("fListHead").textContent = q ? (res.length ? "Найдено: " + res.length + " · КБЖУ на 100 г" : "") : "Популярное · КБЖУ на 100 г";
-    if (q && !res.length) {
+    // без запроса список не показываем — только то, что человек ищет
+    if (!q) { $("fListHead").hidden = true; $("fList").innerHTML = ""; return; }
+    var res = foodSearch(q);
+    $("fListHead").hidden = !res.length;
+    $("fListHead").textContent = res.length ? "КБЖУ на 100 г · нажмите, чтобы добавить" : "";
+    if (!res.length) {
       $("fList").innerHTML = '<div class="empty">Ничего не найдено. Попробуйте другое слово или отсканируйте штрихкод.</div>';
       return;
     }
-    $("fList").innerHTML = res.slice(0, 12).map(function(f){
+    $("fList").innerHTML = res.slice(0, 6).map(function(f){
       return '<button class="sitem" data-i="' + FOODS.indexOf(f) + '"><span class="sn">' + esc(f[0]) +
         '<small>Б ' + f[2] + ' г · Ж ' + f[3] + ' г · У ' + f[4] + ' г</small></span><small>' + f[1] + ' ккал</small></button>';
     }).join("");
@@ -2622,6 +2630,8 @@ button{font-size:14px}
     haptic();
     var f = FOODS[+b.dataset.i];
     fstatus("");
+    $("fSearch").value = ""; renderSearch();
+    try { $("fSearch").blur(); } catch(e){}
     showResult({ name: f[0], src: "Средние значения из встроенного списка", k: f[1], p: f[2], f: f[3], c: f[4], g: 100 });
   };
 
@@ -2781,7 +2791,7 @@ button{font-size:14px}
   };
   $("insight").onclick = function(){
     var k = this.dataset.k;
-    if (!k) { if (!kcalGoal) { try { $("normCard").scrollIntoView({ behavior: "smooth", block: "center" }); } catch(e){} $("fGoal").focus(); } return; }
+    if (!k) { if (!kcalGoal) { $("normFold").open = true; try { $("normFold").scrollIntoView({ behavior: "smooth", block: "center" }); } catch(e){} $("fGoal").focus(); } return; }
     haptic();
     if (openMx !== k) toggleMx(k);
     var row = $("mxList").querySelector('.mxd2[data-for="' + k + '"]');
@@ -2823,9 +2833,10 @@ button{font-size:14px}
     renderMacros(d);
     fillMacroInputs();
     if (kcalGoal && document.activeElement !== $("fGoal")) $("fGoal").value = kcalGoal;
+    $("normSum").textContent = kcalGoal ? "Норма: " + kcalGoal + " ккал в день · изменить" : "Задать норму на день";
     $("dCount").textContent = d.list.length ? Math.round(t.k) + " ккал" : "";
     if (!d.list.length) {
-      $("diary").innerHTML = '<div class="empty">Пока пусто. Сфотографируйте еду кнопкой выше или найдите продукт в поиске ниже.</div>';
+      $("diary").innerHTML = '<div class="empty">Пока пусто. Сфотографируйте еду кнопкой выше или найдите продукт в поиске выше.</div>';
       return;
     }
     var row = function(m){
