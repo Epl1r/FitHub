@@ -276,6 +276,12 @@ nav button.on{color:var(--accent);font-weight:700}
 .hs b{display:block;font-size:20px;font-weight:800;letter-spacing:-.4px;margin-top:4px;white-space:nowrap}
 .hs span{display:block;font-size:12px;color:var(--hint);margin-top:2px;line-height:1.25}
 .htiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.hcal{display:flex;align-items:center;gap:12px;width:100%;margin:0 0 12px;padding:14px;border-radius:var(--radius);border:1px solid rgba(34,211,238,.45);background:linear-gradient(135deg,rgba(34,211,238,.16),rgba(109,93,252,.16));color:var(--text);font-family:inherit;text-align:left;cursor:pointer;min-height:64px}
+.hc-i{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:var(--grad)}
+.hc-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.hc-t b{font-size:15px}
+.hc-t small{font-size:12.5px;color:var(--hint);line-height:1.35}
+.hc-go{flex:none;color:var(--hint);font-size:24px;line-height:1}
 .htile{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px;color:var(--text);font-family:inherit;text-align:left;cursor:pointer;min-height:64px}
 .htile i{font-style:normal;font-size:20px;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,rgba(34,211,238,.22),rgba(109,93,252,.22))}
 .htile span{min-width:0}
@@ -848,18 +854,13 @@ button{font-size:14px}
     </div>
   </div>
 
+  <button class="hcal" id="qCal" type="button">
+    <span class="hc-i" aria-hidden="true">🎙️</span>
+    <span class="hc-t"><b>Календарь и распорядок</b><small>Надиктуйте планы голосом — «вода в 9:00 каждый день», «зал по вт и чт в 19:00»</small></span>
+    <span class="hc-go" aria-hidden="true">›</span>
+  </button>
+
   <div class="hlist" id="homeTasks"></div>
-
-  <div class="hstats">
-    <div class="hs"><i>🔥</i><b id="hStreak">0</b><span>дней подряд</span></div>
-    <div class="hs"><i>✅</i><b id="hWeek">0</b><span>задач за 7 дней</span></div>
-    <div class="hs"><i>⚖️</i><b id="hWeight">—</b><span>текущий вес</span></div>
-  </div>
-
-  <div class="htiles">
-    <button class="htile" id="qCal" type="button"><i>📅</i><span><b>Календарь</b><small>Распорядок и задачи</small></span></button>
-    <button class="htile" id="qSupp" type="button"><i>🥤</i><span><b>Добавки</b><small>Что и когда принимать</small></span></button>
-  </div>
 
   <div class="htip"><div class="ht-h">💡 Совет дня</div><div id="tip"></div></div>
 </section>
@@ -1070,6 +1071,14 @@ button{font-size:14px}
   <div class="card" id="diaryCard">
     <div class="pctrow"><b>Дневник за сегодня</b><span class="sub" id="dCount"></span></div>
     <div id="diary"></div>
+  </div>
+
+  <div class="card tqbox">
+    <button type="button" class="tqrow" id="qSupp">
+      <span class="tqi" aria-hidden="true">🥤</span>
+      <span class="tqt"><b>Добавки</b><small>Что и когда принимать: протеин, креатин, витамины</small></span>
+      <span class="tqgo" aria-hidden="true">›</span>
+    </button>
   </div>
 
   <p class="note">КБЖУ по штрихкоду берётся из открытой базы Open Food Facts, во встроенном списке указаны средние значения. Цифры приблизительные: сверяйтесь с этикеткой.</p>
@@ -2474,12 +2483,6 @@ button{font-size:14px}
           '<span class="tc">✓</span></button>';
       }).join("");
     }
-
-    $("hStreak").textContent = visitStreak();
-    var wk = 0;
-    for (var i = 0; i < 7; i++) { var dd = done[localDay(new Date(now2.getFullYear(), now2.getMonth(), now2.getDate() - i))]; if (dd) wk += Object.keys(dd).length; }
-    $("hWeek").textContent = wk;
-    $("hWeight").textContent = entries.length ? entries[entries.length - 1].w + " кг" : "—";
 
     var doy = Math.floor((now2 - new Date(now2.getFullYear(), 0, 0)) / 86400000);
     $("tip").textContent = TIPS[doy % TIPS.length];
